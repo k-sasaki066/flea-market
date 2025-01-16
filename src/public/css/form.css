@@ -1,0 +1,52 @@
+/* ---form--- */
+.form-container {
+    width: 450px;
+    margin: 48px auto 0;
+}
+
+.login-container {
+    margin: 68px auto 0;
+}
+
+.form-ttl {
+    text-align: center;
+}
+
+.form-group {
+    margin-top: 30px;
+}
+
+.form-group__item:not(:first-of-type) {
+    margin-top: 28px;
+}
+
+.form-group__item-label {
+    font-weight: bold;
+}
+
+.form-group__item-input {
+    border: 1px solid #969696;
+    width: 100%;
+    border-radius: 3px;
+    padding: 4px;
+}
+
+.form-btn {
+    width: 100%;
+    background-color: #ff5655;
+    color: #fff;
+    border-radius: 3px;
+    padding: 8px 0;
+}
+
+.btn-margin {
+    margin-top: 64px;
+}
+
+.guid-text {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #0069c8;
+}

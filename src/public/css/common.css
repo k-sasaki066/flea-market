@@ -1,0 +1,48 @@
+.main {
+    padding: 0 48px 48px;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.error-message {
+    color: #e24a4a;
+}
+
+/* ---header-logo--- */
+.header {
+    padding: 16px 24px;
+    background-color: #000;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.header-logo {
+    grid-column: 1/2;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.header-logo__img {
+    vertical-align: middle;
+}
+
+/* ---header-menu--- */
+.header-nav__menu {
+    grid-column: 3/4;
+    justify-items: right;
+}
+
+.header-nav__list {
+    display: flex;
+}
+
+.header-nav__item:not(:last-of-type) {
+    margin-right: 20px;
+}
+
+.header-nav__link {
+    color: #fff;
+}

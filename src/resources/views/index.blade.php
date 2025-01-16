@@ -18,25 +18,6 @@
             </div>
             <p class="list-card__ttl">商品名</p>
         </div>
-        <div class="list-card__item">
-            <div class="list-card__img-wrap">
-                <img class="list-card__img" src="" alt="item">
-            </div>
-            <p class="list-card__ttl">商品名</p>
-        </div>
-        <div class="list-card__item">
-            <div class="list-card__img-wrap">
-                <img class="list-card__img" src="" alt="item">
-            </div>
-            <p class="list-card__ttl">商品名</p>
-        </div>
-        <div class="list-card__item">
-            <div class="list-card__img-wrap">
-                <img class="list-card__img" src="" alt="item">
-            </div>
-            <p class="list-card__ttl">商品名</p>
-        </div>
     </div>
 </div>
-
 @endsection

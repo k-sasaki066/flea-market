@@ -14,5 +14,10 @@ use App\Http\Controllers\ItemController;
 |
 */
 
+// Route::get('/detail', function () {
+//     return view('detail');
+// });
+
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);
+Route::get('/item/:{item_id}', [ItemController::class, 'getDetail']);

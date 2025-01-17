@@ -27,7 +27,7 @@
             <p class="sold-out">Sold</p>
             @endif
             <div class="list-card__wrap">
-                <a class="list-card__link" href="">
+                <a class="list-card__link" href="/item/:{{ $item['id'] }}">
                     <img class="list-card__img" src="{{ $item['image_url'] }}" alt="item">
                 </a>
             </div>

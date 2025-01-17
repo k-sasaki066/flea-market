@@ -23,7 +23,7 @@ class ItemsTableSeeder extends Seeder
                 'category' => 'a:2:{i:0;i:1;i:1;i:5;}',
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'price' => '15000',
-                'status' => '1',
+                'status' => '2',
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -43,7 +43,7 @@ class ItemsTableSeeder extends Seeder
                 'category' => 'a:1:{i:0;i:10;}',
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'price' => '300',
-                'status' => '1',
+                'status' => '2',
             ],
             [
                 'user_id' => mt_rand(1,5),

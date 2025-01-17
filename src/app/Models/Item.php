@@ -30,6 +30,11 @@ class Item extends Model
         return $this->belongsTo(Condition::class);
     }
 
+    public function brand()
+    {
+        return $this->hasOne(Brand::class);
+    }
+
     public static function getItems()
     {
         $items = Item::with('condition')->get();
@@ -62,5 +67,12 @@ class Item extends Model
         $parameter = $request->input('page');
 
         return $parameter;
+    }
+
+    public static function getDetail($item_id)
+    {
+        $item = Item::with('condition', 'brand')->find($item_id);
+
+        return $item;
     }
 }

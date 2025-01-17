@@ -11,7 +11,7 @@
     <form class="form-group" action="" method="">
         @csrf
         <div class="form-group__item">
-            <label class="form-group__item-label">メールアドレス
+            <label class="form-group__item-label">ユーザー名 / メールアドレス
                 <input class="form-group__item-input" type="text" name="email">
             </label>
             <div class="error-message">

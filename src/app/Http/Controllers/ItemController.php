@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use App\Models\Category;
 
 class ItemController extends Controller
 {
@@ -16,7 +17,6 @@ class ItemController extends Controller
         }elseif($request['page'] == 'mylist') {
             $items = Item::getItems();
         }
-        // dd($param);
 
         return view('index', compact('items', 'parameter'));
     }
@@ -27,5 +27,17 @@ class ItemController extends Controller
         $parameter = Item::getParameter($request);
 
         return view('index', compact('items', 'parameter'));
+    }
+
+    public function getDetail($item_id) {
+        $item = Item::getDetail($item_id);
+
+        $categories = unserialize($item['category']);
+        foreach($categories as $value) {
+            $name = Category::find($value);
+            $category[] = $name['name'];
+        }
+
+        return view('detail', compact('item', 'category'));
     }
 }

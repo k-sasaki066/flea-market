@@ -1,0 +1,179 @@
+.item-container {
+    padding: 0 50px 50px;
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+}
+
+.item-img__wrap {
+    grid-column: 1/2;
+    width: 100%;
+}
+
+.item-img {
+    width: 100%;
+}
+
+.item-content {
+    grid-column: 2/3;
+}
+
+.item-top,
+.item-description,
+.item-info,
+.item-comment__group,
+.item-comment__form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    margin-top: 40px;
+}
+
+.item-top {
+    margin-top: 0;
+}
+
+.item-price {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.item-price__text {
+    font-size: 24px;
+}
+
+.item-count__wrap {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-left: 5%;
+}
+
+.favorite-count__group,
+.comment-count__group {
+    display: inline-block;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+}
+
+.item-brand,
+.favorite-count__text,
+.comment-count__text {
+    font-size: 12px;
+}
+
+.item-purchase__btn {
+    text-align: center;
+}
+
+.item-category__group,
+.item-condition__group {
+    display: flex;
+    gap: 40px;
+}
+
+.item-category__ttl,
+.item-condition__ttl {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.item-category__text {
+    display: inline-block;
+    background-color: #d9d9d9;
+    border-radius: 25px;
+    padding: 0 22px;
+}
+
+.item-category__text:not(:last-of-type) {
+    margin-right: 14px;
+}
+
+.item-comment__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.item-comment__img-wrap {
+    width: 50px;
+    height: 50px;
+    background-color: #d9d9d9;
+    border-radius: 50%;
+}
+
+.item-comment__text {
+    margin-top: 14px;
+    padding: 8px;
+    background-color: #d9d9d9;
+    border-radius: 3px;
+}
+
+.item-comment__form-text {
+    padding: 8px;
+    margin-top: -16px;
+    border: 1px solid #7c7c7c;
+    border-radius: 3px;
+}
+
+.item-category__text,
+.item-condition__text,
+.item-comment__text {
+    font-size: 14px;
+}
+
+/* ---modal--- */
+.modal__group {
+    position: fixed;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.modal__inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    background-color: #b7a5a5;
+    box-shadow: 4px 4px 4px rgba(139, 121, 105, 0.25);
+    transform: translate(-50%, -50%);
+    padding: 64px 32px;
+}
+
+.modal__group:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(235, 232, 232, 0.5);
+}
+
+.close-detail__button {
+    font-size: 32px;
+    color: #000;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 24px;
+}
+
+.modal-text {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+

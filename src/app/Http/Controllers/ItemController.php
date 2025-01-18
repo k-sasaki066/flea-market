@@ -40,4 +40,9 @@ class ItemController extends Controller
 
         return view('detail', compact('item', 'category'));
     }
+
+    public function getProfile() {
+
+        return view('profile');
+    }
 }

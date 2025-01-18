@@ -8,12 +8,12 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-ttl">会員登録</h2>
-    <form class="form-group" action="" method="">
+    <form class="form-group" action="/register" method="POST">
         @csrf
         <div class="form-group__item">
             <label class="form-group__item-label">
                 ユーザー名
-                <input class="form-group__item-input" type="text" name="name">
+                <input class="form-group__item-input" type="text" name="name" value="{{ old('name') }}">
             </label>
             <div class="error-message">
                 @error('name')
@@ -24,7 +24,7 @@
 
         <div class="form-group__item">
             <label class="form-group__item-label">メールアドレス
-                <input class="form-group__item-input" type="text" name="email">
+                <input class="form-group__item-input" type="text" name="email" value="{{ old('email') }}">
             </label>
             <div class="error-message">
                 @error('email')
@@ -35,7 +35,7 @@
 
         <div class="form-group__item">
             <label class="form-group__item-label">パスワード
-                <input class="form-group__item-input" type="text" name="password">
+                <input class="form-group__item-input" type="password" name="password">
             </label>
             <div class="error-message">
                 @error('password')
@@ -46,7 +46,7 @@
 
         <div class="form-group__item">
             <label class="form-group__item-label">確認用パスワード
-                <input class="form-group__item-input" type="text" name="password_confirmation">
+                <input class="form-group__item-input" type="password" name="password_confirmation">
             </label>
             <div class="error-message">
                 @error('password_confirmation')

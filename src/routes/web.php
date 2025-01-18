@@ -14,9 +14,9 @@ use App\Http\Controllers\ItemController;
 |
 */
 
-// Route::get('/detail', function () {
-//     return view('detail');
-// });
+Route::get('/login', function () {
+    return view('auth.login');
+});
 
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);

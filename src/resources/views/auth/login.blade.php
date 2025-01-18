@@ -8,7 +8,7 @@
 @section('content')
 <div class="form-container login-container">
     <h2 class="form-ttl">ログイン</h2>
-    <form class="form-group" action="" method="">
+    <form class="form-group" action="/login" method="POST">
         @csrf
         <div class="form-group__item">
             <label class="form-group__item-label">ユーザー名 / メールアドレス

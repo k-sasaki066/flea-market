@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,11 @@ use App\Http\Controllers\ItemController;
 |
 */
 
-Route::get('/login', function () {
-    return view('auth.login');
-});
+// Route::get('/login', function () {
+//     return view('auth.login');
+// });
+
+Route::post('/register', [RegisteredUserController::class, 'store']);
 
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);

@@ -76,6 +76,40 @@ a {
     border-radius: 3px;
 }
 
+/* ---user-img--- */
+.form-img {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.user-img__wrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+}
+
+.user-img__btn-wrap {
+    position: relative;
+}
+
+.user-img__select {
+    background-color: #fff;
+    color: #fd5152;
+    padding: 4px 12px;
+    border-radius: 5px;
+    border: 2px solid #fd5152;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.user-img__hidden {
+    display: none;
+}
+
 @media screen and (max-width: 850px) {
     .header {
         grid-template-columns: 1fr 1fr;

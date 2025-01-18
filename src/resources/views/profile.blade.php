@@ -7,9 +7,18 @@
 
 @section('content')
 <div class="form-container">
-    <h2 class="form-ttl">会員登録</h2>
-    <form class="form-group" action="/register" method="POST">
+    <h2 class="form-ttl">プロフィール設定</h2>
+    <form class="form-group" action="" method="POST">
         @csrf
+        <div class="form-group__item form-img">
+            <div class="user-img__wrap">
+                <img class="user-img" src="" alt="">
+            </div>
+            <div class="user-img__btn-wrap">
+                <label class="user-img__select" for="upload" >画像を選択する</label>
+                <input class="user-img__hidden" type="file" id="upload" accept="">
+            </div>
+        </div>
         <div class="form-group__item">
             <p class="form-group__item-label">ユーザー名</p>
             <input class="form-group__item-input" type="text" name="name" value="{{ old('name') }}">
@@ -21,41 +30,38 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">メールアドレス</p>
-            <input class="form-group__item-input" type="text" name="email" value="{{ old('email') }}">
+            <p class="form-group__item-label">郵便番号</p>
+            <input class="form-group__item-input" type="text" name="post_cord" value="{{ old('post_cord') }}">
             <div class="error-message">
-                @error('email')
+                @error('post_cord')
                 {{ $message }}
                 @enderror
             </div>
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">パスワード</p>
-            <input class="form-group__item-input" type="password" name="password">
+            <p class="form-group__item-label">住所</p>
+            <input class="form-group__item-input" type="text" name="address">
             <div class="error-message">
-                @error('password')
+                @error('address')
                 {{ $message }}
                 @enderror
             </div>
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">確認用パスワード</p>
-            <input class="form-group__item-input" type="password" name="password_confirmation">
+            <p class="form-group__item-label">建物名</p>
+            <input class="form-group__item-input" type="text" name="building">
             <div class="error-message">
-                @error('password_confirmation')
+                @error('building')
                 {{ $message }}
                 @enderror
             </div>
         </div>
 
         <button class="form-btn btn-margin" type="submit">
-            登録する
+            更新する
         </button>
     </form>
-    <a class="guid-text" href="/login">
-        ログインはこちらから
-    </a>
 </div>
 @endsection

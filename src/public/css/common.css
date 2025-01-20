@@ -7,6 +7,24 @@ a {
     color: #e24a4a;
 }
 
+/* ---セッションメッセージ--- */
+.flash_error-message,
+.flash_success-message {
+    display: inline-block;
+    color: #fff;
+    border-radius: 3px;
+    padding: 8px 18px;
+    margin: 8px 0 0 8px;
+}
+
+.flash_error-message {
+    background-color: #e54c4c;
+}
+
+.flash_success-message {
+    background-color: #32b23d;
+}
+
 /* ---header-logo--- */
 .header {
     padding: 12px 24px;
@@ -92,6 +110,13 @@ a {
 
 .user-img__btn-wrap {
     position: relative;
+}
+
+.user-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .user-img__select {

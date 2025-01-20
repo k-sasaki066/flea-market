@@ -8,22 +8,28 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-ttl">プロフィール設定</h2>
-    <form class="form-group" action="" method="POST">
+    <form class="form-group" action="/mypage/profile" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group__item form-img">
             <div class="user-img__wrap">
-                <img class="user-img" src="" alt="">
+                <img class="user-img" id="figureImage" src="" alt="">
             </div>
             <div class="user-img__btn-wrap">
                 <label class="user-img__select" for="upload" >画像を選択する</label>
-                <input class="user-img__hidden" type="file" id="upload" accept="">
+                <input class="user-img__hidden" type="file" id="upload"  name="image_url" accept="">
             </div>
         </div>
+        <div class="error-message">
+            @error('image_url')
+            {{ $message }}
+            @enderror
+        </div>
+
         <div class="form-group__item">
             <p class="form-group__item-label">ユーザー名</p>
-            <input class="form-group__item-input" type="text" name="name" value="{{ old('name') }}">
+            <input class="form-group__item-input" type="text" name="nickname" value="{{ old('nickname') }}">
             <div class="error-message">
-                @error('name')
+                @error('nickname')
                 {{ $message }}
                 @enderror
             </div>
@@ -41,7 +47,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">住所</p>
-            <input class="form-group__item-input" type="text" name="address">
+            <input class="form-group__item-input" type="text" name="address" value="{{ old('address') }}">
             <div class="error-message">
                 @error('address')
                 {{ $message }}
@@ -51,7 +57,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">建物名</p>
-            <input class="form-group__item-input" type="text" name="building">
+            <input class="form-group__item-input" type="text" name="building" value="{{ old('building') }}">
             <div class="error-message">
                 @error('building')
                 {{ $message }}
@@ -63,5 +69,6 @@
             更新する
         </button>
     </form>
+    <script src="{{ asset('js/preview.js') }}"></script>
 </div>
 @endsection

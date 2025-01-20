@@ -27,4 +27,5 @@ Route::get('/item/:{item_id}', [ItemController::class, 'getDetail']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/mypage/profile', [ItemController::class, 'getProfile']);
+    Route::post('/mypage/profile', [ItemController::class, 'postProfile']);
 });

@@ -6,6 +6,12 @@
 @endsection
 
 @section('content')
+@if (session('result'))
+    <div class="flash_success-message">
+        {{ session('result') }}
+    </div>
+@endif
+
 <div class="list-container">
     <div class="list-menu__group">
         <form class="list-menu__form" action="/" method="GET">

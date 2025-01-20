@@ -95,7 +95,7 @@ a {
 }
 
 /* ---user-img--- */
-.form-img {
+.user-img__group {
     display: flex;
     align-items: center;
     gap: 32px;
@@ -119,7 +119,8 @@ a {
     border-radius: 50%;
 }
 
-.user-img__select {
+.user-img__select,
+.profile-link {
     background-color: #fff;
     color: #fd5152;
     padding: 4px 12px;

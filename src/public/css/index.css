@@ -1,3 +1,20 @@
+/* ---mypage--- */
+.user-img__group {
+    gap: 48px;
+}
+.user__inner {
+    width: 70%;
+    margin: 48px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-link {
+    font-size: 18px;
+    padding: 4px 24px;
+}
+
 /* ---menu--- */
 .list-menu__group {
     margin-top: 40px;
@@ -9,7 +26,7 @@
 }
 
 .list-menu__text {
-    margin-left: 50px;
+    margin-right: 50px;
     line-height: 2em;
     font-weight: bold;
     color: #6d6c6c;

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Item extends Model
 {
@@ -37,7 +38,11 @@ class Item extends Model
 
     public static function getItems()
     {
-        $items = Item::with('condition')->get();
+        if(Auth::check()) {
+            $items = Item::with('condition')->where('user_id', '!=', Auth::id())->get();
+        }else {
+            $items = Item::with('condition')->get();
+        }
 
         return $items;
     }

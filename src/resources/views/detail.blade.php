@@ -65,7 +65,7 @@
             <div class="item-comment__wrap">
                 <div class="item-comment__user">
                     <div class="item-comment__img-wrap">
-                        <img class="item-comment__img" src="" alt="user">
+                        <img class="item-comment__img" src="" alt="">
                     </div>
                     <p class="item-comment__name">name</p>
                 </div>

@@ -17,12 +17,12 @@
         <form class="list-menu__form" action="/" method="GET">
             @csrf
             <input type="hidden" name="page" value="suggest">
-            <button class="list-menu__text {{($parameter == 'suggest') ? 'selected' : ''}}" type="submit">おすすめ</button>
+            <button class="list-menu__text {{ ($parameter == 'suggest') ? 'selected' : '' }}" type="submit">おすすめ</button>
         </form>
         <form class="list-menu__form" action="/" method="GET">
             @csrf
             <input type="hidden" name="page" value="mylist">
-            <button class="list-menu__text {{($parameter == 'mylist') ? 'selected' : ''}}" type="submit">マイリスト</button>
+            <button class="list-menu__text {{ ($parameter == 'mylist') ? 'selected' : '' }}" type="submit">マイリスト</button>
         </form>
     </div>
 

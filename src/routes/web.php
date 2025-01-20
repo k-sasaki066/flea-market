@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\RegisteredUserController;
 
 /*
@@ -26,6 +27,7 @@ Route::get('/search', [ItemController::class, 'searchItem']);
 Route::get('/item/:{item_id}', [ItemController::class, 'getDetail']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/mypage/profile', [ItemController::class, 'getProfile']);
-    Route::post('/mypage/profile', [ItemController::class, 'postProfile']);
+    Route::get('/mypage/profile', [UserController::class, 'getProfile']);
+    Route::post('/mypage/profile', [UserController::class, 'postProfile']);
+    Route::get('/mypage', [UserController::class, 'getMypage']);
 });

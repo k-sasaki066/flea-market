@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\User;
-use App\Http\Requests\ProfileRequest;
-use App\Http\Requests\AddressRequest;
-use Carbon\Carbon;
 
 class ItemController extends Controller
 {
@@ -43,38 +38,5 @@ class ItemController extends Controller
         }
 
         return view('detail', compact('item', 'category'));
-    }
-
-    public function getProfile() {
-
-        return view('profile');
-    }
-
-    public function postProfile(Request $request) {
-        $addressValidated = app(AddressRequest::class)->validated();
-        $profileValidated = app(ProfileRequest::class)->validated();
-
-        if($request->file('image_url')) {
-            $original = $request->file('image_url')->getClientOriginalName();
-            $image_name = Carbon::now()->format('Ymd_His').'_'.$original;
-            request()->file('image_url')->move('storage/images', $image_name);
-
-            User::find(Auth::id())->update([
-            'nickname' => $request->nickname,
-            'post_cord' => $request->post_cord,
-            'address' => $request->address,
-            'building' => $request->building,
-            'image_url' => 'http://localhost/storage/images/'.$image_name,
-            ]);
-        }else {
-            User::find(Auth::id())->update([
-            'nickname' => $request->nickname,
-            'post_cord' => $request->post_cord,
-            'address' => $request->address,
-            'building' => $request->building,
-            ]);
-        }
-
-        return redirect('/')->with('result', 'プロフィールを更新しました');
     }
 }

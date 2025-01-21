@@ -68,6 +68,10 @@
     text-align: center;
 }
 
+.purchased {
+    display: none;
+}
+
 .item-category__group,
 .item-condition__group {
     display: flex;

@@ -24,8 +24,12 @@
             </div>
             <div class="item-count__wrap">
                 <div class="favorite-count__group">
+                    @if($favorite == null)
                     <img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="いいね" width="26px">
-                    <span class="favorite-count__text">3</span>
+                    @else
+                    <img class="favorite-count__img" src="{{ asset('images/star-yellow.svg') }}" alt="いいねを外す" width="26px">
+                    @endif
+                    <span class="favorite-count__text">{{ $item['favorite_count'] }}</span>
                 </div>
                 <div class="comment-count__group">
                     <img class="comment-count__img" src="{{ asset('images/comment.svg') }}" alt="コメント" width="22px">
@@ -33,7 +37,7 @@
                 </div>
             </div>
             @if(Auth::check())
-            <a class="item-purchase__btn form-btn" href="">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif " href="">購入手続きへ</a>
             @else
             <a class="item-purchase__btn form-btn" href="#modal">購入手続きへ</a>
             @endif

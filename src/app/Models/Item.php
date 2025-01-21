@@ -36,12 +36,18 @@ class Item extends Model
         return $this->hasOne(Brand::class);
     }
 
+    public function favorites() {
+
+        return $this->hasMany(Favorite::class);
+    }
+
     public static function getItems()
     {
+        $query = Item::with('condition');
         if(Auth::check()) {
-            $items = Item::with('condition')->where('user_id', '!=', Auth::id())->get();
+            $items = $query->where('user_id', '!=', Auth::id())->get();
         }else {
-            $items = Item::with('condition')->get();
+            $items = $query->get();
         }
 
         return $items;
@@ -67,6 +73,17 @@ class Item extends Model
         return $items;
     }
 
+    public static function getFavoriteItems()
+    {
+        $items = Item::whereHas('favorites', function ($query) {
+            $query->where('user_id', Auth::id());
+            })->with(['favorites' => function($query) {
+                $query->where('user_id', Auth::id());
+        }])->get();
+
+        return $items;
+    }
+
     public static function getParameter($request)
     {
         $parameter = $request->input('page');
@@ -76,8 +93,38 @@ class Item extends Model
 
     public static function getDetail($item_id)
     {
-        $item = Item::with('condition', 'brand')->find($item_id);
+        $joinTable = Item::with('condition', 'brand')->with(['favorites' => function($query) {
+                $query->where('user_id', Auth::id());
+        }])
+        ->leftJoin('favorites', 'items.id', '=', 'favorites.item_id')
+        ->select(
+            'items.id',
+            'items.user_id',
+            'condition_id',
+            'name',
+            'image_url',
+            'category',
+            'description',
+            'price',
+            'status',
+        )
+        ->selectRaw(
+            'COUNT(favorites.item_id) as favorite_count'
+        )
+        ->groupBy(
+            'items.id',
+            'items.user_id',
+            'condition_id',
+            'name',
+            'image_url',
+            'category',
+            'description',
+            'price',
+            'status',
+        )
+        ->get(['items.*']);
 
+        $item = $joinTable->find($item_id);
         return $item;
     }
 }

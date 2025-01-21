@@ -48,7 +48,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function getBuyItems()
+    public static function getSellItems()
     {
         $items = Item::where('user_id', Auth::id())->get();
 

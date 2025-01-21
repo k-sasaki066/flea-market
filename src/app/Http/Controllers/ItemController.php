@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -14,7 +15,7 @@ class ItemController extends Controller
         if($request['page'] == 'suggest') {
             $items = Item::searchSuggestItems();
         }elseif($request['page'] == 'mylist') {
-            $items = Item::getItems();
+            $items = Item::getFavoriteItems();
         }
 
         return view('index', compact('items', 'parameter'));
@@ -30,6 +31,7 @@ class ItemController extends Controller
 
     public function getDetail($item_id) {
         $item = Item::getDetail($item_id);
+        $favorite = $item->favorites()->where('user_id', Auth::id())->first();
 
         $categories = unserialize($item['category']);
         foreach($categories as $value) {
@@ -37,6 +39,6 @@ class ItemController extends Controller
             $category[] = $name['name'];
         }
 
-        return view('detail', compact('item', 'category'));
+        return view('detail', compact('item', 'category', 'favorite'));
     }
 }

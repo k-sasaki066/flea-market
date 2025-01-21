@@ -16,7 +16,7 @@
             </div>
             <div class="user-img__btn-wrap">
                 <label class="user-img__select" for="upload" >画像を選択する</label>
-                <input class="user-img__hidden" type="file" id="upload"  name="image_url" accept="">
+                <input class="user-img__hidden" type="file" id="upload"  name="image_url" accept="image/png, image/jpeg">
             </div>
         </div>
         <div class="error-message">
@@ -27,7 +27,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">ユーザー名</p>
-            <input class="form-group__item-input" type="text" name="nickname" value="{{ ($user['nickname'] == null) ? old('nickname') : $user['nickname'] }}">
+            <input class="form-group__item-input" type="text" name="nickname" value="{{ old('nickname') ? old('nickname') : $user['nickname'] }}">
             <div class="error-message">
                 @error('nickname')
                 {{ $message }}
@@ -37,7 +37,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">郵便番号</p>
-            <input class="form-group__item-input" type="text" name="post_cord" value="{{ ($user['post_cord'] == null) ? old('post_cord') : $user['post_cord'] }}">
+            <input class="form-group__item-input" type="text" name="post_cord" value="{{ old('post_cord') ? old('post_cord') : $user['post_cord'] }}">
             <div class="error-message">
                 @error('post_cord')
                 {{ $message }}
@@ -47,7 +47,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">住所</p>
-            <input class="form-group__item-input" type="text" name="address" value="{{ ($user['address'] == null) ? old('address') : $user['address'] }}">
+            <input class="form-group__item-input" type="text" name="address" value="{{ old('address') ? old('address') : $user['address'] }}">
             <div class="error-message">
                 @error('address')
                 {{ $message }}
@@ -57,7 +57,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">建物名</p>
-            <input class="form-group__item-input" type="text" name="building" value="{{ ($user['building'] == null) ? old('building') : $user['building'] }}">
+            <input class="form-group__item-input" type="text" name="building" value="{{ old('building') ? old('building') : $user['building'] }}">
             <div class="error-message">
                 @error('building')
                 {{ $message }}

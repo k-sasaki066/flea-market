@@ -19,6 +19,11 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'nickname' => $this->faker->userName(),
+            'post_cord' => substr_replace($this->faker->postcode(), '-', 3, 0),
+            'address' => $this->faker->streetAddress(),
+            'building' => $this->faker->secondaryAddress(),
+            'image_url' => 'https://picsum.photos/seed/picsum/200/300',
             'remember_token' => Str::random(10),
         ];
     }

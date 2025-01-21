@@ -50,9 +50,9 @@ class UserController extends Controller
 
         $parameter = Item::getParameter($request);
         if($request['page'] == 'sell') {
-            $items = Item::searchSuggestItems();
+            $items = User::getSellItems();
         }elseif($request['page'] == 'buy') {
-            $items = User::getBuyItems();
+            $items = Item::searchSuggestItems();
         }else {
             $items = null;
         }

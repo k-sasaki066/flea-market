@@ -7,6 +7,12 @@
 @endsection
 
 @section('content')
+@if (session('result'))
+    <div class="flash_success-message">
+        {{ session('result') }}
+    </div>
+@endif
+
 <div class="item-container">
     <div class="item-img__wrap">
         <img class="item-img" src="{{ $item['image_url'] }}" alt="item">
@@ -76,22 +82,36 @@
         </div>
 
         <div class="item-comment__group">
-            <h3 class="item-comment__ttl">コメント（2）</h3>
-            <div class="item-comment__wrap">
-                <div class="item-comment__user">
-                    <div class="item-comment__img-wrap">
-                        <img class="item-comment__img" src="" alt="">
+            <h3 class="item-comment__ttl">コメント ({{ $item['comments_count'] }})</h3>
+            <div class="item-comment__inner">
+                @foreach($item->comments as $user)
+                <div class="item-comment__wrap">
+                    <div class="item-comment__user">
+                        <div class="item-comment__img-wrap">
+                            <img class="item-comment__img" src="{{ $user['image_url'] }}" alt="">
+                        </div>
+                        <p class="item-comment__name">{{ $user['nickname'] }}</p>
                     </div>
-                    <p class="item-comment__name">name</p>
+                    <p class="item-comment__text">{{ $user->pivot->comment }}</p>
                 </div>
-                <p class="item-comment__text">コメントが入ります。</p>
+                @endforeach
             </div>
         </div>
 
-        <form class="item-comment__form" action="" method="">
+        <form class="item-comment__form" action="/comment/:{{ $item['id'] }}" method="POST">
+            @csrf
             <h3 class="item-comment__form-ttl">商品へのコメント</h3>
-            <textarea class="item-comment__form-text" name="" id="" rows="10"></textarea>
+            <textarea class="item-comment__form-text" name="comment" rows="10">{{ old('comment') }}</textarea>
+            <div class="error-message">
+                @error('comment')
+                {{ $message }}
+                @enderror
+            </div>
+            @if(Auth::check())
             <button class="item-comment__form-btn form-btn" type="submit">コメントを送信する</button>
+            @else
+            <a class="item-purchase__btn form-btn" href="#comment">コメントを送信する</a>
+            @endif
         </form>
     </div>
 
@@ -108,6 +128,14 @@
         <div class="modal__inner">
             <a class="close-detail__button" href="#">×</a>
             <p class="modal-text">いいね登録するには、ログインが必要です。</p>
+        </div>
+    </div>
+
+    <div class="modal__group" id="comment">
+        <a href="#!" class="modal-overlay"></a>
+        <div class="modal__inner">
+            <a class="close-detail__button" href="#">×</a>
+            <p class="modal-text">コメントを送信するには、ログインが必要です。</p>
         </div>
     </div>
 </div>

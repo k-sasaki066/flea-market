@@ -24,12 +24,23 @@
             </div>
             <div class="item-count__wrap">
                 <div class="favorite-count__group">
-                    @if($favorite == null)
-                    <img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="いいね" width="26px">
+                    @if(Auth::check())
+                        @if($favorite == null)
+                        <form class="create-favorite__form" action="/like/:{{ $item['id'] }}" method="POST">
+                            @csrf
+                            <input class="favorite-count__img" type="image" src="{{ asset('images/star.svg') }}" alt="いいね" width="22px">
+                        </form>
+                        @else
+                        <form class="delete-favorite__form" action="/unlike/:{{ $item['id'] }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input class="favorite-count__img" type="image" src="{{ asset('images/star-yellow.svg') }}" alt="いいね" width="22px">
+                        </form>
+                        @endif
                     @else
-                    <img class="favorite-count__img" src="{{ asset('images/star-yellow.svg') }}" alt="いいねを外す" width="26px">
+                    <a href="#favorite"><img src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
                     @endif
-                    <span class="favorite-count__text">{{ $item['favorite_count'] }}</span>
+                    <span class="favorite-count__text">{{ $item['favorites_count'] }}</span>
                 </div>
                 <div class="comment-count__group">
                     <img class="comment-count__img" src="{{ asset('images/comment.svg') }}" alt="コメント" width="22px">
@@ -37,9 +48,9 @@
                 </div>
             </div>
             @if(Auth::check())
-            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif " href="">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="">購入手続きへ</a>
             @else
-            <a class="item-purchase__btn form-btn" href="#modal">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
             @endif
         </div>
 
@@ -89,6 +100,14 @@
         <div class="modal__inner">
             <a class="close-detail__button" href="#">×</a>
             <p class="modal-text">商品を購入するには、ログインが必要です。</p>
+        </div>
+    </div>
+
+    <div class="modal__group" id="favorite">
+        <a href="#!" class="modal-overlay"></a>
+        <div class="modal__inner">
+            <a class="close-detail__button" href="#">×</a>
+            <p class="modal-text">いいね登録するには、ログインが必要です。</p>
         </div>
     </div>
 </div>

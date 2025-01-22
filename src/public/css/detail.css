@@ -52,6 +52,8 @@
 }
 
 .favorite-count__group,
+.create-favorite__form,
+.delete-favorite__form,
 .comment-count__group {
     display: inline-block;
     writing-mode: vertical-lr;

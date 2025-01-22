@@ -91,40 +91,12 @@ class Item extends Model
         return $parameter;
     }
 
-    public static function getDetail($item_id)
+    public static function getDetailItem($item_id)
     {
-        $joinTable = Item::with('condition', 'brand')->with(['favorites' => function($query) {
-                $query->where('user_id', Auth::id());
-        }])
-        ->leftJoin('favorites', 'items.id', '=', 'favorites.item_id')
-        ->select(
-            'items.id',
-            'items.user_id',
-            'condition_id',
-            'name',
-            'image_url',
-            'category',
-            'description',
-            'price',
-            'status',
-        )
-        ->selectRaw(
-            'COUNT(favorites.item_id) as favorite_count'
-        )
-        ->groupBy(
-            'items.id',
-            'items.user_id',
-            'condition_id',
-            'name',
-            'image_url',
-            'category',
-            'description',
-            'price',
-            'status',
-        )
-        ->get(['items.*']);
+        $item = Item::withCount('favorites')
+        ->with('condition', 'brand','favorites')
+        ->find($item_id);
 
-        $item = $joinTable->find($item_id);
         return $item;
     }
 }

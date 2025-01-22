@@ -30,7 +30,7 @@ class ItemController extends Controller
     }
 
     public function getDetail($item_id) {
-        $item = Item::getDetail($item_id);
+        $item = Item::getDetailItem($item_id);
         $favorite = $item->favorites()->where('user_id', Auth::id())->first();
 
         $categories = unserialize($item['category']);

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RegisteredUserController;
 
 /*
@@ -30,4 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'getProfile']);
     Route::post('/mypage/profile', [UserController::class, 'postProfile']);
     Route::get('/mypage', [UserController::class, 'getMypage']);
+    Route::post('/like/:{item_id}', [FavoriteController::class, 'create']);
+    Route::delete('/unlike/:{item_id}', [FavoriteController::class, 'delete']);
 });

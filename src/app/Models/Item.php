@@ -41,6 +41,10 @@ class Item extends Model
         return $this->hasMany(Favorite::class);
     }
 
+    public function comments() {
+        return $this->belongsToMany(User::class, 'comments')->withPivot('comment');
+    }
+
     public static function getItems()
     {
         $query = Item::with('condition');
@@ -93,8 +97,8 @@ class Item extends Model
 
     public static function getDetailItem($item_id)
     {
-        $item = Item::withCount('favorites')
-        ->with('condition', 'brand','favorites')
+        $item = Item::withCount('favorites', 'comments')
+        ->with('condition', 'brand','favorites', 'comments')
         ->find($item_id);
 
         return $item;

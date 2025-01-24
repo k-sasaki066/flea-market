@@ -1,0 +1,114 @@
+.sell-container {
+    width: 520px;
+    margin: 48px auto 0;
+    padding-bottom: 48px;
+}
+
+.sell-form,
+.sell-detail__group,
+.sell-content__group {
+    display: flex;
+    flex-direction: column;
+}
+
+.sell-form {
+    margin-top: 20px;
+    gap: 40px;
+}
+
+.sell-text {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sell-text__required {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 8px;
+    font-size: 12px;
+    background-color: #fd5151;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.sell-detail__group,
+.sell-content__group {
+    gap: 16px;
+}
+
+.sell-condition_group {
+    margin-top: 24px;
+}
+
+.sell-img__wrap {
+    height: auto;
+    border: 1px dotted #969696;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.sell-img__inner {
+    margin: 12px auto;
+    width: 200px;
+    height: 200px;
+    background-color: #d1d0d0;
+    display: none;
+}
+
+.sell-img__select {
+    display: inline-block;
+    margin: 32px auto;
+}
+
+.sell-category__hidden:checked+label {
+    background-color: #fd5152;
+    color: #fff;
+}
+
+.sell-ttl {
+    color: #7d7d7d;
+    border-bottom: 1px solid #939393;
+}
+
+.sell-category__select {
+    font-size: 12px;
+    border-radius: 25px;
+    padding: 0 12px;
+}
+
+.sell-category__wrap {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px 12px;
+    flex-wrap: wrap;
+}
+
+.sell-condition__select-wrap {
+    margin-top: 8px;
+    position: relative;
+}
+
+.sell-condition__select {
+    font-size: 12px;
+    padding: 8px;
+}
+
+.sell-condition__select-wrap::after {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #c3c3c3;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    transform: translateY(-50%);
+}
+
+.sell-btn {
+    margin-top: 28px;
+}
+

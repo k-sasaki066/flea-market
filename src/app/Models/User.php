@@ -47,11 +47,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public static function getSellItems()
-    {
-        $items = Item::where('user_id', Auth::id())->get();
-
-        return $items;
-    }
 }

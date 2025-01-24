@@ -12,4 +12,11 @@ class Condition extends Model
     protected $fillable = [
         'name',
     ];
+
+    public static function getConditions()
+    {
+        $conditions = Condition::all();
+        
+        return $conditions;
+    }
 }

@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Category;
+use App\Models\Condition;
+use App\Models\Brand;
 use Carbon\Carbon;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
+use App\Http\Requests\ExhibitionRequest;
 
 class UserController extends Controller
 {
@@ -22,16 +26,14 @@ class UserController extends Controller
         $profileValidated = app(ProfileRequest::class)->validated();
 
         if($request->file('image_url')) {
-            $original = $request->file('image_url')->getClientOriginalName();
-            $image_name = Carbon::now()->format('Ymd_His').'_'.$original;
-            request()->file('image_url')->move('storage/images', $image_name);
+            $image_url = Item::getImageUrl($request->file('image_url'));
 
             User::find(Auth::id())->update([
             'nickname' => $request->nickname,
             'post_cord' => $request->post_cord,
             'address' => $request->address,
             'building' => $request->building,
-            'image_url' => 'http://localhost/storage/images/'.$image_name,
+            'image_url' => $image_url,
             ]);
         }else {
             User::find(Auth::id())->update([
@@ -50,7 +52,7 @@ class UserController extends Controller
 
         $parameter = Item::getParameter($request);
         if($request['page'] == 'sell') {
-            $items = User::getSellItems();
+            $items = Item::getSellItems();
         }elseif($request['page'] == 'buy') {
             $items = Item::searchSuggestItems();
         }else {
@@ -58,5 +60,37 @@ class UserController extends Controller
         }
 
         return view('mypage', compact('user', 'items', 'parameter'));
+    }
+
+    public function getSell() {
+        $categories = Category::getCategories();
+        $conditions = Condition::getConditions();
+
+        return view('sell', compact('categories','conditions'));
+    }
+
+    public function postSell(ExhibitionRequest $request) {
+        $image_url = Item::getImageUrl($request->file('image_url'));
+
+        Item::create([
+            'user_id' => Auth::id(),
+            'condition_id' => $request->condition_id,
+            'name' => $request->name,
+            'image_url' => $image_url,
+            'category' => serialize($request->category),
+            'description' => $request->description,
+            'price' => $request->price,
+            'status' => '1',
+        ]);
+
+        if($request->brand_name) {
+            $item_id = Item::where('image_url', $image_url)->where('user_id', Auth::id())->first()->id;
+            Brand::create([
+                'item_id' => $item_id,
+                'name' => $request->brand_name,
+            ]);
+        }
+
+        return redirect('/mypage')->with('result', '商品を出品しました');
     }
 }

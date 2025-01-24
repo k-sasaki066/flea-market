@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="form-container login-container">
-    <h2 class="form-ttl">ログイン</h2>
+    <h2 class="form-header">ログイン</h2>
     <form class="form-group" action="/login" method="POST">
         @csrf
         <div class="form-group__item">

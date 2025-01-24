@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="form-container">
-    <h2 class="form-ttl">プロフィール設定</h2>
+    <h2 class="form-header">プロフィール設定</h2>
     <form class="form-group" action="/mypage/profile" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group__item user-img__group">

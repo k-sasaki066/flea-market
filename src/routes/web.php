@@ -34,4 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/like/:{item_id}', [FavoriteController::class, 'create']);
     Route::delete('/unlike/:{item_id}', [FavoriteController::class, 'delete']);
     Route::post('/comment/:{item_id}', [ItemController::class, 'postComment']);
+    Route::get('/sell', [UserController::class, 'getSell']);
+    Route::post('/sell', [UserController::class, 'postSell']);
 });

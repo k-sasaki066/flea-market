@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="form-container">
-    <h2 class="form-ttl">会員登録</h2>
+    <h2 class="form-header">会員登録</h2>
     <form class="form-group" action="/register" method="POST">
         @csrf
         <div class="form-group__item">

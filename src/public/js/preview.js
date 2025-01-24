@@ -1,4 +1,5 @@
 const input = document.querySelector('input[name="image_url"]')
+const figure = document.querySelector('#figure')
 const figureImage = document.querySelector('#figureImage')
 
 input.addEventListener('change', (event) => {
@@ -8,5 +9,8 @@ input.addEventListener('change', (event) => {
     fileReader.readAsDataURL(file);
     if (file) {
         figureImage.setAttribute('src', URL.createObjectURL(file))
+        figure.style.display = 'block'
+    } else {
+        figure.style.display = 'none'
     }
 })

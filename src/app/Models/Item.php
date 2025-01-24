@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class Item extends Model
 {
@@ -102,5 +103,22 @@ class Item extends Model
         ->find($item_id);
 
         return $item;
+    }
+
+    public static function getSellItems()
+    {
+        $items = Item::where('user_id', Auth::id())->get();
+
+        return $items;
+    }
+
+    public static function getImageUrl($request_image)
+    {
+        $original = $request_image->getClientOriginalName();
+        $image_name = Carbon::now()->format('Ymd_His').'_'.$original;
+        $request_image->move('storage/images', $image_name);
+        $image_url = 'http://localhost/storage/images/'.$image_name;
+
+        return $image_url;
     }
 }

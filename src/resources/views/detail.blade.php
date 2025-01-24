@@ -44,7 +44,7 @@
                         </form>
                         @endif
                     @else
-                    <a href="#favorite"><img src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
+                    <a class="favorite-count__login" href="#favorite"><img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
                     @endif
                     <span class="favorite-count__text">{{ $item['favorites_count'] }}</span>
                 </div>
@@ -62,7 +62,7 @@
 
         <div class="item-description">
             <h3 class="item-description__ttl">商品説明</h3>
-            <p class="item-description__text">{{ $item['description'] }}</p>
+            <p class="item-description__text">{!! nl2br(e($item['description'])) !!}</p>
         </div>
 
         <div class="item-info">

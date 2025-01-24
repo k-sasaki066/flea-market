@@ -54,7 +54,7 @@
                 </div>
             </div>
             @if(Auth::check())
-            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="/purchase/:{{ $item['id'] }}">購入手続きへ</a>
             @else
             <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
             @endif

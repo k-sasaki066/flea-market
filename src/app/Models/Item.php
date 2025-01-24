@@ -99,7 +99,7 @@ class Item extends Model
     public static function getDetailItem($item_id)
     {
         $item = Item::withCount('favorites', 'comments')
-        ->with('condition', 'brand','favorites', 'comments')
+        ->with('condition', 'brand', 'favorites', 'comments')
         ->find($item_id);
 
         return $item;

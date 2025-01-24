@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 
 /*
@@ -36,4 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment/:{item_id}', [ItemController::class, 'postComment']);
     Route::get('/sell', [UserController::class, 'getSell']);
     Route::post('/sell', [UserController::class, 'postSell']);
+    Route::get('/purchase/:{item_id}', [PurchaseController::class, 'getPurchase']);
+    Route::get('/purchase/address/:{item_id}', [PurchaseController::class, 'getAddress']);
 });

@@ -10,7 +10,7 @@
     <h2 class="form-header">プロフィール設定</h2>
     <form class="form-group" action="/mypage/profile" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="form-group__item user-img__group">
+        <div class="form-group__item user-img__group flex">
             <div class="user-img__wrap">
                 <img class="user-img" id="figureImage" src="{{ $user['image_url'] }}" alt="">
             </div>

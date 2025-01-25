@@ -1,7 +1,6 @@
 .purchase-form {
     width: 90%;
     margin: 52px auto;
-    display: flex;
     justify-content: space-between;
     gap: 48px;
 }
@@ -11,21 +10,17 @@
 }
 
 .purchase-content__img {
-    display: flex;
     gap: 32px;
-    border-bottom: 1px solid #939393;
     padding-bottom: 32px;
 }
 
 .purchase-content {
     padding: 24px 32px 48px;
-    border-bottom: 1px solid #939393;
 }
 
 .purchase-img__wrap {
-    width: 150px;
-    height: 150px;
-    background-color: beige;
+    width: 25%;
+    height: 25%;
 }
 
 .purchase-way__select-wrap,
@@ -68,7 +63,6 @@
 }
 
 .purchase-ttl__inner {
-    display: flex;
     justify-content: space-between;
 }
 
@@ -90,22 +84,26 @@
     width: 100%;
 }
 
-.purchase-confirm__table-heading {
-    font-size: 14px;
-}
-
 .purchase-confirm__table-heading,
 .purchase-confirm__table-item {
     padding: 24px;
     width: 50%;
-    border-bottom: 1px solid #939393;
+    text-align: center;
+}
+
+.purchase-confirm__table-item--span {
+    font-size: 16px;
+}
+
+.purchase-confirm__table-item {
+    font-size: 18px;
 }
 
 .purchase-btn {
     margin-top: 48px;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 959px) {
     .purchase-form {
         width: 90%;
         flex-direction: column;

@@ -2,11 +2,12 @@
 .user-img__group {
     gap: 48px;
 }
+
 .user__inner {
     width: 70%;
     margin: 48px auto 0;
-    display: flex;
     align-items: center;
+    gap: 12px;
     justify-content: space-between;
 }
 
@@ -18,7 +19,6 @@
 /* ---menu--- */
 .list-menu__group {
     margin-top: 40px;
-    border-bottom: 1px solid #939393;
 }
 
 .list-menu__form {
@@ -47,7 +47,6 @@
 /* ---item--- */
 .list-card__group {
     padding: 40px;
-    display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 48px;
@@ -87,8 +86,8 @@
     height: 100%;
 }
 
-.list-card__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+@media screen and (max-width: 850px) {
+    .user__inner {
+        width: 80%;
+    }
 }

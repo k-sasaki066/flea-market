@@ -9,7 +9,7 @@
 @section('content')
 <div class="sell-container">
     <h2 class="form-header">商品の出品</h2>
-    <form class="sell-form" action="/sell" method="POST" enctype="multipart/form-data">
+    <form class="sell-form flex" action="/sell" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="sell-img__group">
             <p class="sell-text">商品画像<span class="sell-text__required">必須</span></p>
@@ -27,11 +27,11 @@
             </div>
         </div>
         
-        <div class="sell-detail__group">
-            <h3 class="sell-ttl">商品の詳細</h3>
+        <div class="sell-detail__group flex">
+            <h3 class="sell-ttl border">商品の詳細</h3>
             <div class="sell-category__group">
                 <p class="sell-text">カテゴリー<span class="sell-text__required">必須</span></p>
-                <div class="sell-category__wrap">
+                <div class="sell-category__wrap flex">
                     @foreach($categories as $category)
                     <input class="sell-category__hidden" type="checkbox" id="{{ $category['name'] }}" name="category[]" value="{{ $category['id'] }}" {{ (is_array(old('category')) && in_array($category['id'], old('category'))) ? 'checked' : '' }}>
                     <label class="sell-category__select" for="{{ $category['name'] }}">{{ $category['name'] }}</label>
@@ -45,7 +45,7 @@
             </div>
 
             <div class="sell-condition_group">
-                <p class="sell-text">商品の状態<span class="sell-text__required">必須</span></p>
+                <p class="sell-text flex">商品の状態<span class="sell-text__required">必須</span></p>
                 <div class="sell-condition__select-wrap">
                     <select class="sell-condition__select form-group__item-input" name="condition_id" id="">
                         <option value="" selected disabled>選択してください</option>
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div class="sell-content__group">
+        <div class="sell-content__group flex">
             <h3 class="sell-ttl">商品名と説明</h3>
             <div class="sell-content__inner">
                 <p class="sell-text">商品名<span class="sell-text__required">必須</span></p>

@@ -13,18 +13,18 @@
 @endif
 
 <div class="mypage-container">
-    <div class="user__inner">
-        <div class="user-img__group">
+    <div class="user__inner flex">
+        <div class="user-img__group flex">
             <div class="user-img__wrap">
                 <img class="user-img" src="{{ $user['image_url'] }}" alt="">
             </div>
-            <h2 class="mypage-user">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
+            <h2 class="user-name">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
         </div>
         <a class="profile-link" href="/mypage/profile">プロフィールを編集</a>
     </div>
 
-    <div class="list-container">
-        <div class="list-menu__group">
+    <div class="list__inner">
+        <div class="list-menu__group border">
             <form class="list-menu__form" action="/mypage" method="GET">
                 @csrf
                 <input type="hidden" name="page" value="sell">
@@ -37,7 +37,7 @@
             </form>
         </div>
 
-        <div class="list-card__group">
+        <div class="list-card__group flex">
             @if($parameter == 'sell' || $parameter == 'buy')
             @foreach($items as $item)
             <div class="list-card__item">

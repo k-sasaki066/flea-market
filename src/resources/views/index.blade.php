@@ -13,7 +13,7 @@
 @endif
 
 <div class="list-container">
-    <div class="list-menu__group">
+    <div class="list-menu__group border">
         <form class="list-menu__form" action="/" method="GET">
             @csrf
             <input type="hidden" name="page" value="suggest">
@@ -26,7 +26,7 @@
         </form>
     </div>
 
-    <div class="list-card__group">
+    <div class="list-card__group flex">
         @foreach($items as $item)
         <div class="list-card__item">
             @if($item['status'] == 2)

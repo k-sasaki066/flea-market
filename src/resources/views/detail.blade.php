@@ -17,18 +17,18 @@
     <div class="item-img__wrap">
         <img class="item-img" src="{{ $item['image_url'] }}" alt="item">
     </div>
-    <div class="item-content">
-        <div class="item-top">
-            <div class="item-ttl__group">
-                <h2 class="item-ttl">{{ $item['name'] }}</h2>
+    <div class="item-detail">
+        <div class="item-detail__top flex">
+            <div class="item-detail__ttl-group">
+                <h1 class="item-detail__ttl">{{ $item['name'] }}</h1>
                 @if($item['brand'] !== null)
-                <p class="item-brand">{{ $item['brand']['name'] }}</p>
+                <p class="item-detail__brand">{{ $item['brand']['name'] }}</p>
                 @endif
             </div>
-            <div class="item-price">
-                <span class="item-price__span">¥</span><p class="item-price__text">{{ number_format($item['price']) }}</p><span class="item-price__span">(税込)</span>
+            <div class="item-detail__price-group flex">
+                <span class="item-detail__price-span">¥</span><p class="item-detail__price-text">{{ number_format($item['price']) }}</p><span class="item-detail__price-span">&nbsp;(税込)</span>
             </div>
-            <div class="item-count__wrap">
+            <div class="item-detail__count-group flex">
                 <div class="favorite-count__group">
                     @if(Auth::check())
                         @if($favorite == null)
@@ -60,14 +60,14 @@
             @endif
         </div>
 
-        <div class="item-description">
-            <h3 class="item-description__ttl">商品説明</h3>
+        <div class="item-description__group flex">
+            <h2 class="item-description__ttl">商品説明</h2>
             <p class="item-description__text">{!! nl2br(e($item['description'])) !!}</p>
         </div>
 
-        <div class="item-info">
-            <h3 class="item-info__ttl">商品の情報</h3>
-            <div class="item-category__group">
+        <div class="item-info__group flex">
+            <h2 class="item-info__ttl">商品の情報</h2>
+            <div class="item-category__group flex">
                 <p class="item-category__ttl">カテゴリー</p>
                 <div class="item-category__name">
                     @foreach($category as $value)
@@ -75,20 +75,20 @@
                     @endforeach
                 </div>
             </div>
-            <div class="item-condition__group">
+            <div class="item-condition__group flex">
                 <p class="item-condition__ttl">商品の状態</p>
                 <span class="item-condition__text">{{ $item['condition']['name'] }}</span>
             </div>
         </div>
 
-        <div class="item-comment__group">
-            <h3 class="item-comment__ttl">コメント ({{ $item['comments_count'] }})</h3>
+        <div class="item-comment__group flex">
+            <h2 class="item-comment__ttl">コメント ({{ $item['comments_count'] }})</h2>
             <div class="item-comment__inner">
                 @foreach($item->comments as $user)
                 <div class="item-comment__wrap">
-                    <div class="item-comment__user">
-                        <div class="item-comment__img-wrap">
-                            <img class="item-comment__img" src="{{ $user['image_url'] }}" alt="">
+                    <div class="item-comment__user flex">
+                        <div class="item-comment__img-wrap user-img__wrap">
+                            <img class="user-img" src="{{ $user['image_url'] }}" alt="">
                         </div>
                         <p class="item-comment__name">{{ $user['nickname'] }}</p>
                     </div>
@@ -98,10 +98,10 @@
             </div>
         </div>
 
-        <form class="item-comment__form" action="/comment/:{{ $item['id'] }}" method="POST">
+        <form class="item-comment__form flex" action="/comment/:{{ $item['id'] }}" method="POST">
             @csrf
             <h3 class="item-comment__form-ttl">商品へのコメント</h3>
-            <textarea class="item-comment__form-text" name="comment" rows="10">{{ old('comment') }}</textarea>
+            <textarea class="item-comment__form-textarea" name="comment" rows="10">{{ old('comment') }}</textarea>
             <div class="error-message">
                 @error('comment')
                 {{ $message }}
@@ -110,7 +110,7 @@
             @if(Auth::check())
             <button class="item-comment__form-btn form-btn" type="submit">コメントを送信する</button>
             @else
-            <a class="item-purchase__btn form-btn" href="#comment">コメントを送信する</a>
+            <a class="item-comment__form-btn form-btn" href="#comment">コメントを送信する</a>
             @endif
         </form>
     </div>

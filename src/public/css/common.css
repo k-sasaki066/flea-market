@@ -1,6 +1,20 @@
+body {
+    width: 100vw;
+    min-height: 100vh;
+    font-family: "Helvetica Neue", Helvetica, Arial, Verdana, Roboto, "游ゴシック","Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro", "Meiryo UI", "メイリオ", Meiryo,"ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
 a {
     text-decoration: none;
     cursor: pointer;
+}
+
+.flex {
+    display: flex;
+}
+
+.border {
+    border-bottom: 1px solid #939393;
 }
 
 .error-message {
@@ -96,7 +110,6 @@ a {
 
 /* ---user-img--- */
 .user-img__group {
-    display: flex;
     align-items: center;
     gap: 32px;
 }
@@ -114,6 +127,7 @@ a {
 
 .user-img,
 .sell-img,
+.list-card__img,
 .purchase-img {
     width: 100%;
     height: 100%;
@@ -145,7 +159,7 @@ a {
     display: none;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 959px) {
     .header {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;

@@ -7,7 +7,6 @@
 .sell-form,
 .sell-detail__group,
 .sell-content__group {
-    display: flex;
     flex-direction: column;
 }
 
@@ -18,7 +17,6 @@
 
 .sell-text {
     font-weight: bold;
-    display: flex;
     align-items: center;
     gap: 8px;
 }
@@ -69,7 +67,6 @@
 
 .sell-ttl {
     color: #7d7d7d;
-    border-bottom: 1px solid #939393;
 }
 
 .sell-category__select {
@@ -80,7 +77,6 @@
 
 .sell-category__wrap {
     margin-top: 20px;
-    display: flex;
     gap: 20px 12px;
     flex-wrap: wrap;
 }

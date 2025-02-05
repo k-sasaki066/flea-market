@@ -83,6 +83,7 @@ a {
 
 /* ---header-menu--- */
 .header-nav__menu {
+    display: grid;
     grid-column: 3/4;
     justify-items: right;
 }
@@ -181,5 +182,6 @@ a {
     .header-nav__menu {
         grid-column: 2/3;
         grid-row: 2/3;
+        text-align: right;
     }
 }

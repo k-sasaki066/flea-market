@@ -22,7 +22,7 @@
                     <img class="purchase-img" src="{{ $item['image_url'] }}" alt="">
                 </div>
                 <div class="purchase-text">
-                    <h3 class="purchase-ttl">{{ $item['name'] }}</h3>
+                    <h2 class="purchase-ttl">{{ $item['name'] }}</h2>
                     <span class="purchase-span">&yen;</span><input class="purchase-price" type="text" name="price" value="{{ number_format($item['price']) }}" readonly>
                 </div>
             </div>

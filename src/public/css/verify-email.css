@@ -1,0 +1,38 @@
+.header{
+    display: none;
+}
+
+.verify-email__container {
+    width: 420px;
+    margin: 120px auto 0;
+}
+
+.verify-email__header {
+    text-align: center;
+}
+
+.verify-email__content {
+    text-align: center;
+    margin-top: 48px;
+}
+
+.verify-email__form {
+    margin: 20px auto 0;
+}
+
+.verify-email__form-button {
+    padding: 8px 20px;
+    background-color: rgb(48, 88, 207);
+    color: #fff;
+    border-radius: 5px;
+    transition: .3s;
+}
+
+.verify-email__back-form {
+    margin: 20px auto 0;
+    font-size: 12px;
+}
+
+.verify-email__back {
+    color: rgb(48, 88, 207);
+}

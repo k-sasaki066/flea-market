@@ -18,8 +18,8 @@ use App\Http\Controllers\RegisteredUserController;
 |
 */
 
-// Route::get('/login', function () {
-//     return view('auth.login');
+// Route::get('/verify', function () {
+//     return view('auth.verify-email');
 // });
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
@@ -28,7 +28,7 @@ Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);
 Route::get('/item/:{item_id}', [ItemController::class, 'getDetail']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'getProfile']);
     Route::post('/mypage/profile', [UserController::class, 'postProfile']);
     Route::get('/mypage', [UserController::class, 'getMypage']);

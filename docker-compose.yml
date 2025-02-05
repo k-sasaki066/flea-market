@@ -1,4 +1,7 @@
-version: '3.8'
+# version: '3.8'
+
+volumes:
+  maildir: {}
 
 services:
   nginx:
@@ -42,3 +45,15 @@ services:
       - mysql
     ports:
       - 8080:80
+
+  mail:
+    image: mailhog/mailhog
+    platform: linux/x86_64
+    container_name: flea-market-mailhog
+    ports:
+      - "8025:8025"
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+    volumes:
+      - maildir:/tmp

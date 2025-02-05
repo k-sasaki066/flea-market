@@ -57,6 +57,10 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
+        Fortify::verifyEmailView(function(){
+            return view('auth.verify-email');
+        });
+
         RateLimiter::for('login', function(Request $request) {
             $email = (string)$request->email;
 
@@ -73,10 +77,9 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('name', $request->name)->orWhere('email', $request->name)->first();
 
-            if ($user &&
-            Hash::check($request->password, $user->password)) {
-            return $user;
-        }
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
         });
 
     }

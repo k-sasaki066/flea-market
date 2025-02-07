@@ -27,12 +27,12 @@
         <div class="list-menu__group border">
             <form class="list-menu__form" action="/mypage" method="GET">
                 @csrf
-                <input type="hidden" name="page" value="sell">
+                <input type="hidden" name="tab" value="sell">
                 <button class="list-menu__text {{ ($parameter == 'sell') ? 'selected' : ''}} " type="submit">出品した商品</button>
             </form>
             <form class="list-menu__form" action="/mypage" method="GET">
                 @csrf
-                <input type="hidden" name="page" value="buy">
+                <input type="hidden" name="tab" value="buy">
                 <button class="list-menu__text {{ ($parameter == 'buy') ? 'selected' : '' }}" type="submit">購入した商品</button>
             </form>
         </div>

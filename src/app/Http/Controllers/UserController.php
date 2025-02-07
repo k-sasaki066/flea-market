@@ -50,14 +50,17 @@ class UserController extends Controller
     public function getMypage(Request $request) {
         $user = User::find(Auth::id(), ['nickname','image_url']);
 
-        $parameter = Item::getParameter($request);
-        if($request['page'] == 'sell') {
-            $items = Item::getSellItems();
-        }elseif($request['page'] == 'buy') {
-            $items = Item::searchSuggestItems();
-        }else {
-            $items = null;
+        switch ($request['tab']) {
+            case 'sell':
+                $items = Item::getSellItems();
+                break;
+            case 'buy':
+                $items = Item::searchSuggestItems();
+                break;
+            default:
+                $items = [];
         }
+        $parameter = Item::getParameter($request);
 
         return view('mypage', compact('user', 'items', 'parameter'));
     }

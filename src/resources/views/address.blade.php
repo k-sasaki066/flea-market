@@ -8,7 +8,7 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-header">住所の変更</h2>
-    <form class="form-group" action="/" method="POST">
+    <form class="form-group" action="/purchase/address/:{{ $item_id }}" method="POST">
         @csrf
         <div class="form-group__item">
             <p class="form-group__item-label">郵便番号</p>
@@ -32,7 +32,7 @@
 
         <div class="form-group__item">
             <p class="form-group__item-label">建物名</p>
-            <input class="form-group__item-input" type="text" name="building">
+            <input class="form-group__item-input" type="text" name="building" value="{{ old('building') }}">
             <div class="error-message">
                 @error('building')
                 {{ $message }}
@@ -43,6 +43,7 @@
         <button class="form-btn btn-margin" type="submit">
             更新する
         </button>
+        <input type="hidden" name="nickname" value="{{ Auth::user()->nickname }}">
     </form>
 </div>
 

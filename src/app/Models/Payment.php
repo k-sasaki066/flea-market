@@ -13,4 +13,10 @@ class Payment extends Model
         'way',
     ];
 
+    public static function getPayments()
+    {
+        $payments = Payment::all();
+
+        return $payments;
+    }
 }

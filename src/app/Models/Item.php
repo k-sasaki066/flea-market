@@ -121,4 +121,11 @@ class Item extends Model
 
         return $image_url;
     }
+
+    public static function getPaymentItem($item_id)
+    {
+        $item = Item::find($item_id);
+
+        return $item;
+    }
 }

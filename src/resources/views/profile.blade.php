@@ -11,7 +11,7 @@
     <form class="form-group" action="/mypage/profile" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group__item user-img__group flex">
-            <div class="user-img__wrap">
+            <div class="user-img__wrap" id="figure">
                 <img class="user-img" id="figureImage" src="{{ $user['image_url'] }}" alt="">
             </div>
             <div class="user-img__btn-wrap">

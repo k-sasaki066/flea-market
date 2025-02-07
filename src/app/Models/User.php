@@ -47,4 +47,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getPaymentUser()
+    {
+        $user = User::select('id', 'post_cord', 'address', 'building')->find(Auth::id());
+
+        return $user;
+    }
 }

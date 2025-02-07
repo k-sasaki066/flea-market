@@ -6,6 +6,12 @@
 @endsection
 
 @section('content')
+@if (session('error'))
+    <div class="flash_error-message">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="form-container login-container">
     <h2 class="form-header">ログイン</h2>
     <form class="form-group" action="/login" method="POST">

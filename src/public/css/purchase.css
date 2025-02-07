@@ -39,7 +39,8 @@
 }
 
 .purchase-ttl,
-.purchase-address__wrap {
+.purchase-address__item,
+.purchase-address {
     font-weight: bold;
 }
 
@@ -51,7 +52,7 @@
 
 .purchase-way__select-wrap::after {
     position: absolute;
-    top: 50%;
+    top: 14px;
     right: 5%;
     width: 0;
     height: 0;

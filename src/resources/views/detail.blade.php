@@ -50,7 +50,7 @@
                 </div>
                 <div class="comment-count__group">
                     <img class="comment-count__img" src="{{ asset('images/comment.svg') }}" alt="コメント" width="22px">
-                    <span class="comment-count__text">2</span>
+                    <span class="comment-count__text">{{ $item['comments_count'] }}</span>
                 </div>
             </div>
             @if(Auth::check())

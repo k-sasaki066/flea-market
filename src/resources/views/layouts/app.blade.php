@@ -17,7 +17,7 @@
 
         <form class="search-form" action="/search" method="GET">
 		@csrf
-            <input class="search-form__keyword" type="text" placeholder="なにをお探しですか?" value="{{ request('keyword') }}" name="keyword">
+            <input class="search-form__keyword" type="text" placeholder="なにをお探しですか?" value="{{ session('search_keyword', '') }}" name="keyword">
             <button class="search-form__btn" type="submit">
                 <img class="search-form__img" src="{{ asset('images/search.svg') }}" alt="search" width="20px">
             </button>

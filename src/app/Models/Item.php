@@ -48,12 +48,18 @@ class Item extends Model
 
     public static function getItems()
     {
+        $keyword = session('search_keyword');
         $query = Item::with('condition');
-        if(Auth::check()) {
-            $items = $query->where('user_id', '!=', Auth::id())->get();
-        }else {
-            $items = $query->get();
+
+        if (Auth::check()) {
+            $query->where('user_id', '!=', Auth::id());
         }
+
+        if (!empty($keyword)) {
+            $query->where('name', 'like', "%{$keyword}%");
+        }
+
+        $items = $query->get();
 
         return $items;
     }
@@ -63,7 +69,7 @@ class Item extends Model
         $query = Item::query();
 
         if (!empty($keyword)) {
-            $query->where('name', 'like', "%$keyword%");
+            $query->where('user_id', '!=', Auth::id())->where('name', 'like', "%$keyword%");
         }
 
         $items = $query->with('condition')->get();
@@ -80,18 +86,23 @@ class Item extends Model
 
     public static function getFavoriteItems()
     {
-        $items = Item::whereHas('favorites', function ($query) {
+        $keyword = session('search_keyword');
+        $query = Item::whereHas('favorites', function ($query) {
             $query->where('user_id', Auth::id());
-            })->with(['favorites' => function($query) {
-                $query->where('user_id', Auth::id());
-        }])->get();
+        })->with('favorites');
+
+        if (!empty($keyword)) {
+            $query->where('name', 'like', "%{$keyword}%");
+        }
+
+        $items = $query->get();
 
         return $items;
     }
 
     public static function getParameter($request)
     {
-        $parameter = $request->input('page');
+        $parameter = $request->input('tab');
 
         return $parameter;
     }

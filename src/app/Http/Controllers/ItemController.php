@@ -12,23 +12,35 @@ use App\Http\Requests\CommentRequest;
 class ItemController extends Controller
 {
     public function index(Request $request) {
-        $items = Item::getItems();
         $parameter = Item::getParameter($request);
-        if($request['page'] == 'suggest') {
-            $items = Item::searchSuggestItems();
-        }elseif($request['page'] == 'mylist') {
-            $items = Item::getFavoriteItems();
+
+        switch ($request['tab']) {
+            case 'suggest':
+                $items = Item::searchSuggestItems();
+                break;
+            case 'mylist':
+                $items = Item::getFavoriteItems();
+                break;
+            default:
+                $items = Item::getItems();
         }
 
         return view('index', compact('items', 'parameter'));
     }
 
     public function searchItem(Request $request) {
-        $items = Item::searchItems($request['keyword']);
+        $keyword = $request->input('keyword');
+
+        if ($keyword) {
+            session(['search_keyword' => $keyword]);
+        } else {
+            session()->forget('search_keyword');
+        }
+        $items = Item::searchItems($keyword);
 
         $parameter = Item::getParameter($request);
 
-        return view('index', compact('items', 'parameter'));
+        return redirect()->back()->with((['items'=>$items, 'parameter'=>$parameter]));
     }
 
     public function getDetail($item_id) {

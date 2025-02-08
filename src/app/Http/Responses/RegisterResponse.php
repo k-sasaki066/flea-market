@@ -18,7 +18,7 @@ class RegisterResponse implements RegisterResponseContract
     public function toResponse($request)
     {
         return $request->wantsJson()
-                    ? new JsonResponse('', 201)
-                    : redirect('/mypage/profile');
+            ? new JsonResponse(['message' => 'Registration successful'], 201)
+            : redirect()->route('login')->with('result', '会員登録が完了しました。ログインしてください');
     }
 }

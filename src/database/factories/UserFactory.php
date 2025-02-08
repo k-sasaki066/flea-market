@@ -24,6 +24,7 @@ class UserFactory extends Factory
             'address' => mb_substr($this->faker->address(), 9),
             'building' => $this->faker->secondaryAddress(),
             'image_url' => 'https://picsum.photos/seed/picsum/200/300',
+            'profile_completed' => true,
             'remember_token' => Str::random(10),
         ];
     }

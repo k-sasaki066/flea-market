@@ -6,6 +6,12 @@
 @endsection
 
 @section('content')
+@if (session('error'))
+    <div class="flash_error-message">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="form-container">
     <h2 class="form-header">プロフィール設定</h2>
     <form class="form-group" action="/mypage/profile" method="POST" enctype="multipart/form-data">

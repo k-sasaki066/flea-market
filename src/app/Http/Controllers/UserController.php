@@ -34,6 +34,7 @@ class UserController extends Controller
             'address' => $request->address,
             'building' => $request->building,
             'image_url' => $image_url,
+            'profile_completed' => true,
             ]);
         }else {
             User::find(Auth::id())->update([
@@ -41,10 +42,11 @@ class UserController extends Controller
             'post_cord' => $request->post_cord,
             'address' => $request->address,
             'building' => $request->building,
+            'profile_completed' => true,
             ]);
         }
 
-        return redirect('/mypage')->with('result', 'プロフィールを更新しました');
+        return redirect('/mypage')->with('result', 'プロフィールが更新されました');
     }
 
     public function getMypage(Request $request) {

@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'address',
         'building',
         'image_url',
+        'profile_completed'
     ];
 
     /**
@@ -46,6 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'profile_completed' => 'boolean',
     ];
 
     public static function getPaymentUser()

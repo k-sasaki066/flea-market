@@ -21,15 +21,19 @@ class FavoriteController extends Controller
             ])->save();
         }
 
-        return redirect()->back();
+        return response()->json(['message' => 'Liked successfully!']);
     }
 
     public function delete($item_id)
     {
-        Favorite::where('user_id', Auth::id())
+        $deleted = Favorite::where('user_id', Auth::id())
         ->where('item_id', $item_id)->delete();
 
-        return redirect()->back();
+        if ($deleted) {
+            return response()->json(['message' => 'Unliked successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Already unliked or not found'], 404);
+        }
     }
 
 }

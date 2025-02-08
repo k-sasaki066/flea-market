@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
     {
         // Tokenエラーの時、ログイン画面にリダイレクトする。
         if ($exception instanceof TokenMismatchException) {
-            return redirect()->route('login')->with('error', 'セッションがタイムアウトしました。再度ログインしてください。');;
+            return redirect()->route('login')->with('error', 'セッションがタイムアウトしました。再度ログインしてください。');
         }
 
         return parent::render($request, $exception);

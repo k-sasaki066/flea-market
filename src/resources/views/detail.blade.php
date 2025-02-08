@@ -1,6 +1,7 @@
 @extends('layouts/app')
 
 @section('css')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="{{ asset('css/common.css')}}">
 <link rel="stylesheet" href="{{ asset('css/form.css')}}">
 <link rel="stylesheet" href="{{ asset('css/detail.css')}}">
@@ -31,18 +32,9 @@
             <div class="item-detail__count-group flex">
                 <div class="favorite-count__group">
                     @auth
-                        @if(is_null($favorite))
-                        <form class="create-favorite__form" action="/like/:{{ $item['id'] }}" method="POST">
-                            @csrf
-                            <input class="favorite-count__img" type="image" src="{{ asset('images/star.svg') }}" alt="いいね" width="22px">
-                        </form>
-                        @else
-                        <form class="delete-favorite__form" action="/unlike/:{{ $item['id'] }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <input class="favorite-count__img" type="image" src="{{ asset('images/star-yellow.svg') }}" alt="いいね" width="22px">
-                        </form>
-                        @endif
+                    <button class="favorite-btn" data-item-id="{{ $item->id }}">
+                        <img class="favorite-count__img" src="{{ asset($favorite ? 'images/star-yellow.svg' : 'images/star.svg') }}" alt="いいね" width="22px">
+                    </button>
                     @else
                     <a class="favorite-count__login" href="#favorite"><img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
                     @endauth
@@ -138,5 +130,6 @@
             <p class="modal-text">コメントを送信するには、ログインが必要です。</p>
         </div>
     </div>
+    <script src="{{ asset('js/favorite.js') }}"></script>
 </div>
 @endsection

@@ -57,6 +57,13 @@ class ItemController extends Controller
     }
 
     public function postComment(CommentRequest $request, $item_id) {
+
+        $user = Auth::user();
+
+        if (!$user->profile_completed) {
+            return redirect('/mypage/profile')->with('error', 'コメントするにはプロフィールを設定してください');
+        }
+
         Comment::create([
         'user_id' => Auth::id(),
         'item_id' => $item_id,

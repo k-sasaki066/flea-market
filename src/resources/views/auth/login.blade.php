@@ -6,6 +6,11 @@
 @endsection
 
 @section('content')
+@if (session('result'))
+    <div class="flash_success-message">
+        {{ session('result') }}
+    </div>
+@endif
 @if (session('error'))
     <div class="flash_error-message">
         {{ session('error') }}

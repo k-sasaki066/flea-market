@@ -16,6 +16,8 @@ use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use App\Http\Requests\LoginRequest;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use App\Http\Responses\RegisterResponse;
+use App\Http\Responses\LoginResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -73,6 +75,8 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Contracts\RegisterResponse::class,
             \App\Http\Responses\RegisterResponse::class
         );
+
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
 
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('name', $request->name)->orWhere('email', $request->name)->first();

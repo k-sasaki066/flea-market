@@ -25,7 +25,7 @@
 
         <nav class="header-nav__menu">
             <ul class="header-nav__list">
-                @if(Auth::check())
+                @auth
                 <li class="header-nav__item">
                     <form action="/logout" method="post">
                         @csrf
@@ -55,7 +55,7 @@
                         ログイン
                     </a>
                 </li>
-                @endif
+                @endauth
             </ul>
         </nav>
     </header>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Favorite;
 
 class Item extends Model
 {
@@ -59,7 +60,7 @@ class Item extends Model
             $query->where('name', 'like', "%{$keyword}%");
         }
 
-        $items = $query->get();
+        $items = $query->orderBy('created_at', 'desc')->get();
 
         return $items;
     }
@@ -69,7 +70,7 @@ class Item extends Model
         $query = Item::query();
 
         if (!empty($keyword)) {
-            $query->where('user_id', '!=', Auth::id())->where('name', 'like', "%$keyword%");
+            $query->where('user_id', '!=', Auth::id())->where('name', 'like', "%{$keyword}%");
         }
 
         $items = $query->with('condition')->get();
@@ -79,7 +80,30 @@ class Item extends Model
 
     public static function searchSuggestItems()
     {
-        $items = Item::where('condition_id', '1')->get();
+        $userId = Auth::id();
+
+        $likedCategories = Favorite::where('favorites.user_id', $userId)
+            ->join('items', 'favorites.item_id', '=', 'items.id')
+            ->select('items.*')
+            ->pluck('items.category')
+            ->map(function ($category) {
+            return unserialize($category);
+            })
+            ->flatten()
+            ->unique();
+
+        $items = Item::where(function ($query) use ($likedCategories) {
+            foreach ($likedCategories as $categoryId) {
+                $query->orWhere('category', 'LIKE', '%"'.$categoryId.'"%');
+            }
+        })
+        ->whereDoesntHave('favorites', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+        ->where('status', '1')
+        ->orderBy('created_at', 'desc')
+        ->limit(10)
+        ->get();
 
         return $items;
     }
@@ -87,9 +111,12 @@ class Item extends Model
     public static function getFavoriteItems()
     {
         $keyword = session('search_keyword');
-        $query = Item::whereHas('favorites', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->with('favorites');
+
+        $query = Item::select('items.*')
+        ->join('favorites', 'items.id', '=', 'favorites.item_id')
+        ->where('favorites.user_id', Auth::id())
+        ->orderBy('favorites.created_at', 'desc')
+        ->with('favorites');
 
         if (!empty($keyword)) {
             $query->where('name', 'like', "%{$keyword}%");

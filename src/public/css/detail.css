@@ -46,23 +46,24 @@
 }
 
 .favorite-count__group,
-.create-favorite__form,
-.delete-favorite__form,
 .comment-count__group {
-    display: inline-block;
-    writing-mode: vertical-lr;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    writing-mode: vertical-rl;
     text-orientation: upright;
+}
+
+.favorite-count__text,
+.comment-count__text {
+    display: block;
+    line-height: 1.5;
 }
 
 .item-detail__brand,
 .favorite-count__text,
 .comment-count__text {
     font-size: 12px;
-}
-
-.favorite-count__text,
-.comment-count__text {
-    margin-top: -12px;
 }
 
 .item-purchase__btn {
@@ -75,13 +76,19 @@
 
 .item-category__group,
 .item-condition__group {
-    gap: 40px;
+    gap: 32px;
     align-items: center;
+}
+
+.item-category__name {
+    flex-wrap: wrap;
+    row-gap: 12px;
 }
 
 .item-category__ttl,
 .item-condition__ttl {
     font-weight: bold;
+    min-width: 90px;
 }
 
 .item-category__text {

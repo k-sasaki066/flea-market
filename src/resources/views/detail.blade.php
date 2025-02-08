@@ -30,8 +30,8 @@
             </div>
             <div class="item-detail__count-group flex">
                 <div class="favorite-count__group">
-                    @if(Auth::check())
-                        @if($favorite == null)
+                    @auth
+                        @if(is_null($favorite))
                         <form class="create-favorite__form" action="/like/:{{ $item['id'] }}" method="POST">
                             @csrf
                             <input class="favorite-count__img" type="image" src="{{ asset('images/star.svg') }}" alt="いいね" width="22px">
@@ -45,7 +45,7 @@
                         @endif
                     @else
                     <a class="favorite-count__login" href="#favorite"><img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
-                    @endif
+                    @endauth
                     <span class="favorite-count__text">{{ $item['favorites_count'] }}</span>
                 </div>
                 <div class="comment-count__group">
@@ -69,7 +69,7 @@
             <h2 class="item-info__ttl">商品の情報</h2>
             <div class="item-category__group flex">
                 <p class="item-category__ttl">カテゴリー</p>
-                <div class="item-category__name">
+                <div class="item-category__name flex">
                     @foreach($category as $value)
                     <span class="item-category__text">{{ $value }}</span>
                     @endforeach

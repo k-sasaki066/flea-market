@@ -57,7 +57,7 @@ class UserController extends Controller
                 $items = Item::getSellItems();
                 break;
             case 'buy':
-                $items = [];
+                $items = Item::getBuyItems();
                 break;
             default:
                 $items = [];

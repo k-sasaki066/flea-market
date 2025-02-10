@@ -47,6 +47,10 @@ class Item extends Model
         return $this->belongsToMany(User::class, 'comments')->withPivot('comment');
     }
 
+    public function purchase() {
+        return $this->hasOne(Purchase::class);
+    }
+
     public static function getItems()
     {
         $keyword = session('search_keyword');
@@ -100,6 +104,7 @@ class Item extends Model
         ->whereDoesntHave('favorites', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })
+        ->where('items.user_id', '!=', $userId)
         ->where('status', '1')
         ->orderBy('created_at', 'desc')
         ->limit(10)
@@ -146,6 +151,18 @@ class Item extends Model
     public static function getSellItems()
     {
         $items = Item::where('user_id', Auth::id())->get();
+
+        return $items;
+    }
+
+    public static function getBuyItems()
+    {
+        $userId = Auth::id();
+        $items = Item::select('items.*')
+        ->join('purchases', 'items.id', '=', 'purchases.item_id')
+        ->where('purchases.user_id', $userId)
+        ->orderBy('purchases.created_at', 'desc')
+        ->get();
 
         return $items;
     }

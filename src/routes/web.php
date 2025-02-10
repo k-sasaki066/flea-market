@@ -38,7 +38,10 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/sell', [UserController::class, 'getSell']);
     Route::post('/sell', [UserController::class, 'postSell']);
     Route::get('/purchase/:{item_id}', [PurchaseController::class, 'getPurchase']);
-    Route::post('/purchase/:{item_id}', [PurchaseController::class, 'postPurchase']);
+    Route::post('/purchase/:{item_id}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');
     Route::get('/purchase/address/:{item_id}', [PurchaseController::class, 'getAddress']);
     Route::post('/purchase/address/:{item_id}', [PurchaseController::class, 'postAddress']);
+
+    Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
+    Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
 });

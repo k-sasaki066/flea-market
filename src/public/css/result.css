@@ -1,0 +1,27 @@
+.result-container {
+    width: 500px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin: 72px auto 0;
+    text-align: center;
+    padding-bottom: 12px;
+}
+
+.success-title {
+    border-radius: 3px 3px 0 0;
+    background-color: #42cc42;
+}
+
+.error-title {
+    border-radius: 3px 3px 0 0;
+    background-color: #ff5855;
+}
+
+.result-message {
+    margin-top: 24px;
+}
+
+.home-btn {
+    display: inline-block;
+    margin-top: 48px;
+}

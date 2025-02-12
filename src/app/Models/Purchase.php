@@ -16,6 +16,8 @@ class Purchase extends Model
         'post_cord',
         'address',
         'building',
+        'stripe_session_id',
+        'payment_status',
     ];
 
     public function payment()

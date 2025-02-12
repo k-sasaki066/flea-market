@@ -30,7 +30,7 @@
             <div class="purchase-content border">
                 <p class="purchase-ttl">支払い方法</p>
                 <div class="purchase-way__select-wrap">
-                    <select class="purchase-way__select form-group__item-input" name="way" id="select">
+                    <select class="purchase-way__select form-group__item-input" name="payment_id" id="select">
                         <option value="" selected disabled>選択してください</option>
                         @foreach($payments as $payment)
                         <option value="{{ $payment['id'] }}" {{ old('way') == $payment['id'] ? 'selected' : '' }}>{{ $payment['way'] }}</option>

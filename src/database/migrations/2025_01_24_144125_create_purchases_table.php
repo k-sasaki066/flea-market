@@ -21,6 +21,8 @@ class CreatePurchasesTable extends Migration
             $table->char('post_cord', '8');
             $table->string('address');
             $table->string('building');
+            $table->string('stripe_session_id');
+            $table->string('payment_status')->default('pending');
             $table->timestamps();
         });
     }

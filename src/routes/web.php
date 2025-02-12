@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +18,6 @@ use App\Http\Controllers\RegisteredUserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/verify', function () {
-//     return view('auth.verify-email');
-// });
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
@@ -45,3 +42,5 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
 });
+
+Route::post('/webhook/stripe', [StripeWebhookController::class, 'handleWebhook']);

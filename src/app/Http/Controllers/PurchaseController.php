@@ -13,8 +13,7 @@ use App\Http\Requests\AddressRequest;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Log;
-use Stripe\Customer;
-
+use Stripe\Webhook;
 
 class PurchaseController extends Controller
 {
@@ -45,6 +44,7 @@ class PurchaseController extends Controller
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $item = Item::getPaymentItem($item_id);
+        $userId = Auth::id();
 
         try {
             $session = Session::create([
@@ -67,6 +67,14 @@ class PurchaseController extends Controller
                 'mode' => 'payment',
                 'success_url' => route('stripe.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('stripe.cancel'),
+                'metadata' => [
+                    'user_id' => $userId,
+                    'item_id' => $item_id,
+                    'payment_id' => $request->payment_id,
+                    'post_cord' => $request->post_cord,
+                    'address' => $request->address,
+                    'building' => $request->building,
+                ],
             ]);
 
             return redirect($session->url);

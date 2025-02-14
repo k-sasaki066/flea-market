@@ -65,15 +65,18 @@ class PurchaseController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
+                'payment_intent_data' => [
+                    'capture_method' => 'automatic',
+                ],
                 'success_url' => route('stripe.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('stripe.cancel'),
                 'metadata' => [
                     'user_id' => $userId,
                     'item_id' => $item_id,
-                    'payment_id' => $request->payment_id,
                     'post_cord' => $request->post_cord,
                     'address' => $request->address,
                     'building' => $request->building,
+                    'item_name' => $item->name,
                 ],
             ]);
 

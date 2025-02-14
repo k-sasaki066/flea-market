@@ -65,7 +65,7 @@ services:
     command: ngrok http nginx:80
     depends_on:
       - nginx
-    environment:
-      NGROK_AUTHTOKEN: "${NGROK_AUTHTOKEN}"
+    env_file:
+      - src/.env
     ports:
       - "4040:4040"

@@ -27,7 +27,7 @@
             <ul class="header-nav__list">
                 @auth
                 <li class="header-nav__item">
-                    <form action="/logout" method="post">
+                    <form action="/logout" method="POST">
                         @csrf
                         <button class="header-nav__link" type="submit">
                             ログアウト

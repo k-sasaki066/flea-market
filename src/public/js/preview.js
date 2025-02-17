@@ -1,18 +1,25 @@
-const input = document.querySelector('input[name="image_url"]')
-const figure = document.querySelector('#figure')
-const figureImage = document.querySelector('#figureImage')
+document.addEventListener("DOMContentLoaded", function () {
+    const figureImage = document.querySelector('#figureImage');
+    const input = document.querySelector('input[name="image_url"]');
 
-input.addEventListener('change', (event) => {
-    const [file] = event.target.files;
-    if (!file) {
-        figure.style.display = 'none';
-        return;
+    if (!figureImage.getAttribute('src')) {
+        figureImage.style.display = 'none';
     }
 
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-        figureImage.setAttribute('src', fileReader.result);
-        figure.style.display = 'block';
-    };
-    fileReader.readAsDataURL(file);
+    input.addEventListener('change', (event) => {
+        const [file] = event.target.files;
+
+        if (!file) {
+            figureImage.style.display = 'none';
+            figureImage.removeAttribute('src');
+            return;
+        }
+
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            figureImage.setAttribute('src', fileReader.result);
+            figureImage.style.display = 'block';
+        };
+        fileReader.readAsDataURL(file);
+    });
 });

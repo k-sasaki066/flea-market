@@ -63,7 +63,7 @@
         </div>
 
         <div class="sell-content__group flex">
-            <h3 class="sell-ttl">商品名と説明</h3>
+            <h3 class="sell-ttl border">商品名と説明</h3>
             <div class="sell-content__inner">
                 <p class="sell-text flex">商品名<span class="sell-text__required">必須</span></p>
                 <input class="form-group__item-input" type="text" name="name" value="{{ old('name') }}">

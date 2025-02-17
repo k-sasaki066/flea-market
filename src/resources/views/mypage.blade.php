@@ -16,7 +16,9 @@
     <div class="user__inner flex">
         <div class="user-img__group flex">
             <div class="user-img__wrap">
+                @if($user['image_url'])
                 <img class="user-img" src="{{ $user['image_url'] }}" alt="">
+                @endif
             </div>
             <h2 class="user-name">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
         </div>

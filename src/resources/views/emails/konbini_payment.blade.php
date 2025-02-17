@@ -9,7 +9,6 @@
     <p>本メールはサーバーからの自動配信メールです。</p>
     <br>
     <p>{{ $data['name'] }} 様</p>
-    <br>
     <p>この度は、coachtechフリマアプリをご利用いただき誠にありがとうございます。</p>
     <p>いただきましたご注文の支払い方法をご案内します。</p>
     <p>ご希望店舗でのお支払い手順をご確認のうえ、期限までにお支払いください。</p>
@@ -18,7 +17,7 @@
     <ul>
         <li>購入商品: {{ $data['item'] }}</li>
         <li>合計金額: <span>¥</span>{{number_format($data['price'])}}</li>
-        <li>支払い期限: {{ $data['payment_deadline'] }}&nbsp;23:59:59</li>
+        <li>支払い期限: {{ $data['expires_at'] }}</li>
         <li>ご利用可能店舗: ファミリーマート、&nbsp;ローソン、&nbsp;ミニストップ、&nbsp;セイコーマート</li>
         <li>支払い手順: <a href="{{ $data['voucher_url'] }}">{{ $data['voucher_url'] }}</a></li>
     </ul>

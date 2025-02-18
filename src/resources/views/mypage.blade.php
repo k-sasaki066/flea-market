@@ -13,15 +13,13 @@
 @endif
 
 <div class="mypage-container">
-    <div class="user__inner flex">
-        <div class="user-img__group flex">
-            <div class="user-img__wrap">
-                @if($user['image_url'])
-                <img class="user-img" src="{{ $user['image_url'] }}" alt="">
-                @endif
-            </div>
-            <h2 class="user-name">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
+    <div class="user__inner">
+        <div class="user-img__wrap">
+            @if($user['image_url'])
+            <img class="user-img" src="{{ $user['image_url'] }}" alt="">
+            @endif
         </div>
+        <h2 class="user-name">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
         <a class="profile-link" href="/mypage/profile">プロフィールを編集</a>
     </div>
 
@@ -47,7 +45,7 @@
                 <p class="sold-out">Sold</p>
                 @endif
                 <div class="list-card__wrap">
-                    <a class="list-card__link" href="/item/:{{ $item['id'] }}">
+                    <a class="list-card__link" href="/item/{{ $item['id'] }}">
                         <img class="list-card__img" src="{{ $item['image_url'] }}" alt="item">
                     </a>
                 </div>

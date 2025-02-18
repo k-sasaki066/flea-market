@@ -14,7 +14,7 @@
 @endif
 
 <div class="purchase-container">
-    <form  class="purchase-form flex" action="/purchase/:{{ $item['id'] }}" method="POST">
+    <form  class="purchase-form flex" action="/purchase/{{ $item['id'] }}" method="POST">
         @csrf
         <div class="purchase-content__inner">
             <div class="purchase-content__img flex border">
@@ -23,7 +23,10 @@
                 </div>
                 <div class="purchase-text">
                     <h2 class="purchase-ttl">{{ $item['name'] }}</h2>
-                    <span class="purchase-span">&yen;</span><input class="purchase-price" type="text" name="price" value="{{ number_format($item['price']) }}" readonly>
+                    <div class="purchase-price flex">
+                        <span class="purchase-span">&yen;</span>
+                        <input class="purchase-price__input" type="text" name="price" value="{{ number_format($item['price']) }}" readonly>
+                    </div>
                 </div>
             </div>
 
@@ -47,7 +50,7 @@
             <div class="purchase-content">
                 <div class="purchase-ttl__inner flex">
                     <p class="purchase-ttl">配送先</p>
-                    <a  class="purchase-address__btn" href="/purchase/address/:{{ $item['id'] }}">変更する</a>
+                    <a  class="purchase-address__btn" href="/purchase/address/{{ $item['id'] }}">変更する</a>
                 </div>
                 <div class="purchase-address__wrap">
                     <div class="purchase-address__item">

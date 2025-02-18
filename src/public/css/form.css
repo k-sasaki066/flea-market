@@ -1,7 +1,7 @@
 /* ---form--- */
 .form-container {
-    width: 450px;
-    margin: 48px auto 0;
+    width: 480px;
+    margin: 52px auto;
 }
 
 .login-container {
@@ -14,7 +14,7 @@
 }
 
 .form-group {
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 .form-group__item:not(:first-of-type) {
@@ -26,16 +26,17 @@
 }
 
 .form-group__item-input {
-    border: 1px solid #969696;
+    border: 1px solid #5F5F5F;
     width: 100%;
     border-radius: 3px;
-    padding: 4px;
+    padding: 8px 4px;
 }
 
 .form-btn {
     width: 100%;
-    background-color: #ff5655;
+    background-color: #ff5555;
     color: #fff;
+    font-weight: bold;
     border-radius: 3px;
     padding: 8px 0;
 }
@@ -48,6 +49,6 @@
     display: block;
     margin-top: 20px;
     text-align: center;
-    font-size: 12px;
-    color: #0069c8;
+    font-size: 14px;
+    color: #0073cc;
 }

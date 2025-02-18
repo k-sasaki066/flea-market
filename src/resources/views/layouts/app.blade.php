@@ -11,10 +11,10 @@
 
 <body>
     <header class="header">
+        @if (!request()->is('email/verify'))
         <a class="header-logo" href="/">
-            <img class="header-logo__img" src="{{ asset('images/logo.svg') }}" alt="coachtech" width="240px">
+            <img class="header-logo__img" src="{{ asset('images/logo.svg') }}" alt="coachtech" width="260px">
         </a>
-
         <form class="search-form" action="/search" method="GET">
 		@csrf
             <input class="search-form__keyword" type="text" placeholder="なにをお探しですか?" value="{{ session('search_keyword', '') }}" name="keyword">
@@ -58,6 +58,11 @@
                 @endauth
             </ul>
         </nav>
+        @else
+        <div class="header-logo" href="/">
+            <img class="header-logo__img" src="{{ asset('images/logo.svg') }}" alt="coachtech" width="260px">
+        </div>
+        @endif
     </header>
 
     <main class="main">

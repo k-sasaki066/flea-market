@@ -156,6 +156,10 @@ class StripeWebhookController extends Controller
                         'payment_status' => 'canceled',
                     ]);
 
+                    Item::find($session['metadata']['item_id'])->update([
+                        'status' => 1,
+                    ]);
+
                     Log::info("❌ 注文をキャンセルしました: ", ['session_id' => $sessionId]);
                 }
                 Mail::to($session->customer_details->email)->send(new KonbiniPaymentFailureMail($data));

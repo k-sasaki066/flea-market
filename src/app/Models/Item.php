@@ -95,20 +95,25 @@ class Item extends Model
             })
             ->flatten()
             ->unique();
+        
+        if($likedCategories->isNotEmpty()){
+            $items = Item::where(function ($query) use ($likedCategories) {
+                foreach ($likedCategories as $categoryId) {
+                    $query->orWhere('category', 'LIKE', '%"'.$categoryId.'"%');
+                }
+            })
+            ->whereDoesntHave('favorites', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('items.user_id', '!=', $userId)
+            ->where('status', '1')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+        }else {
+            $items = Item::where('items.user_id', '!=', $userId)->where('condition_id', '1')->where('status', '1')->get();
+        }
 
-        $items = Item::where(function ($query) use ($likedCategories) {
-            foreach ($likedCategories as $categoryId) {
-                $query->orWhere('category', 'LIKE', '%"'.$categoryId.'"%');
-            }
-        })
-        ->whereDoesntHave('favorites', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })
-        ->where('items.user_id', '!=', $userId)
-        ->where('status', '1')
-        ->orderBy('created_at', 'desc')
-        ->limit(10)
-        ->get();
 
         return $items;
     }

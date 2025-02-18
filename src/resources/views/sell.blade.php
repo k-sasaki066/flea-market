@@ -14,7 +14,7 @@
         <div class="sell-img__group">
             <p class="sell-text flex">商品画像<span class="sell-text__required">必須</span></p>
             <div class="sell-img__wrap">
-                <div class="sell-img__inner" id="figure">
+                <div class="sell-img__inner" id="sellFigure">
                     <img class="sell-img" id="figureImage" src="" alt="">
                 </div>
                 <label class="sell-img__select" for="upload">画像を選択する</label>

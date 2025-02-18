@@ -1,17 +1,29 @@
 /* ---mypage--- */
-.user-img__group {
-    gap: 48px;
-}
-
 .user__inner {
-    width: 70%;
+    width: 75%;
+    display: grid;
+    grid-template-columns: 120px 1fr 215px;
     margin: 48px auto 0;
     align-items: center;
-    gap: 12px;
+    gap: 4%;
     justify-content: space-between;
 }
 
+.user-img__wrap {
+    grid-column: 1/2;
+}
+
+.user-img {
+    text-align: right;
+}
+
+.user-name {
+    grid-column: 2/3;
+}
+
 .profile-link {
+    grid-column: 3/4;
+    min-width: 212px;
     font-size: 18px;
     padding: 4px 24px;
 }
@@ -28,33 +40,37 @@
 .list-menu__text {
     margin-right: 50px;
     line-height: 2em;
+    font-size: 18px;
     font-weight: bold;
     color: #6d6c6c;
 }
 
 .list-menu__form:first-of-type {
-    margin-left: 10%;
+    margin-left: 12%;
 }
 
 .list-menu__text:hover {
-    color: #e24a4a;
+    color: #ff0000;
 }
 
 .selected {
-    color: #e24a4a;
+    color: #ff0000;
 }
 
 /* ---item--- */
 .list-card__group {
-    padding: 40px;
+    padding: 48px;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 48px;
+    gap: 52px;
 }
 
-.list-card__item {
+.list-card__wrap {
+    width: 300px;
+    height: 300px;
     position: relative;
-    overflow-x: hidden;
+    overflow: hidden;
+    border-radius: 3px;
 }
 
 .sold-out {
@@ -75,11 +91,6 @@
     justify-content: center;
 }
 
-.list-card__wrap {
-    width: 300px;
-    height: 300px;
-}
-
 .list-card__link {
     display: inline-block;
     width: 100%;
@@ -88,6 +99,6 @@
 
 @media screen and (max-width: 850px) {
     .user__inner {
-        width: 80%;
+        width: 85%;
     }
 }

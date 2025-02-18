@@ -29,11 +29,11 @@
     <div class="list-card__group flex">
         @foreach($items as $item)
         <div class="list-card__item">
-            @if($item['status'] == 2)
-            <p class="sold-out">Sold</p>
-            @endif
             <div class="list-card__wrap">
-                <a class="list-card__link" href="/item/:{{ $item['id'] }}">
+                @if($item['status'] == 2)
+                <p class="sold-out">Sold</p>
+                @endif
+                <a class="list-card__link" href="/item/{{ $item['id'] }}">
                     <img class="list-card__img" src="{{ $item['image_url'] }}" alt="item">
                 </a>
             </div>

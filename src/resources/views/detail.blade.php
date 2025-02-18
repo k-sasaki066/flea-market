@@ -46,14 +46,14 @@
                 </div>
             </div>
             @if(Auth::check())
-            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="/purchase/:{{ $item['id'] }}">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="/purchase/{{ $item['id'] }}">購入手続きへ</a>
             @else
             <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
             @endif
         </div>
 
         <div class="item-description__group flex">
-            <h2 class="item-description__ttl">商品説明</h2>
+            <h2 class="item-description__ttl">商品説明</h3>
             <p class="item-description__text">{!! nl2br(e($item['description'])) !!}</p>
         </div>
 
@@ -90,10 +90,10 @@
             </div>
         </div>
 
-        <form class="item-comment__form flex" action="/comment/:{{ $item['id'] }}" method="POST">
+        <form class="item-comment__form flex" action="/comment/{{ $item['id'] }}" method="POST">
             @csrf
             <h3 class="item-comment__form-ttl">商品へのコメント</h3>
-            <textarea class="item-comment__form-textarea" name="comment" rows="10">{{ old('comment') }}</textarea>
+            <textarea class="item-comment__form-textarea" name="comment" rows="8">{{ old('comment') }}</textarea>
             <div class="error-message">
                 @error('comment')
                 {{ $message }}

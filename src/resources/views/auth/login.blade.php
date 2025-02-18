@@ -46,7 +46,7 @@
         </button>
     </form>
     <a class="guid-text" href="/register">
-        会員登録はこちらから
+        会員登録はこちら
     </a>
 </div>
 @endsection

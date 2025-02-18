@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let countSpan = this.closest(".favorite-count__group").querySelector(".favorite-count__text");
             let isLiked = icon.src.endsWith("star-yellow.svg");
 
-            fetch(isLiked ? `/unlike/:${itemId}` : `/like/:${itemId}`, {
+            fetch(isLiked ? `/unlike/${itemId}` : `/like/${itemId}`, {
                 method: isLiked ? "DELETE" : "POST",
                 headers: {
                     "Content-Type": "application/json",

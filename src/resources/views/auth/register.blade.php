@@ -55,7 +55,7 @@
         </button>
     </form>
     <a class="guid-text" href="/login">
-        ログインはこちらから
+        ログインはこちら
     </a>
 </div>
 @endsection

@@ -6,28 +6,20 @@
 
 @section('content')
 <div class="verify-email__container">
-    <div class="verify-email__header">
-        <h2 class="verify-email__header-text">
-            {{ __('ご登録いただいたメールアドレスに、確認用のリンクをお送りしました。') }}
-        </h2>
-    </div>
-    <div class="verify-email__content">
-        <p class="verify-email__text">
-            {{ __('もし確認用メールが送信されていない場合は、下記をクリックしてください。') }}
-        </p>
-        <form class="verify-email__form" method="post" action="{{ route('verification.send') }}">
-            @csrf
-            <button type="submit" class="verify-email__form-button">
-                {{ __('確認メールを再送信する') }}
-            </button>
-        </form>
+    <h2 class="verify-email__header-text">
+        登録していただいたメールアドレスに認証メールを送付しました。
+        <br>
+        メール認証を完了してください。
+    </h2>
 
-        <form class="verify-email__back-form" method="post" action="/logout">
-            @csrf
-            <button class="verify-email__back">
-                {{ __('ログアウト') }}
-            </button>
-        </form>
-    </div>
+    <a class="verify-email__btn" href="https://{{ Auth::user()->email }}" target="_blank" class="btn">認証はこちらから</a>
+
+    <form class="verify-email__form" method="POST" action="{{ route('verification.send') }}">
+        @csrf
+        <button class="verify-email__form-button" type="submit">
+            認証メールを再送する
+        </button>
+    </form>
+
 </div>
 @endsection

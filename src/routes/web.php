@@ -29,13 +29,17 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'getProfile']);
     Route::post('/mypage/profile', [UserController::class, 'postProfile']);
     Route::get('/mypage', [UserController::class, 'getMypage']);
+
     Route::post('/like/{item_id}', [FavoriteController::class, 'create']);
     Route::delete('/unlike/{item_id}', [FavoriteController::class, 'delete']);
     Route::post('/comment/{item_id}', [ItemController::class, 'postComment']);
+
     Route::get('/sell', [UserController::class, 'getSell']);
     Route::post('/sell', [UserController::class, 'postSell']);
+
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'getPurchase']);
     Route::post('/purchase/{item_id}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');
+    
     Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'getAddress']);
     Route::post('/purchase/address/{item_id}', [PurchaseController::class, 'postAddress']);
 

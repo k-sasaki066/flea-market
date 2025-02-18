@@ -89,11 +89,11 @@ class PurchaseController extends Controller
 
     public function success(Request $request)
     {
-        return view('success');
+        return view('stripe.success');
     }
 
     public function cancel()
     {
-        return view('cancel');
+        return view('stripe.cancel');
     }
 }

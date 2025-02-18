@@ -97,7 +97,7 @@
             </div>
         </div>
 
-        <button class="form-btn sell-btn" type="submit">出品する</button>
+        <button class="form-btn sell-btn" type="submit" onclick="return confirm('商品を出品しますか？');">出品する</button>
     </form>
     <script src="{{ asset('js/preview.js') }}"></script>
 </div>

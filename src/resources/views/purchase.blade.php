@@ -82,7 +82,7 @@
                     <td class="purchase-confirm__table-item border" id="selectValue"></td>
                 </tr>
             </table>
-            <button class="form-btn purchase-btn" type="submit">購入する</button>
+            <button class="form-btn purchase-btn" type="submit" onclick="return confirm('決済画面に進みます。よろしいですか？');">購入する</button>
         </div>
     </form>
     <script src="{{ asset('js/select.js') }}"></script>

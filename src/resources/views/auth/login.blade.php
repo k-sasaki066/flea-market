@@ -22,10 +22,10 @@
     <form class="form-group" action="/login" method="POST">
         @csrf
         <div class="form-group__item">
-            <p class="form-group__item-label">ユーザー名 / メールアドレス</p>
-            <input class="form-group__item-input" type="text" name=" name" value="{{ old('name') }}">
+            <p class="form-group__item-label">メールアドレス</p>
+            <input class="form-group__item-input" type="text" name="email" value="{{ old('email') }}">
             <div class="error-message">
-                @error('name')
+                @error('email')
                 {{ $message }}
                 @enderror
             </div>

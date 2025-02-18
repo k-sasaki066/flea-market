@@ -18,8 +18,6 @@ use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use App\Http\Responses\RegisterResponse;
 use App\Http\Responses\LoginResponse;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -77,14 +75,5 @@ class FortifyServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-
-        Fortify::authenticateUsing(function (Request $request) {
-            $user = User::where('name', $request->name)->orWhere('email', $request->name)->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
-            }
-        });
-
     }
 }

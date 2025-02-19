@@ -184,7 +184,7 @@ class Item extends Model
 
     public static function getPaymentItem($item_id)
     {
-        $item = Item::find($item_id);
+        $item = Item::with('user')->find($item_id);
 
         return $item;
     }

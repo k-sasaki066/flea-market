@@ -14,7 +14,7 @@
 @endif
 
 <div class="purchase-container">
-    <form  class="purchase-form flex" action="/purchase/{{ $item['id'] }}" method="POST">
+    <form class="purchase-form flex" action="/purchase/{{ $item['id'] }}" method="POST">
         @csrf
         <div class="purchase-content__inner">
             <div class="purchase-content__img flex border">

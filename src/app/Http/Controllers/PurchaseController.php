@@ -44,7 +44,7 @@ class PurchaseController extends Controller
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $item = Item::getPaymentItem($item_id);
-        $userId = Auth::id();
+        $user = Auth::user();
 
         try {
             $session = Session::create([
@@ -71,12 +71,15 @@ class PurchaseController extends Controller
                 'success_url' => route('stripe.success') . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => route('stripe.cancel'),
                 'metadata' => [
-                    'user_id' => $userId,
+                    'user_id' => $user->id,
                     'item_id' => $item_id,
                     'post_cord' => $request->post_cord,
                     'address' => $request->address,
                     'building' => $request->building,
                     'item_name' => $item->name,
+                    'seller_nickname' => $item->user->nickname,
+                    'seller_email' => $item->user->email,
+                    'purchaser_nickname' => $user->nickname,
                 ],
             ]);
 

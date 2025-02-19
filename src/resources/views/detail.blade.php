@@ -27,7 +27,7 @@
                 @endif
             </div>
             <div class="item-detail__price-group flex">
-                <span class="item-detail__price-span">¥</span><p class="item-detail__price-text">{{ number_format($item['price']) }}</p><span class="item-detail__price-span">&nbsp;(税込)</span>
+                <span class="item-detail__price-span">&yen;</span><p class="item-detail__price-text">{{ number_format($item['price']) }}</p><span class="item-detail__price-span">&nbsp;(税込)</span>
             </div>
             <div class="item-detail__count-group flex">
                 <div class="favorite-count__group">

@@ -40,7 +40,7 @@
                         @endforeach
                     </select>
                     <div class="error-message">
-                        @error('way')
+                        @error('payment_id')
                         {{ $message }}
                         @enderror
                     </div>

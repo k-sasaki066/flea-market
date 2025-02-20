@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Purchase;
 use App\Models\Item;
 use Stripe\Webhook;
 use Stripe\Stripe;
+use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\KonbiniPaymentMail;
@@ -21,6 +23,7 @@ use App\Mail\KonbiniPaymentFailureMail;
 use App\Mail\SellerNotificationMail;
 use App\Mail\ShippingNotificationMail;
 use App\Mail\SellerOrderCancelMail;
+use App\Mail\PurchaseFailedMail;
 
 class StripeWebhookController extends Controller
 {
@@ -52,7 +55,7 @@ class StripeWebhookController extends Controller
 
         Mail::to($session->customer_details->email)->send(new OrderConfirmationMail($data));
 
-        Log::info("📩 注文確認メールを送信しました: ", $data);
+        Log::info("📩 購入者へ注文確認メールを送信しました: ", $data);
     }
 
     // 出品者へ商品が売れた連絡
@@ -84,7 +87,7 @@ class StripeWebhookController extends Controller
             'voucher_url' => $hostedVoucherUrl,
             'expires_at' => $expiresAt,
         ];
-        Log::info('📩 送信するメールデータ:', $data);
+        Log::info('📩 購入者へ支払い手順メールを送信しました:', $data);
 
         Mail::to($session->customer_details->email)->send(new KonbiniPaymentMail($data));
     }
@@ -137,59 +140,102 @@ class StripeWebhookController extends Controller
 
             // カード決済完了 & コンビニ支払い手順メール送信
             if ($event->type === 'checkout.session.completed') {
-                // payment_intentを取得
-                if (!empty($session->payment_intent)) {
-                    $paymentIntent = PaymentIntent::retrieve($session->payment_intent);
-                    // 支払い方法を取得
-                    $paymentMethodType = $paymentIntent->payment_method_types[0] ?? null;
+                DB::beginTransaction();
+                try {
+                    // payment_intentを取得
+                    $paymentMethodType = null;
+                    if (!empty($session->payment_intent)) {
+                        try {
+                            $paymentIntent = PaymentIntent::retrieve($session->payment_intent);
+                            $paymentMethodType = $paymentIntent->payment_method_types[0] ?? null;
+                            Log::info("📌 使用された支払い方法: " . $paymentMethodType);
+                        } catch (\Exception $e) {
+                            Log::error("❌ PaymentIntent の取得に失敗しました: " . $e->getMessage());
+                        }
+                    }
 
-                    Log::info("📌 使用された支払い方法: " . $paymentMethodType);
-                }
-                // データベースに保存
-                Purchase::create([
-                    'user_id' => $session['metadata']['user_id'],
-                    'item_id' => $session['metadata']['item_id'],
-                    'payment_id' => ($paymentMethodType == 'card' ? 2 : 1),
-                    'post_cord' => $session['metadata']['post_cord'],
-                    'address' => $session['metadata']['address'],
-                    'building' => $session['metadata']['building'],
-                    'stripe_session_id' => $session['id'],
-                    'payment_status' => ($paymentMethodType == 'card' ? 'paid' : 'pending'),
-                ]);
+                    $metadata = $session->metadata ?? [];
+                    $userId = $metadata['user_id'] ?? null;
+                    $itemId = $metadata['item_id'] ?? null;
+                    $postCord = $metadata['post_cord'] ?? '';
+                    $address = $metadata['address'] ?? '';
+                    $building = $metadata['building'] ?? '';
 
-                Item::find($session['metadata']['item_id'])->update([
-                    'status' => 2,
-                ]);
+                    // `status=1` の場合のみ `status=2` に更新（アトミックロック）
+                    // update の際に status = 1（未購入）を status = 2（購入済み）に 「同時に」変更できた場合のみ成功 させる
+                    $updated = Item::where('id', $itemId)
+                        ->where('status', 1) // 未購入状態を確認
+                        ->update(['status' => 2]);
+                        Log::info('✅ 商品のステータスを購入済みに更新しました', ['item_id' => $itemId, 'session_id' => $session->id]);
+                    
+                    // 他のユーザーが先に購入していた場合（更新なし)
+                    if ($updated === 0) {
+                        Log::warning("❌ 商品が既に購入済みです", ['item_id' => $itemId]);
 
-                $this->orderConfirmationMail($session, $paymentMethodType);
+                        DB::rollBack();
+                        Session::update($session->id, [
+                            'metadata' => ['purchase_error' => 'already_sold']
+                        ]);
 
-                $this->sellerNotificationMail($session, $paymentMethodType);
+                        // 購入者へ「商品が購入済み」の通知メールを送信
+                        $data = [
+                            'purchaser_nickname' => $metadata['purchaser_nickname'] ?? 'お客',
+                            'item_name' => $metadata['item_name'] ?? '商品',
+                        ];
+                        Mail::to($session->customer_details->email)->send(new PurchaseFailedMail($data));
 
-                // コンビニ決済処理
-                if($paymentMethodType == 'konbini') {
-                    $this->konbiniPaymentMail($session, $paymentIntent);
-                }
+                        Log::info("📩 購入失敗メールを送信しました: ", ['email' => $session->customer_details->email, 'data' => $data]);
 
-                // カード決済完了時
-                if($paymentMethodType == 'card') {
-                    $this->shippingNotificationMail($session, $paymentMethodType);
+                        return;
+                    }
+
+                    Purchase::create([
+                        'user_id' => $userId,
+                        'item_id' => $itemId,
+                        'payment_id' => ($paymentMethodType == 'card' ? 2 : 1),
+                        'post_cord' => $postCord,
+                        'address' => $address,
+                        'building' => $building,
+                        'stripe_session_id' => $session['id'],
+                        'payment_status' => ($paymentMethodType == 'card' ? 'paid' : 'pending'),
+                    ]);
+
+                    DB::commit();
+                    Log::info("✅ 商品購入完了", ['item_id' => $itemId, 'user_id' => $userId]);
+
+                    $this->orderConfirmationMail($session, $paymentMethodType);
+
+                    $this->sellerNotificationMail($session, $paymentMethodType);
+
+                    // コンビニ決済処理
+                    if($paymentMethodType == 'konbini') {
+                        $this->konbiniPaymentMail($session, $paymentIntent);
+                    }
+
+                    // カード決済完了時
+                    if($paymentMethodType == 'card') {
+                        $this->shippingNotificationMail($session, $paymentMethodType);
+                    }
+
+                } catch (\Exception $e) {
+                    Log::error("❌ checkout.session.completed の処理中にエラーが発生しました: " . $e->getMessage());
                 }
             }
 
             // コンビニ決済完了時の処理
             if ($event->type === 'checkout.session.async_payment_succeeded') {
-                $updated = Purchase::where('stripe_session_id', $session['id'])->update([
-                    'payment_status' => 'paid'
-                ]);
-
-                // コンビニ決済完了メール
-                $this->konbiniPaymentSuccessMail($session);
-
-                // 発送準備メール
-                $this->shippingNotificationMail($session, $paymentMethodType);
+                $updated = Purchase::where('stripe_session_id', $session['id'])->first();
 
                 if ($updated) {
                     Log::info("✅ コンビニ支払い完了: ", ['session_id' => $session->id]);
+                    $updated->update([
+                        'payment_status' => 'paid'
+                    ]);
+                    Log::info('✅ 購入ステータスをpaidに更新しました', ['session_id' => $session->id]);
+                    // コンビニ決済完了メール
+                    $this->konbiniPaymentSuccessMail($session);
+                    // 発送準備メール
+                    $this->shippingNotificationMail($session, $paymentMethodType);
                 } else {
                     Log::error("❌ 購入データが見つかりませんでした。Session ID: " . $session->id);
                 }
@@ -199,9 +245,13 @@ class StripeWebhookController extends Controller
             if ($event->type === 'checkout.session.async_payment_failed') {
                 $expiresAt = Carbon::createFromTimestamp($session->expires_at);
 
-                Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
-
                 $purchase = Purchase::with('user')->where('stripe_session_id', $sessionId)->first();
+
+                // テスト(実際にデータベースに登録してあるデータを使用)
+                // $purchase = Purchase::where('stripe_session_id', 'cs_test_a1x01UVYipPNmJ8QJ0RtMdrSGjfqgd1qTIobHNQYKnlbi9E7wCLBKCpeIx')->with('user')->first();
+                // テストここまで
+
+                Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
 
                 if ($purchase) {
                     $purchase->update([
@@ -212,34 +262,33 @@ class StripeWebhookController extends Controller
                         $item->update([
                             'status' => 1,
                         ]);
-                        Log::info('✅ 商品のステータスを更新しました', ['item_id' => $purchase->item_id]);
+                        Log::info('✅ 商品のステータスを出品に更新しました', ['item_id' => $purchase->item_id, 'purchase' => $purchase]);
+
+                        // 購入者への決済失敗メール
+                        $data = [
+                            'purchaser_nickname' => $purchase->user->nickname ?? 'お客',
+                            'item' => $item->name ?? '商品',
+                            'price' => $session->amount_total,
+                            'expires_at' => $expiresAt,
+                        ];
+
+                        Mail::to($session->customer_details->email)->send(new KonbiniPaymentFailureMail($data));
+
+                        Log::info("✅ 購入者へコンビニ決済失敗メールを送信しました: ", ['data' => $data]);
+
+                        // 出品者へのキャンセルメール
+                        $data = [
+                            'seller_nickname' => $item->user->nickname ?? 'お客',
+                            'item' => $item->name ?? '商品',
+                            'price' => $session->amount_total,
+                        ];
+
+                        Mail::to($item->user->email)->send(new SellerOrderCancelMail($data));
+                        Log::info("📩 出品者へキャンセルメールを送信しました: ", $data);
                     }
 
                     Log::info("❌ 注文をキャンセルしました: ", ['session_id' => $sessionId]);
                 }
-
-                // 購入者への決済失敗メール
-                $data = [
-                    'purchaser_nickname' => $purchase->user->nickname ?? 'お客',
-                    'item' => $item->name ?? '商品',
-                    'price' => $session->amount_total,
-                    'expires_at' => $expiresAt,
-                ];
-                Log::error("✅ 決済失敗メールデータ: ", ['data' => $data]);
-
-                Mail::to($session->customer_details->email)->send(new KonbiniPaymentFailureMail($data));
-                Log::info("📩 コンビニ決済失敗メールを送信しました: ", $data);
-
-                // 出品者へのキャンセルメール
-                $data = [
-                    'seller_nickname' => $item->user->nickname ?? 'お客',
-                    'item' => $item->name ?? '商品',
-                    'price' => $session->amount_total,
-                ];
-                Log::error("✅ キャンセルメールデータ: ", ['data' => $data]);
-
-                Mail::to($item->user->email)->send(new SellerOrderCancelMail($data));
-                Log::info("📩 出品者へキャンセルメールを送信しました: ", $data);
             }
 
             // 決済が失敗した場合

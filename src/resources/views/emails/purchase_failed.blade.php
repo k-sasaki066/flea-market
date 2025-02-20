@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>coachtechフリマアプリ コンビニ決済完了メール</title>
+    <title>coachtechフリマアプリ ご希望商品が売り切れました</title>
 </head>
-
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -26,7 +25,7 @@
         font-weight: bold;
         text-align: center;
         padding-bottom: 10px;
-        border-bottom: 2px solid rgb(59, 194, 52);
+        border-bottom: 2px solid #e24a4a;
     }
     .content {
         margin-top: 20px;
@@ -37,21 +36,15 @@
 
 <body>
     <div class="container">
-        <div class="header">コンビニ決済完了のご連絡</div>
+        <div class="header">ご希望商品が売り切れました</div>
         <div class="content">
             <p>本メールはサーバーからの自動配信メールです。</p>
             <br>
             <p>{{ $data['purchaser_nickname'] }}様</p>
             <p>この度は、coachtechフリマアプリをご利用いただき誠にありがとうございます。</p>
-            <p>以下の注文のコンビニ支払いが完了しましたので、ご連絡します。</p>
+            <p>ご希望の商品「<strong>{{ $data['item_name'] }}</strong>」は、すでに他の方が購入されたため、購入できませんでした。</p>
+
             <br>
-            <p>■ 注文内容</p>
-            <ul>
-                <li>商品名&nbsp;:&nbsp; {{ $data['item'] }}</li>
-                <li>価格&nbsp;:&nbsp; <span>¥</span>{{number_format($data['price'])}}</li>
-            </ul>
-            <br>
-            <p>出品者様より商品が発送されるまで、今しばらくお待ちください。</p>
             <p>またのご利用をお待ちしております。</p>
         </div>
     </div>

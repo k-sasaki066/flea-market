@@ -27,6 +27,11 @@ class PurchaseController extends Controller
     }
 
     public function getAddress($item_id) {
+        $user = Auth::user();
+
+        if (!$user->profile_completed) {
+            return redirect('/mypage/profile')->with('error', '商品を購入するにはプロフィールを設定してください');
+        }
 
         return view('address', compact('item_id'));
     }
@@ -88,6 +93,21 @@ class PurchaseController extends Controller
             Log::error($e->getMessage());
             return back()->with('error', '決済セッションの作成に失敗しました。');
         }
+    }
+
+    public function getSessionStatus(Request $request)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $sessionId = $request->query('session_id');
+        $session = Session::retrieve($sessionId);
+        $paymentMethodType = $session->payment_method_types[0] ?? null;
+
+        return response()->json([
+            'purchase_error' => $session->metadata->purchase_error ?? null,
+            'item_id' => $session->metadata->item_id ?? null,
+            'payment_method' => $paymentMethodType,
+        ]);
     }
 
     public function success(Request $request)

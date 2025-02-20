@@ -47,8 +47,8 @@ class Item extends Model
         return $this->belongsToMany(User::class, 'comments')->withPivot('comment');
     }
 
-    public function purchase() {
-        return $this->hasOne(Purchase::class);
+    public function purchases() {
+        return $this->hasMany(Purchase::class);
     }
 
     public static function getItems()
@@ -111,7 +111,10 @@ class Item extends Model
             ->limit(10)
             ->get();
         }else {
-            $items = Item::where('items.user_id', '!=', $userId)->where('condition_id', '1')->where('status', '1')->get();
+            $items = Item::where('items.user_id', '!=', $userId)->where('condition_id', '1')
+            ->where('status', '1')
+            ->limit(10)
+            ->get();
         }
 
 
@@ -153,19 +156,22 @@ class Item extends Model
         return $item;
     }
 
-    public static function getSellItems()
+    public static function getExhibitedItems()
     {
         $items = Item::where('user_id', Auth::id())->get();
 
         return $items;
     }
 
-    public static function getBuyItems()
+    public static function getPurchasedItems()
     {
         $userId = Auth::id();
         $items = Item::select('items.*')
-        ->join('purchases', 'items.id', '=', 'purchases.item_id')
-        ->where('purchases.user_id', $userId)
+        ->join('purchases', function ($join) use ($userId) {
+            $join->on('items.id', '=', 'purchases.item_id')
+                ->where('purchases.user_id', '=', $userId)
+                ->where('purchases.payment_status', '!=', 'canceled');
+        })
         ->orderBy('purchases.created_at', 'desc')
         ->get();
 

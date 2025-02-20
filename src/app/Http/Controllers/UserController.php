@@ -54,10 +54,10 @@ class UserController extends Controller
 
         switch ($request['tab']) {
             case 'sell':
-                $items = Item::getSellItems();
+                $items = Item::getExhibitedItems();
                 break;
             case 'buy':
-                $items = Item::getBuyItems();
+                $items = Item::getPurchasedItems();
                 break;
             default:
                 $items = [];
@@ -75,6 +75,12 @@ class UserController extends Controller
     }
 
     public function postSell(ExhibitionRequest $request) {
+        $user = Auth::user();
+
+        if (!$user->profile_completed) {
+            return redirect('/mypage/profile')->with('error', '商品を出品するにはプロフィールを設定してください');
+        }
+
         $image_url = Item::getImageUrl($request->file('image_url'));
 
         Item::create([

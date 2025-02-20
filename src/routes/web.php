@@ -39,7 +39,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'getPurchase']);
     Route::post('/purchase/{item_id}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');
-    
+
     Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'getAddress']);
     Route::post('/purchase/address/{item_id}', [PurchaseController::class, 'postAddress']);
 
@@ -47,4 +47,5 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
 });
 
+Route::get('/stripe/session-status', [PurchaseController::class, 'getSessionStatus']);
 Route::post('/webhook/stripe', [StripeWebhookController::class, 'handleWebhook']);

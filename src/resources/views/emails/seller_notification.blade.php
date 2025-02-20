@@ -26,7 +26,7 @@
         font-weight: bold;
         text-align: center;
         padding-bottom: 10px;
-        border-bottom: 2px solid #e24a4a;
+        border-bottom: 2px solid rgb(59, 194, 52);
     }
     .content {
         margin-top: 20px;

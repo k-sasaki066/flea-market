@@ -4,10 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         form.addEventListener("submit", function () {
             button.disabled = true;
-            button.textContent = "登録中...";
+            button.textContent = "処理中...";
         });
     });
-
 
     setTimeout(() => {
         document.querySelectorAll('.flash_success-message, .flash_error-message').forEach(el => {

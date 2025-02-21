@@ -21,16 +21,6 @@
     gap: 8px;
 }
 
-.sell-text__required {
-    display: inline-block;
-    vertical-align: middle;
-    padding: 0 8px;
-    font-size: 12px;
-    background-color: #fd5151;
-    color: #fff;
-    border-radius: 3px;
-}
-
 .sell-detail__group,
 .sell-content__group {
     gap: 20px;

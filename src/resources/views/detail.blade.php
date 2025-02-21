@@ -80,7 +80,9 @@
                 <div class="item-comment__wrap">
                     <div class="item-comment__user flex">
                         <div class="item-comment__img-wrap user-img__wrap">
+                            @if($user['image_url'])
                             <img class="user-img" src="{{ $user['image_url'] }}" alt="">
+                            @endif
                         </div>
                         <p class="item-comment__name">{{ $user['nickname'] }}</p>
                     </div>

@@ -5,6 +5,12 @@
 @endsection
 
 @section('content')
+@if (session('result'))
+    <div class="flash_success-message">
+        {{ session('result') }}
+    </div>
+@endif
+
 <div class="verify-email__container">
     <h2 class="verify-email__header-text">
         登録していただいたメールアドレスに認証メールを送付しました。
@@ -12,7 +18,7 @@
         メール認証を完了してください。
     </h2>
 
-    <a class="verify-email__btn" href="https://{{ Auth::user()->email }}" target="_blank" class="btn">認証はこちらから</a>
+    <a class="verify-email__btn" href="http://localhost:8025" target="_blank">認証はこちらから</a>
 
     <form class="verify-email__form" method="POST" action="{{ route('verification.send') }}">
         @csrf

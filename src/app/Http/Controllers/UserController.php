@@ -52,7 +52,7 @@ class UserController extends Controller
     public function getMypage(Request $request) {
         $user = User::find(Auth::id(), ['nickname','image_url']);
 
-        switch ($request['tab']) {
+        switch ($request['page']) {
             case 'sell':
                 $items = Item::getExhibitedItems();
                 break;

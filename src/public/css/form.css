@@ -23,6 +23,8 @@
 
 .form-group__item-label {
     font-weight: bold;
+    align-items: center;
+    gap: 8px;
 }
 
 .form-group__item-input {
@@ -51,4 +53,14 @@
     text-align: center;
     font-size: 14px;
     color: #0073cc;
+}
+
+.form-text__required {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 8px;
+    font-size: 12px;
+    background-color: #fd5151;
+    color: #fff;
+    border-radius: 3px;
 }

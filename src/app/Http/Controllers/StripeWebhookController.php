@@ -10,6 +10,7 @@ use App\Models\Purchase;
 use App\Models\Item;
 use Stripe\Webhook;
 use Stripe\Stripe;
+use Stripe\Refund;
 use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
 use Illuminate\Support\Facades\Mail;
@@ -185,6 +186,20 @@ class StripeWebhookController extends Controller
                         Mail::to($session->customer_details->email)->send(new PurchaseFailedMail($data));
 
                         Log::info("📩 購入失敗メールを送信しました: ", ['email' => $session->customer_details->email, 'data' => $data]);
+
+                        // Stripe でカード決済が完了していた場合は返金処理
+                        if ($paymentIntent && $paymentMethodType == 'card') {
+                            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+                            try {
+                                $refund = Refund::create([
+                                    'payment_intent' => $paymentIntent,
+                                ]);
+                                Log::info("✅ 返金処理完了: ", ['payment_intent' => $paymentIntent, 'refund_id' => $refund->id]);
+                            } catch (\Exception $e) {
+                                Log::error("❌ 返金処理に失敗: " . $e->getMessage(), ['payment_intent' => $paymentIntent]);
+                            }
+                        }
 
                         return;
                     }

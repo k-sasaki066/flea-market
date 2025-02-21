@@ -14,7 +14,7 @@ class ItemController extends Controller
     public function index(Request $request) {
         $parameter = Item::getParameter($request);
 
-        switch ($request['tab']) {
+        switch ($request['page']) {
             case 'suggest':
                 $items = Item::searchSuggestItems();
                 break;

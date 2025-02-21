@@ -142,7 +142,7 @@ class Item extends Model
 
     public static function getParameter($request)
     {
-        $parameter = $request->input('tab');
+        $parameter = $request->input('page');
 
         return $parameter;
     }

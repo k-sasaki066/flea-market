@@ -32,7 +32,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">ユーザー名</p>
+            <p class="form-group__item-label flex">ユーザー名<span class="form-text__required">必須</span></p>
             <input class="form-group__item-input" type="text" name="nickname" value="{{ old('nickname') ? old('nickname') : $user['nickname'] }}">
             <div class="error-message">
                 @error('nickname')
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">郵便番号</p>
+            <p class="form-group__item-label flex">郵便番号<span class="form-text__required">必須</span></p>
             <input class="form-group__item-input" type="text" name="post_cord" value="{{ old('post_cord') ? old('post_cord') : $user['post_cord'] }}">
             <div class="error-message">
                 @error('post_cord')
@@ -52,7 +52,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">住所</p>
+            <p class="form-group__item-label flex">住所<span class="form-text__required">必須</span></p>
             <input class="form-group__item-input" type="text" name="address" value="{{ old('address') ? old('address') : $user['address'] }}">
             <div class="error-message">
                 @error('address')
@@ -64,11 +64,6 @@
         <div class="form-group__item">
             <p class="form-group__item-label">建物名</p>
             <input class="form-group__item-input" type="text" name="building" value="{{ old('building') ? old('building') : $user['building'] }}">
-            <div class="error-message">
-                @error('building')
-                {{ $message }}
-                @enderror
-            </div>
         </div>
 
         <button class="form-btn btn-margin" type="submit">

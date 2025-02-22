@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="result-container">
-    <h2 class="form-btn error-title">決済がキャンセルされました</h2>
+    <h2 class="form-btn error-title bold">決済がキャンセルされました</h2>
     <p class="result-message">もう一度お試しください</p>
     <a class="home-btn" href="/">ホームに戻る</a>
 </div>

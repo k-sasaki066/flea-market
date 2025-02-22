@@ -14,7 +14,7 @@
     @php
         $isEmailVerifyPage = request()->is('email/verify');
     @endphp
-    <header class="header">
+    <header class="header grid">
         @if (!$isEmailVerifyPage)
         <a class="header-logo" href="/">
             <img class="header-logo__img" src="{{ asset('images/logo.svg') }}" alt="coachtech" width="260px">
@@ -25,15 +25,15 @@
         </div>
         @endif
 
-        <form class="search-form" action="/search" method="GET">
+        <form class="search-form flex" action="/search" method="GET">
             <input class="search-form__keyword" type="text" placeholder="なにをお探しですか?" value="{{ session('search_keyword', '') }}" name="keyword">
             <button class="search-form__btn" type="submit">
                 <img class="search-form__img" src="{{ asset('images/search.svg') }}" alt="search" width="20px">
             </button>
         </form>
 
-        <nav class="header-nav__menu">
-            <ul class="header-nav__list">
+        <nav class="header-nav__menu grid">
+            <ul class="header-nav__list flex">
                 @auth
                 <li class="header-nav__item">
                     <form action="/logout" method="POST" onsubmit="return confirm('ログアウトしますか？');">

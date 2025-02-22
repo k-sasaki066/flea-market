@@ -1,7 +1,6 @@
 .item-container {
     padding: 0 48px;
-    margin: 48px auto;
-    display: grid;
+    margin: 64px auto;
     grid-template-columns: 1fr 1fr;
     gap: 48px;
 }
@@ -54,7 +53,6 @@
 
 .favorite-count__group,
 .comment-count__group {
-    display: flex;
     align-items: center;
     gap: 5px;
     writing-mode: vertical-rl;
@@ -240,7 +238,6 @@
 
 .modal-text {
     font-size: 20px;
-    font-weight: bold;
     text-align: center;
 }
 

@@ -8,8 +8,6 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\EmailVerificationNotificationController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------

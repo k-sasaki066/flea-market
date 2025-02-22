@@ -1,6 +1,6 @@
 .purchase-form {
     padding: 0 48px;
-    margin: 48px auto;
+    margin: 64px auto;
     justify-content: space-between;
     gap: 48px;
 }
@@ -20,15 +20,23 @@
 
 .purchase-img__wrap {
     width: 200px;
+    min-width: 200px;
     height: 200px;
 }
 
 .purchase-way__select-wrap,
 .purchase-address__wrap {
     margin: 20px 0 0 48px;
+    width: 85%;
 }
 
-.purchase-price {
+.purchase-address__input,
+.purchase-building__input {
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+.purchase-price__item {
     align-items: baseline;
 }
 
@@ -41,12 +49,6 @@
     margin-left: 8px;
     font-size: 26px;
     display: inline-block;
-}
-
-.purchase-ttl,
-.purchase-address__item,
-.purchase-address {
-    font-weight: bold;
 }
 
 .purchase-way__select-wrap {
@@ -70,10 +72,6 @@
 
 .purchase-ttl__inner {
     justify-content: space-between;
-}
-
-.purchase-address {
-    width: 100%;
 }
 
 .purchase-address__btn {

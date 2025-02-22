@@ -9,12 +9,12 @@
 
 @section('content')
 @if (session('result'))
-    <div class="flash_success-message">
-        {{ session('result') }}
-    </div>
+<div class="flash_success-message">
+    {{ session('result') }}
+</div>
 @endif
 
-<div class="item-container">
+<div class="item-container grid">
     <div class="item-img__wrap">
         <img class="item-img" src="{{ $item['image_url'] }}" alt="item">
     </div>
@@ -30,7 +30,7 @@
                 <span class="item-detail__price-span">&yen;</span><p class="item-detail__price-text">{{ number_format($item['price']) }}</p><span class="item-detail__price-span">&nbsp;(税込)</span>
             </div>
             <div class="item-detail__count-group flex">
-                <div class="favorite-count__group">
+                <div class="favorite-count__group flex">
                     @auth
                     <button class="favorite-btn" data-item-id="{{ $item->id }}">
                         <img class="favorite-count__img" src="{{ asset($favorite ? 'images/star-yellow.svg' : 'images/star.svg') }}" alt="いいね" width="22px">
@@ -40,15 +40,15 @@
                     @endauth
                     <span class="favorite-count__text">{{ $item['favorites_count'] }}</span>
                 </div>
-                <div class="comment-count__group">
+                <div class="comment-count__group flex">
                     <img class="comment-count__img" src="{{ asset('images/comment.svg') }}" alt="コメント" width="22px">
                     <span class="comment-count__text">{{ $item['comments_count'] }}</span>
                 </div>
             </div>
             @if(Auth::check())
-            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="/purchase/{{ $item['id'] }}">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="/purchase/{{ $item['id'] }}">購入手続きへ</a>
             @else
-            <a class="item-purchase__btn form-btn @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
             @endif
         </div>
 
@@ -102,9 +102,9 @@
                 @enderror
             </div>
             @if(Auth::check())
-            <button class="item-comment__form-btn form-btn" type="submit">コメントを送信する</button>
+            <button class="item-comment__form-btn form-btn bold" type="submit">コメントを送信する</button>
             @else
-            <a class="item-comment__form-btn form-btn" href="#comment">コメントを送信する</a>
+            <a class="item-comment__form-btn form-btn bold" href="#comment">コメントを送信する</a>
             @endif
         </form>
     </div>
@@ -113,7 +113,7 @@
         <a href="#!" class="modal-overlay"></a>
         <div class="modal__inner">
             <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text">商品を購入するには、ログインが必要です。</p>
+            <p class="modal-text bold">商品を購入するには、ログインが必要です。</p>
         </div>
     </div>
 
@@ -121,7 +121,7 @@
         <a href="#!" class="modal-overlay"></a>
         <div class="modal__inner">
             <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text">いいね登録するには、ログインが必要です。</p>
+            <p class="modal-text bold">いいね登録するには、ログインが必要です。</p>
         </div>
     </div>
 
@@ -129,7 +129,7 @@
         <a href="#!" class="modal-overlay"></a>
         <div class="modal__inner">
             <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text">コメントを送信するには、ログインが必要です。</p>
+            <p class="modal-text bold">コメントを送信するには、ログインが必要です。</p>
         </div>
     </div>
     <script src="{{ asset('js/favorite.js') }}"></script>

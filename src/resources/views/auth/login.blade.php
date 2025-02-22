@@ -7,14 +7,14 @@
 
 @section('content')
 @if (session('result'))
-    <div class="flash_success-message">
-        {{ session('result') }}
-    </div>
+<div class="flash_success-message">
+    {{ session('result') }}
+</div>
 @endif
 @if (session('error'))
-    <div class="flash_error-message">
-        {{ session('error') }}
-    </div>
+<div class="flash_error-message">
+    {{ session('error') }}
+</div>
 @endif
 
 <div class="form-container login-container">
@@ -22,7 +22,7 @@
     <form class="form-group" action="/login" method="POST">
         @csrf
         <div class="form-group__item">
-            <p class="form-group__item-label">メールアドレス</p>
+            <p class="form-group__item-label bold">メールアドレス</p>
             <input class="form-group__item-input" type="text" name="email" value="{{ old('email') }}">
             <div class="error-message">
                 @error('email')
@@ -32,7 +32,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">パスワード</p>
+            <p class="form-group__item-label bold">パスワード</p>
             <input class="form-group__item-input" type="password" name="password">
             <div class="error-message">
                 @error('password')
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <button class="form-btn btn-margin" type="submit">
+        <button class="form-btn btn-margin bold" type="submit">
             ログインする
         </button>
     </form>

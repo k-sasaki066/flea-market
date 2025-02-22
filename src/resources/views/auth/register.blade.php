@@ -11,7 +11,7 @@
     <form class="form-group" action="/register" method="POST">
         @csrf
         <div class="form-group__item">
-            <p class="form-group__item-label">ユーザー名</p>
+            <p class="form-group__item-label bold">ユーザー名</p>
             <input class="form-group__item-input" type="text" name="name" value="{{ old('name') }}">
             <div class="error-message">
                 @error('name')
@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">メールアドレス</p>
+            <p class="form-group__item-label bold">メールアドレス</p>
             <input class="form-group__item-input" type="text" name="email" value="{{ old('email') }}">
             <div class="error-message">
                 @error('email')
@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">パスワード</p>
+            <p class="form-group__item-label bold">パスワード</p>
             <input class="form-group__item-input" type="password" name="password">
             <div class="error-message">
                 @error('password')
@@ -41,7 +41,7 @@
         </div>
 
         <div class="form-group__item">
-            <p class="form-group__item-label">確認用パスワード</p>
+            <p class="form-group__item-label bold">確認用パスワード</p>
             <input class="form-group__item-input" type="password" name="password_confirmation">
             <div class="error-message">
                 @error('password_confirmation')
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <button class="form-btn btn-margin" type="submit">
+        <button class="form-btn btn-margin bold" type="submit">
             登録する
         </button>
     </form>

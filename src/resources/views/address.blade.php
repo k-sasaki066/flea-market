@@ -33,11 +33,6 @@
         <div class="form-group__item">
             <p class="form-group__item-label">建物名</p>
             <input class="form-group__item-input" type="text" name="building" value="{{ old('building') }}">
-            <div class="error-message">
-                @error('building')
-                {{ $message }}
-                @enderror
-            </div>
         </div>
 
         <button class="form-btn btn-margin" type="submit">

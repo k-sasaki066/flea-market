@@ -20,9 +20,9 @@
 
     <a class="verify-email__btn" href="http://localhost:8025" target="_blank">認証はこちらから</a>
 
-    <form class="verify-email__form" method="POST" action="{{ route('verification.send') }}">
+    <form class="verify-email__form" method="POST" action="{{ route('verification.send') }}" id="resendForm">
         @csrf
-        <button class="verify-email__form-button" type="submit">
+        <button class="verify-email__form-button" type="submit" id="resendButton">
             認証メールを再送する
         </button>
     </form>

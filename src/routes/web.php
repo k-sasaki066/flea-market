@@ -7,6 +7,9 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\EmailVerificationNotificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +27,10 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);
 Route::get('/item/{item_id}', [ItemController::class, 'getDetail']);
+
+Route::middleware('auth','throttle:6,1')->group(function () {
+    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'resend'])->name('verification.send');
+});
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/mypage/profile', [UserController::class, 'getProfile']);

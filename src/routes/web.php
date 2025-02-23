@@ -8,6 +8,8 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\EmailVerificationNotificationController;
+use App\Models\Brand;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/sell', [UserController::class, 'getSell']);
     Route::post('/sell', [UserController::class, 'postSell']);
+    Route::get('/api/brands', [UserController::class, 'getBrandName']);
 
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'getPurchase']);
     Route::post('/purchase/{item_id}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');

@@ -17,12 +17,12 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('payment_id')->comment('1:コンビニ払い 2:カード支払い')->constrained()->cascadeOnDelete();
-            $table->char('post_cord', '8');
+            $table->foreignId('payment_id')->nullable()->constrained('payments')->nullOnDelete();
+            $table->char('post_cord', 8);
             $table->string('address');
-            $table->string('building');
-            $table->string('stripe_session_id');
-            $table->string('payment_status')->default('pending');
+            $table->string('building')->nullable();
+            $table->string('stripe_session_id')->unique();
+            $table->enum('payment_status', ['pending', 'paid', 'canceled'])->default('pending');
             $table->timestamps();
         });
     }

@@ -75,7 +75,12 @@
             </div>
             <div class="sell-content__inner">
                 <p class="sell-text bold">ブランド名</p>
-                <input class="form-group__item-input" type="text" name="brand_name" value="{{ old('brand_name') }}">
+                <input class="form-group__item-input sell-brand__input" type="text" name="brand_name" value="{{ old('brand_name') }}" id="brand_name" list="brand-list">
+                <datalist id="brand-list">
+                    @foreach($brands as $brand)
+                        <option value="{{ $brand->name }}">
+                    @endforeach
+                </datalist>
             </div>
             <div class="sell-content__inner">
                 <p class="sell-text flex bold">商品の説明<span class="form-text__required">必須</span></p>
@@ -100,5 +105,6 @@
         <button class="form-btn sell-btn bold" type="submit" onclick="return confirm('商品を出品しますか？');">出品する</button>
     </form>
     <script src="{{ asset('js/preview.js') }}"></script>
+    <script src="{{ asset('js/brand_autocomplete.js') }}"></script>
 </div>
 @endsection

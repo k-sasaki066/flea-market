@@ -15,6 +15,7 @@ class Item extends Model
     protected $fillable = [
         'user_id',
         'condition_id',
+        'brand_id',
         'name',
         'image_url',
         'category',
@@ -35,7 +36,7 @@ class Item extends Model
 
     public function brand()
     {
-        return $this->hasOne(Brand::class);
+        return $this->belongsTo(Brand::class);
     }
 
     public function favorites() {
@@ -43,12 +44,13 @@ class Item extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function comments() {
-        return $this->belongsToMany(User::class, 'comments')->withPivot('comment');
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function purchases() {
-        return $this->hasMany(Purchase::class);
+        return $this->hasOne(Purchase::class);
     }
 
     public static function getItems()
@@ -150,7 +152,7 @@ class Item extends Model
     public static function getDetailItem($item_id)
     {
         $item = Item::withCount('favorites', 'comments')
-        ->with('condition', 'brand', 'favorites', 'comments')
+        ->with('condition', 'brand', 'favorites', 'comments.user')
         ->find($item_id);
 
         return $item;
@@ -158,7 +160,7 @@ class Item extends Model
 
     public static function getExhibitedItems()
     {
-        $items = Item::where('user_id', Auth::id())->get();
+        $items = Item::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
 
         return $items;
     }

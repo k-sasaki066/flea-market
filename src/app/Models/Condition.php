@@ -13,6 +13,11 @@ class Condition extends Model
         'name',
     ];
 
+    public function items() {
+
+        return $this->hasMany(Item::class);
+    }
+
     public static function getConditions()
     {
         $conditions = Condition::all();

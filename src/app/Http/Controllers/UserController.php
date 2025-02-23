@@ -70,8 +70,9 @@ class UserController extends Controller
     public function getSell() {
         $categories = Category::getCategories();
         $conditions = Condition::getConditions();
+        $brands = Brand::all();
 
-        return view('sell', compact('categories','conditions'));
+        return view('sell', compact('categories','conditions', 'brands'));
     }
 
     public function postSell(ExhibitionRequest $request) {
@@ -83,9 +84,15 @@ class UserController extends Controller
 
         $image_url = Item::getImageUrl($request->file('image_url'));
 
+        $brand = null;
+        if (!empty($request->brand_name)) {
+            $brand = Brand::firstOrCreate(['name' => $request->brand_name]);
+        }
+
         Item::create([
             'user_id' => Auth::id(),
             'condition_id' => $request->condition_id,
+            'brand_id' => $brand ? $brand->id : null,
             'name' => $request->name,
             'image_url' => $image_url,
             'category' => serialize($request->category),
@@ -94,14 +101,18 @@ class UserController extends Controller
             'status' => '1',
         ]);
 
-        if($request->brand_name) {
-            $item_id = Item::where('image_url', $image_url)->where('user_id', Auth::id())->first()->id;
-            Brand::create([
-                'item_id' => $item_id,
-                'name' => $request->brand_name,
-            ]);
+        return redirect('/mypage')->with('result', '商品を出品しました');
+    }
+
+    public function getBrandName(Request $request) {
+        $query = $request->query('query');
+
+        $brands = Brand::query();
+
+        if (!empty($query)) {
+            $brands->whereRaw('LOWER(name) LIKE ?', ["%" . strtolower($query) . "%"]);
         }
 
-        return redirect('/mypage')->with('result', '商品を出品しました');
+        return response()->json($brands->get());
     }
 }

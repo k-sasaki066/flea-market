@@ -13,6 +13,11 @@ class Payment extends Model
         'way',
     ];
 
+    public function purchase()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     public static function getPayments()
     {
         $payments = Payment::all();

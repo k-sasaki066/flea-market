@@ -10,7 +10,9 @@ class EmailVerificationNotificationController extends Controller
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect('/');
+            return $request->wantsJson()
+                        ? new JsonResponse('', 204)
+                        : redirect()->intended(Fortify::redirects('email-verification'));
         }
 
         $request->user()->sendEmailVerificationNotification();

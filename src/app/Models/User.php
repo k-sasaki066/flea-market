@@ -50,6 +50,26 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_completed' => 'boolean',
     ];
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function purchases() {
+
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function favorites() {
+
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function items() {
+
+        return $this->hasMany(Item::class);
+    }
+
     public static function getPaymentUser()
     {
         $user = User::select('id', 'post_cord', 'address', 'building')->find(Auth::id());

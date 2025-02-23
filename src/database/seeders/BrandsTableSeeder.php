@@ -14,30 +14,10 @@ class BrandsTableSeeder extends Seeder
      */
     public function run()
     {
-        $brands = [
-            [
-                'item_id' => '1',
-                'name' => 'EMPORIO-AMANI',
-            ],
-            [
-                'item_id' => '4',
-                'name' => 'Crockett&Jones',
-            ],
-            [
-                'item_id' => '5',
-                'name' => 'Windows',
-            ],
-            [
-                'item_id' => '6',
-                'name' => 'MAXIM',
-            ],
-            [
-                'item_id' => '7',
-                'name' => 'NINE WEST',
-            ],
-        ];
+        $brands = ['EMPORIO-AMANI', 'Crockett&Jones', 'Windows', 'MAXIM', 'NINE WEST', 'THERMOS', 'ちふれ',];
+
         foreach ($brands as $brand) {
-            DB::table('brands')->insert($brand);
+            DB::table('brands')->insert(['name' => $brand]);
         }
     }
 }

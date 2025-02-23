@@ -76,17 +76,17 @@
         <div class="item-comment__group flex">
             <h2 class="item-comment__ttl">コメント ({{ $item['comments_count'] }})</h2>
             <div class="item-comment__inner">
-                @foreach($item->comments as $user)
+                @foreach($item->comments as $comment)
                 <div class="item-comment__wrap">
                     <div class="item-comment__user flex">
                         <div class="item-comment__img-wrap user-img__wrap">
-                            @if($user['image_url'])
-                            <img class="user-img" src="{{ $user['image_url'] }}" alt="">
+                            @if($comment['user']['image_url'])
+                            <img class="user-img" src="{{ $comment['user']['image_url'] }}" alt="">
                             @endif
                         </div>
-                        <p class="item-comment__name">{{ $user['nickname'] }}</p>
+                        <p class="item-comment__name">{{ $comment['user']['nickname'] }}</p>
                     </div>
-                    <p class="item-comment__text">{{ $user->pivot->comment }}</p>
+                    <p class="item-comment__text">{{ $comment['comment'] }}</p>
                 </div>
                 @endforeach
             </div>

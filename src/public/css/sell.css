@@ -82,7 +82,7 @@
 .sell-condition__select-wrap::after {
     position: absolute;
     top: 50%;
-    right: 5%;
+    right: 2%;
     width: 0;
     height: 0;
     border-top: 10px solid #5f5f5f;

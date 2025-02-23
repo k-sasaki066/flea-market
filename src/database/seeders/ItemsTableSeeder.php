@@ -18,6 +18,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '1',
+                'brand_id' => '1',
                 'name' => '腕時計',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -28,6 +29,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '2',
+                'brand_id' => null,
                 'name' => 'HDD',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/HDD+Hard+Disk.jpg',
                 'category' => serialize([0=>"8"]),
@@ -38,6 +40,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '3',
+                'brand_id' => null,
                 'name' => '玉ねぎ3束',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
                 'category' => serialize([0=>"10"]),
@@ -48,6 +51,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '4',
+                'brand_id' => '2',
                 'name' => '革靴',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -58,6 +62,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '1',
+                'brand_id' => '3',
                 'name' => 'ノートPC',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
                 'category' => serialize([0=>"8"]),
@@ -68,6 +73,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '2',
+                'brand_id' => '4',
                 'name' => 'マイク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
                 'category' => serialize([0=>"3"]),
@@ -78,6 +84,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '3',
+                'brand_id' => '5',
                 'name' => 'ショルダーバッグ',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
                 'category' => serialize([0=>"4"]),
@@ -88,6 +95,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '4',
+                'brand_id' => '6',
                 'name' => 'タンブラー',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Tumbler+souvenir.jpg',
                 'category' => serialize([0=>"10"]),
@@ -98,6 +106,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '1',
+                'brand_id' => null,
                 'name' => 'コーヒーミル',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Waitress+with+Coffee+Grinder.jpg',
                 'category' => serialize([0=>"10"]),
@@ -108,6 +117,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => mt_rand(1,5),
                 'condition_id' => '2',
+                'brand_id' => '7',
                 'name' => 'メイクセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
                 'category' => serialize([0=>"6"]),

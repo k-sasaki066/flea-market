@@ -14,6 +14,12 @@
 </div>
 @endif
 
+@if (session('error'))
+<div class="flash_error-message">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="item-container grid">
     <div class="item-img__wrap">
         <img class="item-img" src="{{ $item['image_url'] }}" alt="item">

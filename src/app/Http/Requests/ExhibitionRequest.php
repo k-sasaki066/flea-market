@@ -44,7 +44,7 @@ class ExhibitionRequest extends FormRequest
             'category.required'=>'商品のカテゴリーを入力してください',
             'condition_id.required'=>'商品の状態を入力してください',
             'price.required'=>'商品の価格を入力してください',
-            'price.numeric'=>'商品の価格は半角数字で入力してください',
+            'price.numeric'=>'商品の価格は半角数字でカンマ( , )を抜いて入力してください',
             'price.min'=>'商品の価格は0円以上で入力してください',
         ];
     }

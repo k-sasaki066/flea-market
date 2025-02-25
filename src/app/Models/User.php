@@ -70,9 +70,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Item::class);
     }
 
-    public static function getPaymentUser()
+    public static function getPaymentUser($userId)
     {
-        $user = User::select('id', 'post_cord', 'address', 'building')->find(Auth::id());
+        $user = User::select('id', 'post_cord', 'address', 'building')->findOrFail($userId);
 
         return $user;
     }

@@ -31,12 +31,18 @@
             <h3 class="sell-ttl border">商品の詳細</h3>
             <div class="sell-category__group">
                 <p class="sell-text flex bold">カテゴリー<span class="form-text__required">必須</span></p>
+                @if ($categories->isNotEmpty())
                 <div class="sell-category__wrap flex">
                     @foreach($categories as $category)
                     <input class="sell-category__hidden" type="checkbox" id="{{ $category['name'] }}" name="category[]" value="{{ $category['id'] }}" {{ (is_array(old('category')) && in_array($category['id'], old('category'))) ? 'checked' : '' }}>
                     <label class="sell-category__select bold" for="{{ $category['name'] }}">{{ $category['name'] }}</label>
                     @endforeach
                 </div>
+                @else
+                <div class="sell-category__wrap">
+                    <p class="sell-category__error">カテゴリー情報がありません</p>
+                </div>
+                @endif
             </div>
             <div class="error-message">
                 @error('category')

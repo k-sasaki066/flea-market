@@ -49,37 +49,37 @@ class Item extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function purchases() {
+    public function purchase() {
         return $this->hasOne(Purchase::class);
     }
 
     public static function getItems()
     {
-        $keyword = session('search_keyword');
-        $query = Item::with('condition');
-
-        if (Auth::check()) {
-            $query->where('user_id', '!=', Auth::id());
-        }
-
-        if (!empty($keyword)) {
-            $query->where('name', 'like', "%{$keyword}%");
-        }
-
-        $items = $query->orderBy('created_at', 'desc')->get();
+        $items = Item::select('items.*')
+        ->with('condition')
+        ->when(Auth::check(), function ($query) {
+            return $query->where('user_id', '!=', Auth::id());
+        })
+        ->when(session('search_keyword') ?? null, function ($query, $keyword) {
+            return $query->where('name', 'like', "%{$keyword}%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return $items;
     }
 
     public static function searchItems($keyword)
     {
-        $query = Item::query();
-
-        if (!empty($keyword)) {
-            $query->where('user_id', '!=', Auth::id())->where('name', 'like', "%{$keyword}%");
-        }
-
-        $items = $query->with('condition')->get();
+        $items = Item::select('items.*')
+        ->when(Auth::check(), function ($query) {
+            return $query->where('user_id', '!=', Auth::id());
+        })
+        ->when(!empty($keyword), function ($query) use ($keyword) {
+            return $query->where('name', 'like', "%{$keyword}%");
+        })
+        ->with('condition')
+        ->get();
 
         return $items;
     }
@@ -127,47 +127,47 @@ class Item extends Model
     {
         $keyword = session('search_keyword');
 
-        $query = Item::select('items.*')
-        ->join('favorites', 'items.id', '=', 'favorites.item_id')
-        ->where('favorites.user_id', Auth::id())
-        ->orderBy('favorites.created_at', 'desc')
-        ->with('favorites');
-
-        if (!empty($keyword)) {
-            $query->where('name', 'like', "%{$keyword}%");
-        }
-
-        $items = $query->get();
+        $items = Item::select('items.*')
+        ->whereHas('favorites', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        ->when($keyword, function ($query, $keyword) {
+            return $query->where('name', 'like', "%{$keyword}%");
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return $items;
     }
 
     public static function getParameter($request)
     {
-        $parameter = $request->input('page');
+        $allowedPages = ['suggest', 'mylist', 'sell', 'buy', 'default'];
+        $parameter = $request->input('page', 'default');
 
-        return $parameter;
+        return in_array($parameter, $allowedPages, true) ? $parameter : 'default';
     }
 
-    public static function getDetailItem($item_id)
+    public static function getDetailItem($itemId)
     {
-        $item = Item::withCount('favorites', 'comments')
-        ->with('condition', 'brand', 'favorites', 'comments.user')
-        ->find($item_id);
+        $item = Item::withCount(['favorites', 'comments'])
+        ->with(['condition', 'brand', 'favorites', 'comments.user'])
+        ->findOrFail($itemId);
 
         return $item;
     }
 
-    public static function getExhibitedItems()
+    public static function getExhibitedItems($userId)
     {
-        $items = Item::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        $items = Item::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return $items;
     }
 
-    public static function getPurchasedItems()
+    public static function getPurchasedItems($userId)
     {
-        $userId = Auth::id();
         $items = Item::select('items.*')
         ->join('purchases', function ($join) use ($userId) {
             $join->on('items.id', '=', 'purchases.item_id')
@@ -190,9 +190,9 @@ class Item extends Model
         return $image_url;
     }
 
-    public static function getPaymentItem($item_id)
+    public static function getPaymentItem($itemId)
     {
-        $item = Item::with('user')->find($item_id);
+        $item = Item::with('user')->findOrFail($itemId);
 
         return $item;
     }

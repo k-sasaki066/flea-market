@@ -8,8 +8,6 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\EmailVerificationNotificationController;
-use App\Models\Brand;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +35,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/mypage/profile', [UserController::class, 'postProfile']);
     Route::get('/mypage', [UserController::class, 'getMypage']);
 
-    Route::post('/like/{item_id}', [FavoriteController::class, 'create']);
-    Route::delete('/unlike/{item_id}', [FavoriteController::class, 'delete']);
+    Route::post('/like/{item_id}', [FavoriteController::class, 'createFavorite']);
+    Route::delete('/unlike/{item_id}', [FavoriteController::class, 'deleteFavorite']);
     Route::post('/comment/{item_id}', [ItemController::class, 'postComment']);
 
     Route::get('/sell', [UserController::class, 'getSell']);

@@ -12,6 +12,12 @@
 </div>
 @endif
 
+@if (session('error'))
+<div class="flash_error-message">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="mypage-container">
     <div class="user__inner grid">
         <div class="user-img__wrap">

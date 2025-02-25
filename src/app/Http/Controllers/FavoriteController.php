@@ -7,7 +7,7 @@ use App\Models\Favorite;
 
 class FavoriteController extends Controller
 {
-    public function create($item_id)
+    public function createFavorite($item_id)
     {
         $existingFavorite = Favorite::where('item_id', $item_id)
         ->where('user_id', Auth::id())
@@ -24,7 +24,7 @@ class FavoriteController extends Controller
         return response()->json(['message' => 'Liked successfully!']);
     }
 
-    public function delete($item_id)
+    public function deleteFavorite($item_id)
     {
         $deleted = Favorite::where('user_id', Auth::id())
         ->where('item_id', $item_id)->delete();

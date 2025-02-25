@@ -27,7 +27,6 @@ class PurchaseRequest extends FormRequest
             'payment_id' => ['required'],
             'post_cord' => ['required'],
             'address' => ['required'],
-            'building' => ['required'],
         ];
     }
 
@@ -37,7 +36,6 @@ class PurchaseRequest extends FormRequest
             'payment_id.required' => '支払い方法を選択してください',
             'post_cord.required' => '郵便番号を設定してください',
             'address.required' => '住所を設定してください',
-            'building.required' => '番地や建物名を設定してください',
         ];
     }
 }

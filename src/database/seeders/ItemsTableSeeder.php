@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ItemsTableSeeder extends Seeder
 {
@@ -25,6 +26,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'price' => '15000',
                 'status' => '1',
+                'created_at' => Carbon::now()->format('Y-m-d'),
+                'updated_at' => Carbon::now()->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -36,6 +39,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '高速で信頼性の高いハードディスク',
                 'price' => '5000',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(1)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(1)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -47,6 +52,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '新鮮な玉ねぎ3束のセット',
                 'price' => '300',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(2)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(2)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -58,6 +65,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => 'クラシックなデザインの革靴',
                 'price' => '4000',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(3)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(3)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -69,6 +78,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '高性能なノートパソコン',
                 'price' => '45000',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(4)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(4)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -80,6 +91,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '高音質のレコーディング用マイク',
                 'price' => '8000',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(5)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(5)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -91,6 +104,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => 'おしゃれなショルダーバッグ',
                 'price' => '3500',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(6)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(6)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -102,6 +117,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '使いやすいタンブラー',
                 'price' => '500',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(7)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(7)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -113,6 +130,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '手動のコーヒーミル',
                 'price' => '4000',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(8)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(8)->format('Y-m-d'),
             ],
             [
                 'user_id' => mt_rand(1,5),
@@ -124,6 +143,8 @@ class ItemsTableSeeder extends Seeder
                 'description' => '便利なメイクアップセット',
                 'price' => '2500',
                 'status' => '1',
+                'created_at' => Carbon::now()->subDay(9)->format('Y-m-d'),
+                'updated_at' => Carbon::now()->subDay(9)->format('Y-m-d'),
             ],
         ];
         foreach ($items as $item) {

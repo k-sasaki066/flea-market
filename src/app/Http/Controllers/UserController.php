@@ -13,95 +13,174 @@ use Carbon\Carbon;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Exception;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
     public function getProfile() {
-        $user = User::find(Auth::id());
-        return view('profile', compact('user'));
+        try {
+            $user = Auth::user();
+            return view('profile', compact('user'));
+        } catch (Exception $e) {
+            Log::error("❌ プロフィールページの取得中にエラー発生", ['error' => $e->getMessage()]);
+            return redirect('/mypage')->with('error', 'プロフィール情報の取得に失敗しました');
+        }
     }
 
-    public function postProfile(Request $request) {
-        $addressValidated = app(AddressRequest::class)->validated();
-        $profileValidated = app(ProfileRequest::class)->validated();
+    public function postProfile(AddressRequest $addressRequest, ProfileRequest $profileRequest) {
+        try {
+            $user = User::findOrFail(Auth::id());
 
-        if($request->file('image_url')) {
-            $image_url = Item::getImageUrl($request->file('image_url'));
+            $validatedData = array_merge($addressRequest->validated(), $profileRequest->validated());
 
-            User::find(Auth::id())->update([
-            'nickname' => $request->nickname,
-            'post_cord' => $request->post_cord,
-            'address' => $request->address,
-            'building' => $request->building,
-            'image_url' => $image_url,
-            'profile_completed' => true,
+            try {
+                $image_url = $profileRequest->file('image_url') 
+                    ? Item::getImageUrl($profileRequest->file('image_url')) 
+                    : $user->image_url;
+            } catch (Exception $e) {
+                Log::error("❌ 画像アップロードエラー: " . $e->getMessage());
+                $image_url = $user->image_url;
+            }
+
+            DB::beginTransaction();
+            $user->update([
+                'nickname' => $validatedData['nickname'],
+                'post_cord' => $validatedData['post_cord'],
+                'address' => $validatedData['address'],
+                'building' => $addressRequest['building'],
+                'image_url' => $image_url,
+                'profile_completed' => true,
             ]);
-        }else {
-            User::find(Auth::id())->update([
-            'nickname' => $request->nickname,
-            'post_cord' => $request->post_cord,
-            'address' => $request->address,
-            'building' => $request->building,
-            'profile_completed' => true,
-            ]);
+            DB::commit();
+
+            return redirect('/mypage')->with('result', 'プロフィールが更新されました');
+        } catch (ModelNotFoundException $e) {
+            Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
+            return redirect('/mypage')->with('error', 'ユーザー情報の取得に失敗しました。');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error("❌ プロフィール更新エラー: " . $e->getMessage());
+            return redirect('/mypage')->with('error', 'プロフィールの更新に失敗しました。');
         }
-
-        return redirect('/mypage')->with('result', 'プロフィールが更新されました');
     }
 
     public function getMypage(Request $request) {
-        $user = User::find(Auth::id(), ['nickname','image_url']);
+        try {
+            $userId = Auth::id();
+            $user = User::select(['nickname', 'image_url'])->findOrFail($userId);
+            $parameter = Item::getParameter($request);
+            $page = $request->input('page', 'default');
 
-        switch ($request['page']) {
-            case 'sell':
-                $items = Item::getExhibitedItems();
-                break;
-            case 'buy':
-                $items = Item::getPurchasedItems();
-                break;
-            default:
-                $items = [];
+            switch ($page) {
+                case 'sell':
+                    $items = Item::getExhibitedItems($userId);
+                    break;
+                case 'buy':
+                    $items = Item::getPurchasedItems($userId);
+                    break;
+                default:
+                    $items = collect([]);
+            }
+
+            return view('mypage', compact('user', 'items', 'parameter'));
+        } catch (ModelNotFoundException $e) {
+            Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
+            return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');
+        } catch (Exception $e) {
+            Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
+            return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
-        $parameter = Item::getParameter($request);
-
-        return view('mypage', compact('user', 'items', 'parameter'));
     }
 
     public function getSell() {
-        $categories = Category::getCategories();
-        $conditions = Condition::getConditions();
-        $brands = Brand::all();
+        try {
+            $categories = Category::getCategories();
+            $conditions = Condition::getConditions();
+            $brands = Brand::all();
 
-        return view('sell', compact('categories','conditions', 'brands'));
+            if ($categories->isEmpty()) {
+                Log::warning('カテゴリー情報が空です');
+            }
+            if ($conditions->isEmpty()) {
+                Log::warning('商品の状態情報が空です');
+            }
+            if ($brands->isEmpty()) {
+                Log::warning('ブランド情報が空です');
+            }
+
+            return view('sell', compact('categories','conditions', 'brands'));
+        } catch (QueryException $e) {
+            Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
+            return redirect('/')->with('error', 'データの取得に失敗しました。');
+        } catch (Exception $e) {
+            Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
+            return redirect('/')->with('error', '予期しないエラーが発生しました。');
+        }
     }
 
     public function postSell(ExhibitionRequest $request) {
-        $user = Auth::user();
+        try{
+            $user = Auth::user();
+            $userId = $user->id;
 
-        if (!$user->profile_completed) {
-            return redirect('/mypage/profile')->with('error', '商品を出品するにはプロフィールを設定してください');
+            if (!$user->profile_completed) {
+                return redirect('/mypage/profile')->with('error', '商品を出品するにはプロフィールを設定してください');
+            }
+
+            DB::beginTransaction();
+
+            $image_url = null;
+            if ($request->hasFile('image_url')) {
+                try {
+                    $image_url = Item::getImageUrl($request->file('image_url'));
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    Log::error("❌ 画像アップロードに失敗しました: " . $e->getMessage());
+                    return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください。');
+                }
+            }
+
+            $brand = null;
+            if (!empty($request->brand_name)) {
+                $brandName = trim($request->brand_name);
+                try {
+                    $brand = Brand::firstOrCreate(['name' => $brandName]);
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    Log::error("❌ ブランド作成エラー: " . $e->getMessage());
+                    return redirect()->back()->with('error', 'ブランドの登録に失敗しました。再度お試しください。');
+                }
+            }
+
+            try{
+                Item::create([
+                    'user_id' => $userId,
+                    'condition_id' => $request->condition_id,
+                    'brand_id' => $brand ? $brand->id : null,
+                    'name' => $request->name,
+                    'image_url' => $image_url,
+                    'category' => serialize($request->category),
+                    'description' => $request->description,
+                    'price' => $request->price,
+                    'status' => 1,
+                ]);
+            } catch (QueryException $e) {
+                DB::rollBack();
+                Log::error("❌ 商品登録エラー: " . $e->getMessage());
+                return redirect()->back()->with('error', '商品の登録に失敗しました。再度お試しください。');
+            }
+            DB::commit();
+
+            return redirect('/mypage')->with('result', '商品を出品しました');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error("❌ 予期しないエラー発生: " . $e->getMessage());
+            return redirect()->back()->with('error', '予期しないエラーが発生しました。');
         }
-
-        $image_url = Item::getImageUrl($request->file('image_url'));
-
-        $brand = null;
-        if (!empty($request->brand_name)) {
-            $brand = Brand::firstOrCreate(['name' => $request->brand_name]);
-        }
-
-        Item::create([
-            'user_id' => Auth::id(),
-            'condition_id' => $request->condition_id,
-            'brand_id' => $brand ? $brand->id : null,
-            'name' => $request->name,
-            'image_url' => $image_url,
-            'category' => serialize($request->category),
-            'description' => $request->description,
-            'price' => $request->price,
-            'status' => '1',
-        ]);
-
-        return redirect('/mypage')->with('result', '商品を出品しました');
     }
 
     public function getBrandName(Request $request) {

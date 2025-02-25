@@ -13,6 +13,12 @@
 </div>
 @endif
 
+@if (session('error'))
+<div class="flash_error-message">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="purchase-container">
     <form class="purchase-form flex" action="/purchase/{{ $item['id'] }}" method="POST">
         @csrf

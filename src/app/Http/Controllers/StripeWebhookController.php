@@ -25,6 +25,7 @@ use App\Mail\SellerNotificationMail;
 use App\Mail\ShippingNotificationMail;
 use App\Mail\SellerOrderCancelMail;
 use App\Mail\PurchaseFailedMail;
+use Exception;
 
 class StripeWebhookController extends Controller
 {
@@ -150,7 +151,7 @@ class StripeWebhookController extends Controller
                             $paymentIntent = PaymentIntent::retrieve($session->payment_intent);
                             $paymentMethodType = $paymentIntent->payment_method_types[0] ?? null;
                             Log::info("📌 使用された支払い方法: " . $paymentMethodType);
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             Log::error("❌ PaymentIntent の取得に失敗しました: " . $e->getMessage());
                         }
                     }
@@ -196,7 +197,7 @@ class StripeWebhookController extends Controller
                                     'payment_intent' => $paymentIntent,
                                 ]);
                                 Log::info("✅ 返金処理完了: ", ['payment_intent' => $paymentIntent, 'refund_id' => $refund->id]);
-                            } catch (\Exception $e) {
+                            } catch (Exception $e) {
                                 Log::error("❌ 返金処理に失敗: " . $e->getMessage(), ['payment_intent' => $paymentIntent]);
                             }
                         }
@@ -232,7 +233,7 @@ class StripeWebhookController extends Controller
                         $this->shippingNotificationMail($session, $paymentMethodType);
                     }
 
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error("❌ checkout.session.completed の処理中にエラーが発生しました: " . $e->getMessage());
                 }
             }
@@ -263,7 +264,7 @@ class StripeWebhookController extends Controller
                 $purchase = Purchase::with('user')->where('stripe_session_id', $sessionId)->first();
 
                 // テスト(実際にデータベースに登録してあるデータを使用)
-                // $purchase = Purchase::where('stripe_session_id', 'cs_test_a1x01UVYipPNmJ8QJ0RtMdrSGjfqgd1qTIobHNQYKnlbi9E7wCLBKCpeIx')->with('user')->first();
+                // $purchase = Purchase::where('stripe_session_id', 'cs_test_a1Kd53kl6mZNyeNdFFvEfGPPhQmKz4vRjmeq5A19jskobNJcklCFVQFI5N')->with('user')->first();
                 // テストここまで
 
                 Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
@@ -338,7 +339,7 @@ class StripeWebhookController extends Controller
             }
 
             return response()->json(['status' => 'success']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('❌ Webhook 処理エラー:', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Invalid signature'], 400);
         }

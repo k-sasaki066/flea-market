@@ -28,7 +28,7 @@
         <div class="item-detail__top flex">
             <div class="item-detail__ttl-group">
                 <h1 class="item-detail__ttl">{{ $item['name'] }}</h1>
-                @if($item['brand'] !== null)
+                @if($item['brand'])
                 <p class="item-detail__brand">{{ $item['brand']['name'] }}</p>
                 @endif
             </div>
@@ -51,11 +51,11 @@
                     <span class="comment-count__text">{{ $item['comments_count'] }}</span>
                 </div>
             </div>
-            @if(Auth::check())
+            @auth
             <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="/purchase/{{ $item['id'] }}">購入手続きへ</a>
             @else
             <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
-            @endif
+            @endauth
         </div>
 
         <div class="item-description__group flex">

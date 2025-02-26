@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use App\Models\Payment;
 use App\Models\Item;
 use App\Models\User;
@@ -41,14 +42,10 @@ class PurchaseController extends Controller
                 Log::warning('ユーザー情報が取得できませんでした');
             }
 
-            if (!$item) {
-                return redirect('/')->with('error', '購入ページが見つかりませんでした。');
-            }
-
             return view('purchase', compact('payments', 'item', 'user', 'address'));
         } catch (ModelNotFoundException $e) {
             Log::error("❌ データが見つかりませんでした: " . $e->getMessage());
-            return redirect('/')->with('error', '指定されたデータが見つかりませんでした。');
+            return redirect('/')->with('error', '購入ページが見つかりませんでした。');
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');

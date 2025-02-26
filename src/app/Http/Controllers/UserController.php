@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -27,7 +28,7 @@ class UserController extends Controller
             return view('profile', compact('user'));
         } catch (Exception $e) {
             Log::error("❌ プロフィールページの取得中にエラー発生", ['error' => $e->getMessage()]);
-            return redirect('/mypage')->with('error', 'プロフィール情報の取得に失敗しました');
+            return redirect('/mypage')->with('error', 'プロフィール情報の取得に失敗しました。');
         }
     }
 
@@ -44,6 +45,7 @@ class UserController extends Controller
             } catch (Exception $e) {
                 Log::error("❌ 画像アップロードエラー: " . $e->getMessage());
                 $image_url = $user->image_url;
+                return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください。');
             }
 
             DB::beginTransaction();

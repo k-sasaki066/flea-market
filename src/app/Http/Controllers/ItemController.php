@@ -88,7 +88,14 @@ class ItemController extends Controller
 
             return view('detail', compact('item', 'category', 'favorite'));
         } catch (ModelNotFoundException $e) {
+            Log::error("❌ 商品情報が見つかりません", ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '商品が見つかりませんでした。');
+        } catch (QueryException $e) {
+            Log::error("❌ データベースエラー:", ['error' => $e->getMessage()]);
+            return redirect('/')->with('error', 'データの取得に失敗しました。');
+        } catch (Exception $e) {
+            Log::error("❌ 予期しないエラー:", ['error' => $e->getMessage()]);
+            return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
     }
 

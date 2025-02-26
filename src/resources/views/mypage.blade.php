@@ -25,7 +25,7 @@
             <img class="user-img" src="{{ $user['image_url'] }}" alt="">
             @endif
         </div>
-        <h2 class="user-name">{{ ($user['nickname'] == null) ? 'ユーザー' : $user['nickname'] }}</h2>
+        <h2 class="user-name">{{ (!$user['nickname']) ? 'ユーザー' : $user['nickname'] }}</h2>
         <a class="profile-link bold" href="/mypage/profile">プロフィールを編集</a>
     </div>
 

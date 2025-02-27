@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Condition;
+use App\Models\Brand;
 
 class ItemsTableSeeder extends Seeder
 {
@@ -17,9 +20,9 @@ class ItemsTableSeeder extends Seeder
     {
         $items = [
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '1',
-                'brand_id' => '1',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => '腕時計',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -30,8 +33,8 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '2',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
                 'brand_id' => null,
                 'name' => 'HDD',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/HDD+Hard+Disk.jpg',
@@ -43,8 +46,8 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(1)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '3',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
                 'brand_id' => null,
                 'name' => '玉ねぎ3束',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
@@ -56,9 +59,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(2)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '4',
-                'brand_id' => '2',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => '革靴',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -69,9 +72,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(3)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '1',
-                'brand_id' => '3',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'ノートPC',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
                 'category' => serialize([0=>"8"]),
@@ -82,9 +85,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(4)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '2',
-                'brand_id' => '4',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'マイク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
                 'category' => serialize([0=>"3"]),
@@ -95,9 +98,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(5)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '3',
-                'brand_id' => '5',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'ショルダーバッグ',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
                 'category' => serialize([0=>"4"]),
@@ -108,9 +111,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(6)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '4',
-                'brand_id' => '6',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'タンブラー',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Tumbler+souvenir.jpg',
                 'category' => serialize([0=>"10"]),
@@ -121,8 +124,8 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(7)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '1',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
                 'brand_id' => null,
                 'name' => 'コーヒーミル',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Waitress+with+Coffee+Grinder.jpg',
@@ -134,9 +137,9 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(8)->format('Y-m-d'),
             ],
             [
-                'user_id' => mt_rand(1,5),
-                'condition_id' => '2',
-                'brand_id' => '7',
+                'user_id' => User::inRandomOrder()->first()->id,
+                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'メイクセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
                 'category' => serialize([0=>"6"]),

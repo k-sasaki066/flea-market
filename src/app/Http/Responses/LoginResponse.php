@@ -23,6 +23,10 @@ class LoginResponse implements LoginResponseContract
             return redirect('/mypage/profile');
         }
 
+        if (!$user->hasVerifiedEmail()) {
+            return redirect('/email/verify');
+        }
+
         return $request->wantsJson()
             ? new JsonResponse(['two_factor' => false], 200)
             : redirect()->intended(config('fortify.home'));

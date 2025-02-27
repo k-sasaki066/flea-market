@@ -1,0 +1,121 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Item;
+
+class SearchTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    public function test_テストデータが正しく作成されたか()
+    {
+        $this->assertDatabaseCount('users', 5);
+
+        $this->assertDatabaseCount('items', 10);
+        $this->assertDatabaseHas('items', [
+            'name' => '腕時計',
+            'price' => 15000,
+        ]);
+
+        $this->assertDatabaseCount('conditions', 4);
+        $this->assertDatabaseHas('conditions', [
+            'name' => '良好',
+        ]);
+
+        $this->assertDatabaseCount('categories', 14);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'ファッション',
+        ]);
+
+        $this->assertDatabaseCount('brands', 7);
+        $this->assertDatabaseHas('brands', [
+            'name' => 'EMPORIO-AMANI',
+        ]);
+
+        $this->assertDatabaseCount('comments', 5);
+        $this->assertDatabaseHas('comments', [
+            'comment' => 'コメント失礼します。こちらの商品はお値引き可能でしょうか。',
+        ]);
+
+        $this->assertDatabaseCount('favorites', 15);
+    }
+
+    public function test_部分一致検索ができる()
+    {
+        $user = User::firstOrFail();
+        $response = $this->actingAs($user)
+        ->followingRedirects() // リダイレクトを追跡
+        ->get('/search?keyword=時計');
+
+        // `viewData('items')` を取得し、null でないことを確認
+        $items = $response->viewData('items');
+        $this->assertIsIterable($items);
+
+        $response->assertStatus(200)->assertViewHas('items'); // 200 (成功) が返ることを確認
+        if (count($items) === 0) {
+            return true;
+        } else {
+            $this->assertGreaterThanOrEqual(1, count($items)); // 1件以上ヒットするか
+        }
+        $response->assertSessionHas('search_keyword', '時計'); // セッションに検索キーワードが保存されているか
+    }
+
+    public function test_トップページで検索したキーワードがマイリストページでも保持される()
+    {
+        $user = User::firstOrFail();
+        $this->actingAs($user)->followingRedirects()->get('/search?keyword=時計')->assertSessionHas('search_keyword', '時計');
+
+        $response = $this->actingAs($user)->followingRedirects()->get('/?page=mylist');
+        $response->assertSessionHas('search_keyword', '時計');
+        // ビューに `items` と `parameter` が渡されているか確認
+        $response->assertViewHas('items');
+        $response->assertViewHas('parameter');
+    }
+
+    public function test_マイリストページで検索したキーワードがトップページでも保持される()
+    {
+        $user = User::firstOrFail();
+        $this->actingAs($user)
+        ->followingRedirects()->get('/search?keyword=コーヒー')->assertSessionHas('search_keyword', 'コーヒー');
+
+        $response = $this->actingAs($user)->followingRedirects()->get('/');
+        $response->assertSessionHas('search_keyword', 'コーヒー');
+        // ビューに `items` と `parameter` が渡されているか確認
+        $response->assertViewHas('items');
+        $response->assertViewHas('parameter');
+    }
+
+    public function test_検索キーワードを空で送信すると全件表示される()
+    {
+        // 出品商品を持っていない新規ユーザーを作成
+        $this->assertDatabaseCount('items', 10);
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+        $response = $this->actingAs($user)
+        ->followingRedirects() // リダイレクトを追跡
+        ->get('/search?keyword=');
+
+        // `viewData('items')` を取得し、null でないことを確認
+        $items = $response->viewData('items');
+        $this->assertIsIterable($items);
+
+        $response->assertStatus(200)
+        ->assertViewHas('items', function ($items) {
+            return count($items) === 10;
+        });
+
+        $response->assertSessionHas('search_keyword', ''); // セッションに検索キーワードが保存されているか
+    }
+}

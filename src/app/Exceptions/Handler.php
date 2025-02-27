@@ -49,9 +49,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // Tokenエラーの時、ログイン画面にリダイレクトする。
         if ($exception instanceof TokenMismatchException) {
-            return redirect('/login')->with('error', 'セッションがタイムアウトしました。再度ログインしてください。');
+            // セッションが切れている場合の処理
+            if (!$request->session()->has('_token')) {
+                return redirect('/login')->with('error', 'セッションがタイムアウトしました。再度ログインしてください。');
+            }
+
+            // CSRFトークンが不正な場合の処理
+            return redirect()->back()->with('error', 'セキュリティエラーが発生しました。もう一度お試しください。');
         }
 
         return parent::render($request, $exception);

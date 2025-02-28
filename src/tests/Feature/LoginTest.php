@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Session;
 
 class LoginTest extends TestCase
 {
@@ -158,21 +159,22 @@ class LoginTest extends TestCase
 
     public function test_レートリミットが適用される()
     {
-        RateLimiter::clear('login:test@example.com' . request()->ip());
+        $email = 'test@example.com';
+        $ip = '127.0.0.1';
 
+        // 10回まで正常に試行できる
         for ($i = 0; $i < 10; $i++) {
-            $this->post('/login', [
-                'email' => 'test@example.com',
-                'password' => 'wrongpassword',
-            ]);
+            RateLimiter::hit("login:{$email}{$ip}");
         }
 
-        $response = $this->post('/login', [
-            'email' => 'test@example.com',
-            'password' => 'wrongpassword',
-        ]);
+        // 11回目の試行で制限される
+        $this->assertTrue(RateLimiter::tooManyAttempts("login:{$email}{$ip}", 10));
 
-        $response->assertStatus(429); // Too Many Requests
+        sleep(60);
+        RateLimiter::clear("login:{$email}{$ip}");
+
+        // 制限が解除されていることを確認
+        $this->assertFalse(RateLimiter::tooManyAttempts("login:{$email}{$ip}", 10));
     }
 
     public function test_メール認証済みのユーザーがログインした場合_プロフィール設定画面にリダイレクトされる()

@@ -8,7 +8,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Condition;
-use Illuminate\Support\Facades\DB;
 
 class RouteTest extends TestCase
 {

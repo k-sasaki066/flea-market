@@ -24,11 +24,10 @@ use Stripe\Exception\ApiConnectionException;
 
 class PurchaseController extends Controller
 {
-    public function getPurchase($itemId) {
+    public function getPurchase(Item $item) {
         try {
             $userId = Auth::id();
             $payments = Payment::getPayments();
-            $item = Item::getPaymentItem($itemId);
             $user = User::getPaymentUser($userId);
             $address = [];
 
@@ -43,9 +42,6 @@ class PurchaseController extends Controller
             }
 
             return view('purchase', compact('payments', 'item', 'user', 'address'));
-        } catch (ModelNotFoundException $e) {
-            Log::error("❌ データが見つかりませんでした: " . $e->getMessage());
-            return redirect('/')->with('error', '購入ページが見つかりませんでした。');
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
@@ -55,7 +51,7 @@ class PurchaseController extends Controller
         }
     }
 
-    public function getAddress($itemId) {
+    public function getAddress(Item $item) {
         try {
             $user = Auth::user();
 
@@ -63,21 +59,17 @@ class PurchaseController extends Controller
                 return redirect('/mypage/profile')->with('error', '商品を購入するにはプロフィールを設定してください');
             }
 
-            return view('address', compact('itemId'));
-        } catch (ModelNotFoundException $e) {
-            Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
-            return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');
+            return view('address', compact('item', 'user'));
         } catch (Exception $e) {
             Log::error("❌ 予期しないエラー: " . $e->getMessage());
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
     }
 
-    public function postAddress(AddressRequest $request, $itemId) {
+    public function postAddress(AddressRequest $request, Item $item) {
         try {
             $userId = Auth::id();
             $payments = Payment::getPayments();
-            $item = Item::getPaymentItem($itemId);
             $user = User::getPaymentUser($userId);
             $address = array_merge($request->validated(), [
                 'building' => $request->building ?? null,
@@ -94,9 +86,6 @@ class PurchaseController extends Controller
             }
 
             return view('purchase', compact('payments', 'item', 'user', 'address'));
-        } catch (ModelNotFoundException $e) {
-            Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
-            return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
@@ -106,15 +95,12 @@ class PurchaseController extends Controller
         }
     }
 
-    public function postPurchase(PurchaseRequest $request, $itemId)
+    public function postPurchase(PurchaseRequest $request, Item $item)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {
-            $item = Item::getPaymentItem($itemId);
-            if (!$item) {
-                throw new ModelNotFoundException("商品が見つかりません: item_id={$itemId}");
-            }
+            $item->load('user');
 
             $user = Auth::user();
             if (!$user) {
@@ -146,7 +132,7 @@ class PurchaseController extends Controller
                 'cancel_url' => route('stripe.cancel'),
                 'metadata' => [
                     'user_id' => $user->id,
-                    'item_id' => $itemId,
+                    'item_id' => $item->id,
                     'post_cord' => $request->post_cord,
                     'address' => $request->address,
                     'building' => $request->building,
@@ -158,9 +144,6 @@ class PurchaseController extends Controller
             ]);
 
             return redirect($session->url);
-        } catch (ModelNotFoundException $e) {
-            Log::error("❌ 商品またはユーザーが見つかりません: " . $e->getMessage());
-            return redirect('/')->with('error', '購入手続きに失敗しました。（商品が見つかりません）');
         } catch (InvalidRequestException $e) {
             Log::error("❌ Stripe API のリクエストエラー: " . $e->getMessage());
             return redirect('/')->with('error', '決済情報が不正です。管理者にお問い合わせください。');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
+use App\Models\Item;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -12,11 +13,11 @@ use Illuminate\Database\QueryException;
 
 class FavoriteController extends Controller
 {
-    public function createFavorite($itemId)
+    public function createFavorite(Item $item)
     {
         try {
             $userId = Auth::id();
-            $existingFavorite = Favorite::where('item_id', $itemId)
+            $existingFavorite = Favorite::where('item_id', $item->id)
             ->where('user_id', $userId)
             ->first();
 
@@ -24,7 +25,7 @@ class FavoriteController extends Controller
                 DB::beginTransaction();
                 $favorite = new Favorite();
                 $favorite->fill([
-                    'item_id'=>$itemId,
+                    'item_id'=>$item->id,
                     'user_id'=>$userId,
                 ])->save();
 
@@ -46,12 +47,12 @@ class FavoriteController extends Controller
         }
     }
 
-    public function deleteFavorite($itemId)
+    public function deleteFavorite(Item $item)
     {
         try {
             $userId = Auth::id();
             $favorite = Favorite::where('user_id', $userId)
-                ->where('item_id', $itemId)
+                ->where('item_id', $item->id)
                 ->first();
 
             if (!$favorite) {

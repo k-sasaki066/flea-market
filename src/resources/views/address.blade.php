@@ -8,7 +8,7 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-header">住所の変更</h2>
-    <form class="form-group" action="/purchase/address/{{ $itemId }}" method="POST">
+    <form class="form-group" action="/purchase/address/{{ $item['id'] }}" method="POST">
         @csrf
         <div class="form-group__item">
             <p class="form-group__item-label flex bold">郵便番号<span class="form-text__required">必須</span></p>
@@ -38,7 +38,7 @@
         <button class="form-btn btn-margin bold" type="submit">
             更新する
         </button>
-        <input type="hidden" name="nickname" value="{{ Auth::user()->nickname }}">
+        <input type="hidden" name="nickname" value="{{ $user['nickname'] }}">
     </form>
 </div>
 

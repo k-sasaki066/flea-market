@@ -69,10 +69,11 @@ class ItemController extends Controller
         }
     }
 
-    public function getDetail($itemId) {
+    public function getDetail(Item $item) {
         try {
-            $item = Item::getDetailItem($itemId);
-            
+            $item->loadCount(['favorites', 'comments'])
+            ->load(['condition', 'brand', 'favorites', 'comments.user']);
+
             $favorite = $item->favorites()->where('user_id', Auth::id())->first();
             
             $category = [];
@@ -87,9 +88,6 @@ class ItemController extends Controller
             }
 
             return view('detail', compact('item', 'category', 'favorite'));
-        } catch (ModelNotFoundException $e) {
-            Log::error("❌ 商品情報が見つかりません", ['error' => $e->getMessage()]);
-            return redirect('/')->with('error', '商品が見つかりませんでした。');
         } catch (QueryException $e) {
             Log::error("❌ データベースエラー:", ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
@@ -99,7 +97,7 @@ class ItemController extends Controller
         }
     }
 
-    public function postComment(CommentRequest $request, $itemId) {
+    public function postComment(CommentRequest $request, Item $item) {
 
         $user = Auth::user();
 
@@ -111,7 +109,7 @@ class ItemController extends Controller
             DB::beginTransaction();
             Comment::create([
                 'user_id' => $user->id,
-                'item_id' => $itemId,
+                'item_id' => $item->id,
                 'comment' => $request->comment,
             ]);
             DB::commit();

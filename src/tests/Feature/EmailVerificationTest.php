@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
 use App\Models\User;
+use App\Models\Item;
+use App\Models\Condition;
 use Illuminate\Auth\Notifications\VerifyEmail;
 
 class EmailVerificationTest extends TestCase
@@ -20,6 +22,49 @@ class EmailVerificationTest extends TestCase
             now()->addMinutes(config('auth.verification.expire', 60)), 
             ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
         );
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create();
+
+        $condition = Condition::create([
+            'name' => 'テスト状態',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $item = Item::create([
+            'user_id' => User::first()->id,
+            'condition_id' => Condition::first()->id,
+            'brand_id' => null,
+            'name' => 'テスト商品',
+            'image_url' => '/images/test.jpg',
+            'category' => serialize([1]),
+            'description' => 'これはテスト用の商品です。',
+            'price' => 5000,
+            'status' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->item = Item::first();
+    }
+
+    public function test_テストデータが正しく作成されたか()
+    {
+        $this->assertDatabaseCount('users', 1);
+
+        $this->assertDatabaseHas('conditions', [
+            'name' => 'テスト状態',
+        ]);
+
+        $this->assertDatabaseHas('items', [
+            'name' => 'テスト商品',
+            'price' => 5000,
+        ]);
     }
 
     public function test_会員登録後にメール認証メールが送信される()
@@ -41,13 +86,16 @@ class EmailVerificationTest extends TestCase
     {
         $user = User::factory()->create([
             'email_verified_at' => null,
+            'profile_completed' => false,
         ]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
+        $response->assertRedirect('/mypage/profile');
 
+        $response = $this->get('/mypage/profile');
         $response->assertRedirect('/email/verify');
     }
 
@@ -57,7 +105,7 @@ class EmailVerificationTest extends TestCase
         Notification::assertNothingSent();
 
         $user = User::factory()->create([
-            'email_verified_at' => null, // メール未認証
+            'email_verified_at' => null,
         ]);
 
         // メール認証通知を送信
@@ -117,4 +165,73 @@ class EmailVerificationTest extends TestCase
         Notification::assertSentToTimes($user, VerifyEmail::class, 1);
     }
 
+    public function test_メール未認証ユーザーはプロフィール編集ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get('/mypage/profile');
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーはマイページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get('/mypage');
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーは出品ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get('/sell');
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーは購入ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get("/purchase/{$this->item->id}");
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーは配送先変更ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get("/purchase/address/{$this->item->id}");
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーは決済成功ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get('/success');
+
+        $response->assertRedirect('/email/verify');
+    }
+
+    public function test_メール未認証ユーザーは決済失敗ページにアクセスするとメール認証ページにリダイレクトされる()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+        $response = $this->actingAs($user)->get('/cancel');
+
+        $response->assertRedirect('/email/verify');
+    }
 }

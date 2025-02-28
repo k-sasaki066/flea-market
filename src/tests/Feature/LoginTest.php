@@ -152,7 +152,8 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect('/email/verify');
+        $response->assertRedirect('/mypage/profile');
+        // LoginResponseでuser_completed=falseの場合/mypage/profileに設定、そのページにアクセスするにはverifiedミドルウェアが適用されている
     }
 
     public function test_レートリミットが適用される()

@@ -24,7 +24,7 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'searchItem']);
-Route::get('/item/{item_id}', [ItemController::class, 'getDetail']);
+Route::get('/item/{item}', [ItemController::class, 'getDetail']);
 
 Route::middleware('auth','throttle:6,1')->group(function () {
     Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'resend'])->name('verification.send');
@@ -35,19 +35,19 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::post('/mypage/profile', [UserController::class, 'postProfile']);
     Route::get('/mypage', [UserController::class, 'getMypage']);
 
-    Route::post('/like/{item_id}', [FavoriteController::class, 'createFavorite']);
-    Route::delete('/unlike/{item_id}', [FavoriteController::class, 'deleteFavorite']);
-    Route::post('/comment/{item_id}', [ItemController::class, 'postComment']);
+    Route::post('/like/{item}', [FavoriteController::class, 'createFavorite']);
+    Route::delete('/unlike/{item}', [FavoriteController::class, 'deleteFavorite']);
+    Route::post('/comment/{item}', [ItemController::class, 'postComment']);
 
     Route::get('/sell', [UserController::class, 'getSell']);
     Route::post('/sell', [UserController::class, 'postSell']);
     Route::get('/api/brands', [UserController::class, 'getBrandName']);
 
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'getPurchase']);
-    Route::post('/purchase/{item_id}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');
+    Route::get('/purchase/{item}', [PurchaseController::class, 'getPurchase']);
+    Route::post('/purchase/{item}', [PurchaseController::class, 'postPurchase'])->name('stripe.session');
 
-    Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'getAddress']);
-    Route::post('/purchase/address/{item_id}', [PurchaseController::class, 'postAddress']);
+    Route::get('/purchase/address/{item}', [PurchaseController::class, 'getAddress']);
+    Route::post('/purchase/address/{item}', [PurchaseController::class, 'postAddress']);
 
     Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');

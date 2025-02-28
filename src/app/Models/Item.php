@@ -148,15 +148,6 @@ class Item extends Model
         return in_array($parameter, $allowedPages, true) ? $parameter : 'default';
     }
 
-    public static function getDetailItem($itemId)
-    {
-        $item = Item::withCount(['favorites', 'comments'])
-        ->with(['condition', 'brand', 'favorites', 'comments.user'])
-        ->findOrFail($itemId);
-
-        return $item;
-    }
-
     public static function getExhibitedItems($userId)
     {
         $items = Item::where('user_id', $userId)
@@ -188,12 +179,5 @@ class Item extends Model
         $image_url = 'http://localhost/storage/images/'.$image_name;
 
         return $image_url;
-    }
-
-    public static function getPaymentItem($itemId)
-    {
-        $item = Item::with('user')->findOrFail($itemId);
-
-        return $item;
     }
 }

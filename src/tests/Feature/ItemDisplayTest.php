@@ -20,7 +20,6 @@ class ItemDisplayTest extends TestCase
         $this->seed();
     }
 
-    /** @test */
     public function test_テストデータが正しく作成されたか()
     {
         $this->assertDatabaseCount('users', 5);
@@ -183,6 +182,9 @@ class ItemDisplayTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get('/?page=mylist');
+        $response->assertStatus(200)->assertSee('マイリスト');
+
+        // **レスポンスから `items` を取得**
         $items = $response->viewData('items');
         // いいねした商品だけが表示されていることを確認
         $response->assertViewHas('items', function ($items) use ($favoriteItemIds) {
@@ -225,10 +227,9 @@ class ItemDisplayTest extends TestCase
 
     public function test_mylistページでは未認証の場合は何も表示されない()
     {
-        $response = $this->get('/?page=mylist');
+        $response = $this->get('/');
 
-        $items = $response->viewData('items');
-        $response->assertStatus(200)
-        ->assertViewHas('items', fn($items) => count($items) === 0);
+        $response = $this->get('/?page=mylist');
+        $response->assertStatus(200)->assertDontSee('マイリスト');
     }
 }

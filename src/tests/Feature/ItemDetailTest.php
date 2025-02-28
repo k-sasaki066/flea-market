@@ -201,6 +201,7 @@ class ItemDetailTest extends TestCase
         $response->assertViewIs('detail');
 
         $response->assertSee('purchased');
+        $response->assertSee('Sold');
         // 購入済みの商品の場合、購入ボタンのクラスにpurchasedを追加し非表示にしている
     }
 
@@ -218,6 +219,7 @@ class ItemDetailTest extends TestCase
         $response->assertViewIs('detail');
 
         $response->assertSee('<a class="item-purchase__btn form-btn bold " href="/purchase/' . $this->item->id . '">購入手続きへ</a>', false);
+        $response->assertDontSee('Sold');
     }
 
     public function ログイン前のユーザーは購入できない()

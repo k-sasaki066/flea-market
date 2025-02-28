@@ -9,6 +9,9 @@
     grid-column: 1/2;
     width: 100%;
     object-fit: cover;
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
 }
 
 .item-img {
@@ -175,6 +178,23 @@
 .item-comment__form-btn {
     text-align: center;
     margin-top: 32px;
+}
+
+.sold-out {
+    position: absolute;
+    top: -85px;
+    left: -200px;
+    background-color: #e24a4a;
+    padding: 80px 40px 0 40px;
+    width: 220px;
+    height: 220px;
+    color: #fff;
+    font-size: 28px;
+    transform: rotate(-45deg);
+    transform-origin: top;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
 }
 
 /* ---modal--- */

@@ -24,10 +24,12 @@
             <input type="hidden" name="page" value="suggest">
             <button class="list-menu__text bold {{ ($parameter == 'suggest') ? 'selected' : '' }}" type="submit">おすすめ</button>
         </form>
+        @auth
         <form class="list-menu__form" action="/" method="GET">
             <input type="hidden" name="page" value="mylist">
             <button class="list-menu__text bold {{ ($parameter == 'mylist') ? 'selected' : '' }}" type="submit">マイリスト</button>
         </form>
+        @endauth
     </div>
 
     <div class="list-card__group flex">

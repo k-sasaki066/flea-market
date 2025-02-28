@@ -22,6 +22,9 @@
 
 <div class="item-container grid">
     <div class="item-img__wrap">
+        @if($item['status'] == 2)
+        <p class="sold-out bold">Sold</p>
+        @endif
         <img class="item-img" src="{{ $item['image_url'] }}" alt="item">
     </div>
     <div class="item-detail">

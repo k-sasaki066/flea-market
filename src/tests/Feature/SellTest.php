@@ -13,6 +13,7 @@ use App\Models\Brand;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class SellTest extends TestCase
 {
@@ -58,10 +59,7 @@ class SellTest extends TestCase
 
     public function test_必須項目を未選択場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -88,10 +86,7 @@ class SellTest extends TestCase
 
     public function test_画像形式が違う場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 500, 'application/pdf');
         // PDFファイルを作成
 
@@ -114,10 +109,7 @@ class SellTest extends TestCase
 
     public function test_商品の説明が256文字以上の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -138,10 +130,7 @@ class SellTest extends TestCase
 
     public function test_販売価格が全角数字の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -162,10 +151,7 @@ class SellTest extends TestCase
 
     public function test_販売価格がカンマ有りで入力した場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -186,10 +172,7 @@ class SellTest extends TestCase
 
     public function test_販売価格をマイナスの数字で入力した場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -213,11 +196,8 @@ class SellTest extends TestCase
         Storage::fake('public');
         // 仮想ストレージを使用
 
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
-        $file = UploadedFile::fake()->create('test.jpeg', 500, 'image/jpeg');
+        $user = User::factory()->create();
+        $file = UploadedFile::fake()->create('test_image.jpg');
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
@@ -233,11 +213,12 @@ class SellTest extends TestCase
             'price' => 1000,
         ]);
 
-        $response->assertRedirect('/mypage')
+        $response->assertRedirect('/mypage?page=sell')
         ->assertSessionHas(['result' => '商品を出品しました']);
 
         $brandId = Brand::where('name', 'テストブランド')->value('id');
 
+        $savedItem = Item::latest()->first();
         $this->assertDatabaseHas('items', [
             'user_id' => $user->id,
             'condition_id' => $this->condition,
@@ -247,6 +228,13 @@ class SellTest extends TestCase
             'description' => 'テスト説明',
             'price' => 1000,
         ]);
+
+        // ファイルが正しいディレクトリに保存されているか確認
+        Storage::disk('public')->assertExists('images/' . basename($savedItem->image_url));
+
+        // `image_url` が正しいURLか
+        $expectedUrl = '/storage/images/' . basename($savedItem->image_url);
+        $this->assertEquals($expectedUrl, $savedItem->image_url);
     }
 
     public function test_プロフィールが未設定の状態で出品ボタンをクリックするとプロフィール設定ページにリダイレクトされる()
@@ -274,16 +262,13 @@ class SellTest extends TestCase
     public function test_同じ名前のブランド名は重複して登録されない()
     {
         Storage::fake('public');// 仮想ストレージを使用
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => false,
-        ]);
-        $brandName = Brand::first()->name;
+        $user = User::factory()->create();
+        $sameBrandName = Brand::first()->name;
 
         $response = $this->actingAs($user)->post('/sell', [
             'user_id' => $user->id,
             'condition_id' => $this->condition,
-            'brand_id' => $brandName,
+            'brand_id' => $sameBrandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,
             'category' => $this->categoryIds,
@@ -291,7 +276,7 @@ class SellTest extends TestCase
             'price' => 1000,
         ]);
 
-        $brandCount = Brand::where('name', $brandName)->count();
+        $brandCount = Brand::where('name', $sameBrandName)->count();
         $this->assertEquals(1, $brandCount);
     }
 }

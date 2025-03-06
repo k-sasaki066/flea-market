@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $response->assertSessionHasErrors(['name' => 'お名前を入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['name' => 'お名前を入力してください']);
     }
 
     public function test_メールアドレスが入力されていない場合_バリデーションメッセージが表示される()
@@ -40,7 +40,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $response->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
     }
 
     public function test_メールアドレスが無効な場合_バリデーションメッセージが表示される_1()
@@ -56,7 +56,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $response->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
     }
 
     public function test_メールアドレスが無効な場合_バリデーションメッセージが表示される_2()
@@ -72,7 +72,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $response->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
     }
 
     public function test_パスワードが入力されていない場合_バリデーションメッセージが表示される()
@@ -88,7 +88,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => '12345678',
         ]);
 
-        $response->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
     }
 
     public function test_パスワードが7文字以下の場合_バリデーションメッセージが表示される()
@@ -104,7 +104,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => '1234567',
         ]);
 
-        $response->assertSessionHasErrors(['password' => 'パスワードは8文字以上で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password' => 'パスワードは8文字以上で入力してください']);
     }
 
     public function test_パスワードが確認用パスワードと一致しない場合_バリデーションメッセージが表示される()
@@ -120,7 +120,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'DifferentPassword!',
         ]);
 
-        $response->assertSessionHasErrors(['password_confirmation' => 'パスワードと一致しません']);
+        $response->assertRedirect()->assertSessionHasErrors(['password_confirmation' => 'パスワードと一致しません']);
     }
 
     public function test_確認パスワードが未入力の場合_バリデーションメッセージが表示される()
@@ -136,7 +136,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => '',
         ]);
 
-        $response->assertSessionHasErrors(['password_confirmation' => '確認用パスワードを入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password_confirmation' => '確認用パスワードを入力してください']);
     }
 
     public function test_確認用パスワードが7文字以下の場合_バリデーションメッセージが表示される()
@@ -152,7 +152,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => '1234567',
         ]);
 
-        $response->assertSessionHasErrors(['password_confirmation' => '確認用パスワードは8文字以上で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password_confirmation' => '確認用パスワードは8文字以上で入力してください']);
     }
 
     public function test_全ての項目が入力されている場合_会員情報が登録され_ログイン画面に遷移される()
@@ -187,7 +187,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $response->assertSessionHasErrors(['email' => '指定のemailは既に使用されています。']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => '指定のemailは既に使用されています。']);
         $this->assertEquals(1, User::count());
     }
 }

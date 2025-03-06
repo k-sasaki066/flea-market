@@ -79,7 +79,7 @@ class RouteTest extends TestCase
         $response->assertStatus(200)->assertViewIs('auth.register');
     }
 
-    public function 認証済みユーザーは会員登録ページにアクセスするとマイページにリダイレクトされる()
+    public function test_認証済みユーザーは会員登録ページにアクセスするとマイページにリダイレクトされる()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user)->get('/register');
@@ -95,7 +95,7 @@ class RouteTest extends TestCase
         $response->assertStatus(200)->assertViewIs('auth.login');
     }
 
-    public function 認証済みユーザーはログインページにアクセスするとマイページにリダイレクトされる()
+    public function test_認証済みユーザーはログインページにアクセスするとマイページにリダイレクトされる()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user)->get('/login');

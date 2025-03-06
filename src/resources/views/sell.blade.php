@@ -7,6 +7,12 @@
 @endsection
 
 @section('content')
+@if (session('error'))
+<div class="flash_error-message">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="sell-container">
     <h2 class="form-header">商品の出品</h2>
     <form class="sell-form flex" action="/sell" method="POST" enctype="multipart/form-data">

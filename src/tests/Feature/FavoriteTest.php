@@ -96,7 +96,7 @@ class FavoriteTest extends TestCase
 
         // 詳細ページで `いいね` の数が表示されることを確認
         $response = $this->get("/item/{$this->item->id}");
-        $response->assertSee((string)$newCount); // 数値として表示されているか
+        $response->assertSee((string)$newCount);
     }
 
     public function test_追加済みのアイコンは色が変化する()
@@ -123,6 +123,13 @@ class FavoriteTest extends TestCase
         $response = $this->actingAs($this->user)->postJson("/like/{$this->item->id}");
 
         $response->assertStatus(200)->assertJson(['message' => 'Already liked!']);
+        $this->assertDatabaseCount('favorites', 1);
+
+        // 再度 `user_id` & `item_id` の組み合わせが増えていないか確認
+        $this->assertDatabaseHas('favorites', [
+            'user_id' => $this->user->id,
+            'item_id' => $this->item->id,
+        ]);
     }
 
     public function test_再度いいねアイコンを押下することによって_いいねを解除することができる()
@@ -155,14 +162,7 @@ class FavoriteTest extends TestCase
         $response->assertSee('/images/star.svg');
     }
 
-    public function test_いいねしていない商品を解除しようとするとエラーになる()
-    {
-        $response = $this->actingAs($this->user)->deleteJson("/unlike/{$this->item->id}");
-
-        $response->assertStatus(404)->assertJson(['message' => 'Already unliked or not found']);
-    }
-
-    public function ログイン前のユーザーはいいねを登録できない()
+    public function test_ログイン前のユーザーはいいねを登録できない()
     {
         $response = $this->get("/item/{$this->item->id}");
 

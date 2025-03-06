@@ -18,8 +18,8 @@ class EmailVerificationTest extends TestCase
     protected function getVerificationUrl($notification, $user)
     {
         return \URL::temporarySignedRoute(
-            'verification.verify', 
-            now()->addMinutes(config('auth.verification.expire', 60)), 
+            'verification.verify',
+            now()->addMinutes(config('auth.verification.expire', 60)),
             ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
         );
     }

@@ -21,7 +21,7 @@ class ItemsTableSeeder extends Seeder
         $items = [
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::first()->id,
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => '腕時計',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
@@ -34,7 +34,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
                 'brand_id' => null,
                 'name' => 'HDD',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/HDD+Hard+Disk.jpg',
@@ -47,7 +47,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', 'やや傷や汚れあり')->value('id'),
                 'brand_id' => null,
                 'name' => '玉ねぎ3束',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/iLoveIMG+d.jpg',
@@ -60,7 +60,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => '革靴',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
@@ -73,7 +73,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::first()->id,
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'ノートPC',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
@@ -86,7 +86,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'マイク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
@@ -99,7 +99,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', 'やや傷や汚れあり')->value('id'),
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'ショルダーバッグ',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
@@ -112,7 +112,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'タンブラー',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Tumbler+souvenir.jpg',
@@ -125,7 +125,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::first()->id,
                 'brand_id' => null,
                 'name' => 'コーヒーミル',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Waitress+with+Coffee+Grinder.jpg',
@@ -138,7 +138,7 @@ class ItemsTableSeeder extends Seeder
             ],
             [
                 'user_id' => User::inRandomOrder()->first()->id,
-                'condition_id' => Condition::inRandomOrder()->first()->id,
+                'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
                 'brand_id' => Brand::inRandomOrder()->first()->id,
                 'name' => 'メイクセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',

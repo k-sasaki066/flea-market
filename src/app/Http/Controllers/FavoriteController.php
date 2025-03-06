@@ -40,7 +40,7 @@ class FavoriteController extends Controller
             Log::error('❌ データベースエラー: ' . $e->getMessage());
             return response()->json(['error' => 'データベースエラーが発生しました'], 500);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error('❌ 予期しないエラー: ' . $e->getMessage());
             return response()->json(['error' => '予期しないエラーが発生しました'], 500);
@@ -65,7 +65,7 @@ class FavoriteController extends Controller
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return response()->json(['message' => 'Database error'], 500);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
             return response()->json(['message' => 'An unexpected error occurred'], 500);
         }

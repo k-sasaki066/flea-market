@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\session\TolenMismatchException;
+use Illuminate\Database\QueryException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,14 +50,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof TokenMismatchException) {
-            // セッションが切れている場合の処理
-            if (!$request->session()->has('_token')) {
-                return redirect('/login')->with('error', 'セッションがタイムアウトしました。再度ログインしてください。');
-            }
-
-            // CSRFトークンが不正な場合の処理
-            return redirect()->back()->with('error', 'セキュリティエラーが発生しました。もう一度お試しください。');
+        if ($exception instanceof Illuminate\Session\TokenMismatchException) {
+            return redirect()->route('login');
         }
 
         return parent::render($request, $exception);

@@ -45,7 +45,7 @@ class PurchaseController extends Controller
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -60,7 +60,7 @@ class PurchaseController extends Controller
             }
 
             return view('address', compact('item', 'user'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error("❌ 予期しないエラー: " . $e->getMessage());
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -89,7 +89,7 @@ class PurchaseController extends Controller
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             Log::error("❌ 予期しないエラー: " . $e->getMessage());
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -153,7 +153,7 @@ class PurchaseController extends Controller
         } catch (ApiConnectionException $e) {
             Log::error("❌ Stripe API への接続エラー: " . $e->getMessage());
             return redirect('/')->with('error', '決済処理に失敗しました。ネットワークを確認してください。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error("❌ 予期しないエラー: " . $e->getMessage());
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }

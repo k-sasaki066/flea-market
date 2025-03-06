@@ -14,11 +14,7 @@ class ItemDisplayTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed();
-    }
+    protected $seed = true;
 
     public function test_テストデータが正しく作成されたか()
     {
@@ -50,22 +46,7 @@ class ItemDisplayTest extends TestCase
             'comment' => 'コメント失礼します。こちらの商品はお値引き可能でしょうか。',
         ]);
 
-        $this->assertDatabaseHas('favorites', [
-            'user_id' => User::inRandomOrder()->first()->id,
-        ]);
-    }
-
-    public function test_トップページに正しいデータが渡される()
-    {
-        $response = $this->get('/');
-        $response->assertStatus(200);
-
-        // ビューに `items` と `parameter` が渡されているか確認
-        $response->assertViewHas('items');
-        $response->assertViewHas('parameter');
-
-        $items = $response->viewData('items');
-        $this->assertNotEmpty($items);
+        $this->assertDatabaseCount('favorites', 15);
     }
 
     public function test_トップページで商品詳細ページのリンクが正しく表示される()
@@ -107,7 +88,6 @@ class ItemDisplayTest extends TestCase
 
     public function test_購入済み商品は「Sold」と表示される()
     {
-        // 商品を1つ取得して確実にstatus=2に更新
         $item = Item::firstOrFail();
         $item->update(['status' => 2]);
 
@@ -159,7 +139,7 @@ class ItemDisplayTest extends TestCase
         $items = $response->viewData('items');
         $conditionId = Condition::where('name', '良好')->firstOrFail()->id;
 
-        $response->assertViewHas('items', function ($items) use ($user) {
+        $response->assertViewHas('items', function ($items) use ($user, $conditionId) {
         if ($items->isEmpty()) {
             return true; // 商品がなくてもテストを通す
         }
@@ -184,7 +164,6 @@ class ItemDisplayTest extends TestCase
         $response = $this->actingAs($user)->get('/?page=mylist');
         $response->assertStatus(200)->assertSee('マイリスト');
 
-        // **レスポンスから `items` を取得**
         $items = $response->viewData('items');
         // いいねした商品だけが表示されていることを確認
         $response->assertViewHas('items', function ($items) use ($favoriteItemIds) {

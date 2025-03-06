@@ -151,6 +151,7 @@ class ItemDetailTest extends TestCase
         $response->assertViewHas('favorite', function ($favorite) {
             return $favorite !== null;
         });
+        $response->assertSee('<img class="favorite-count__img" src="' . asset('images/star-yellow.svg') . '" alt="いいね" width="22px">', false);
     }
 
     public function test_複数選択されたカテゴリが表示されているか()
@@ -222,14 +223,22 @@ class ItemDetailTest extends TestCase
         $response->assertDontSee('Sold');
     }
 
-    public function ログイン前のユーザーは購入できない()
+    public function test_ログイン前のユーザーは購入できない()
     {
         $response = $this->get("/item/{$this->item->id}");
 
-        $response->assertStatus(200)->assertViewIn('detail');
+        $response->assertStatus(200)->assertViewIs('detail');
         $response->assertSee('<a class="item-purchase__btn form-btn bold " href="#modal">購入手続きへ</a>', false);
 
-        $response = $this->get("/item/{$this->item->id}#modal", $commentData);
+        $response = $this->get("/item/{$this->item->id}#modal");
         $response->assertSee('商品を購入するには、ログインが必要です。');
+    }
+
+    public function test_存在しない商品を指定するとエラーハンドリングが行われる()
+    {
+        $invalidItemId = 9999;
+        $response = $this->get('/item/' . $invalidItemId);
+
+        $response->assertStatus(404)->assertSee('404');
     }
 }

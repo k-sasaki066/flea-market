@@ -50,7 +50,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
     }
 
     public function test_メールアドレスが無効な場合_バリデーションメッセージが表示される_1()
@@ -64,7 +64,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
     }
 
     public function test_メールアドレスが無効な場合_バリデーションメッセージが表示される_2()
@@ -78,7 +78,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'メールアドレスは「ユーザー名@ドメイン」形式で入力してください']);
     }
 
     public function test_パスワードが入力されていない場合_バリデーションメッセージが表示される()
@@ -87,12 +87,12 @@ class LoginTest extends TestCase
         $response->assertStatus(200);
 
         $response = $this->post('/login', [
-            'email' => 'test@@example.com',
+            'email' => 'test@example.com',
             'password' => '',
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
     }
 
     public function test_パスワードを7文字で入力した場合_バリデーションメッセージが表示される()
@@ -101,12 +101,12 @@ class LoginTest extends TestCase
         $response->assertStatus(200);
 
         $response = $this->post('/login', [
-            'email' => 'test@@example.com',
+            'email' => 'test@example.com',
             'password' => 'passwor',
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['password' => 'パスワードは8文字以上で入力してください']);
+        $response->assertRedirect()->assertSessionHasErrors(['password' => 'パスワードは8文字以上で入力してください']);
     }
 
     public function test_入力情報が間違っている場合_バリデーションメッセージが表示される_メールアドレス()
@@ -120,7 +120,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
     }
 
     public function test_入力情報が間違っている場合_バリデーションメッセージが表示される_パスワード()
@@ -134,7 +134,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertGuest();
-        $response->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
+        $response->assertRedirect()->assertSessionHasErrors(['email' => 'ログイン情報が登録されていません']);
     }
 
     public function test_正しい情報が入力された場合_ログイン処理が実行される()
@@ -223,6 +223,7 @@ class LoginTest extends TestCase
         $user = User::factory()->create([
             'email_verified_at' => now(),
         ]);
+        $response = $this->actingAs($user)->get('/');
 
         $response = $this->post('/logout', [
             'email' => $user->email,

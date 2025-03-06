@@ -40,7 +40,7 @@ class ItemController extends Controller
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -63,7 +63,7 @@ class ItemController extends Controller
         } catch (QueryException $e) {
             Log::error("❌ データベースエラー:", ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', '検索処理に問題が発生しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error("❌ 予期しないエラー:", ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', '予期しないエラーが発生しました。');
         }
@@ -91,7 +91,7 @@ class ItemController extends Controller
         } catch (QueryException $e) {
             Log::error("❌ データベースエラー:", ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error("❌ 予期しないエラー:", ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -115,7 +115,7 @@ class ItemController extends Controller
             DB::commit();
 
             return redirect()->back()->with('result', 'コメントを送信しました');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ コメント投稿エラー: " . $e->getMessage());
             return redirect()->back()->with('error', 'コメントの送信に失敗しました。再度お試しください。');

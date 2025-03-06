@@ -10,7 +10,7 @@
 <div class="result-container">
     <h2 class="form-btn success-title bold">決済成功！</h2>
     <p class="result-message">お支払いありがとうございました</p>
-    <a class="home-btn" href="/mypage">マイページに戻る</a>
+    <a class="home-btn" href="/mypage?page=buy">マイページに戻る</a>
 </div>
 
 <script>

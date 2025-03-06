@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Favorite;
+use Illuminate\Support\Facades\Storage;
 
 class Item extends Model
 {
@@ -175,9 +176,8 @@ class Item extends Model
     {
         $original = $request_image->getClientOriginalName();
         $image_name = Carbon::now()->format('Ymd_His').'_'.$original;
-        $request_image->move('storage/images', $image_name);
-        $image_url = 'http://localhost/storage/images/'.$image_name;
+        $path = $request_image->storeAs('images', $image_name, 'public');
 
-        return $image_url;
+        return Storage::url($path);
     }
 }

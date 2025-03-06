@@ -12,11 +12,7 @@ class SearchTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed();
-    }
+    protected $seed = true;
 
     public function test_テストデータが正しく作成されたか()
     {
@@ -55,20 +51,19 @@ class SearchTest extends TestCase
     {
         $user = User::firstOrFail();
         $response = $this->actingAs($user)
-        ->followingRedirects() // リダイレクトを追跡
+        ->followingRedirects()
         ->get('/search?keyword=時計');
 
-        // `viewData('items')` を取得し、null でないことを確認
         $items = $response->viewData('items');
         $this->assertIsIterable($items);
 
-        $response->assertStatus(200)->assertViewHas('items'); // 200 (成功) が返ることを確認
+        $response->assertStatus(200)->assertViewHas('items');
         if (count($items) === 0) {
             return true;
         } else {
-            $this->assertGreaterThanOrEqual(1, count($items)); // 1件以上ヒットするか
+            $this->assertGreaterThanOrEqual(1, count($items));
         }
-        $response->assertSessionHas('search_keyword', '時計'); // セッションに検索キーワードが保存されているか
+        $response->assertSessionHas('search_keyword', '時計');
     }
 
     public function test_トップページで検索したキーワードがマイリストページでも保持される()
@@ -78,7 +73,6 @@ class SearchTest extends TestCase
 
         $response = $this->actingAs($user)->followingRedirects()->get('/?page=mylist');
         $response->assertSessionHas('search_keyword', '時計');
-        // ビューに `items` と `parameter` が渡されているか確認
         $response->assertViewHas('items');
         $response->assertViewHas('parameter');
     }
@@ -91,7 +85,6 @@ class SearchTest extends TestCase
 
         $response = $this->actingAs($user)->followingRedirects()->get('/');
         $response->assertSessionHas('search_keyword', 'コーヒー');
-        // ビューに `items` と `parameter` が渡されているか確認
         $response->assertViewHas('items');
         $response->assertViewHas('parameter');
     }
@@ -104,10 +97,9 @@ class SearchTest extends TestCase
             'email_verified_at' => now(),
         ]);
         $response = $this->actingAs($user)
-        ->followingRedirects() // リダイレクトを追跡
+        ->followingRedirects()
         ->get('/search?keyword=');
 
-        // `viewData('items')` を取得し、null でないことを確認
         $items = $response->viewData('items');
         $this->assertIsIterable($items);
 
@@ -116,6 +108,6 @@ class SearchTest extends TestCase
             return count($items) === 10;
         });
 
-        $response->assertSessionHas('search_keyword', ''); // セッションに検索キーワードが保存されているか
+        $response->assertSessionHas('search_keyword', '');
     }
 }

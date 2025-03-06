@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Favorite;
+use App\Models\Comment;
 use App\Models\Condition;
 use App\Models\Category;
 use App\Models\Brand;
@@ -72,7 +73,7 @@ class CommentTest extends TestCase
         ]);
     }
 
-    public function ログイン済みのユーザーはコメントを送信できる()
+    public function test_ログイン済みのユーザーはコメントを送信できる()
     {
         $initialCount = Comment::where('item_id', $this->item->id)->count();
         $this->assertEquals(0, $initialCount);
@@ -99,16 +100,22 @@ class CommentTest extends TestCase
         $response->assertSee((string)$newCount); // 数値として表示されているか
     }
 
-    public function ログイン前のユーザーはコメントを送信できない()
+    public function test_ログイン前のユーザーはコメントを送信できない()
     {
         $response = $this->get("/item/{$this->item->id}");
-        $response->assertStatus(200)->assertViewIn('detail');
+        $response->assertStatus(200)->assertViewIs('detail');
 
         $response->assertSee('<a class="item-comment__form-btn form-btn bold" href="#comment">コメントを送信する</a>', false);
         $commentData = ['comment' => 'テストコメント'];
 
-        $response = $this->get("/comment/{$this->item->id}#comment", $commentData);
+        $response = $this->get("/item/{$this->item->id}#comment", $commentData);
         $response->assertSee('コメントを送信するには、ログインが必要です。');
+
+        $this->assertDatabaseMissing('comments', [
+            'user_id' => $this->user->id,
+            'item_id' => $this->item->id,
+            'comment' => 'テストコメント',
+        ]);
     }
 
     public function test_コメントが入力されていない場合、バリデーションメッセージが表示される()
@@ -120,6 +127,7 @@ class CommentTest extends TestCase
             'comment' => '',
         ]);
 
+        $response->assertRedirect();
         $response->assertSessionHasErrors(['comment' => 'コメントを入力してください']);
     }
 
@@ -133,6 +141,7 @@ class CommentTest extends TestCase
             'comment' => $longComment,
         ]);
 
+        $response->assertRedirect();
         $response->assertSessionHasErrors(['comment' => 'コメントは255文字以下で入力してください']);
     }
 

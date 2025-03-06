@@ -39,9 +39,7 @@ class UserController extends Controller
             $validatedData = array_merge($addressRequest->validated(), $profileRequest->validated());
 
             try {
-                $image_url = $profileRequest->file('image_url') 
-                    ? Item::getImageUrl($profileRequest->file('image_url')) 
-                    : $user->image_url;
+                $image_url = $profileRequest->file('image_url') ? Item::getImageUrl($profileRequest->file('image_url')) : $user->image_url;
             } catch (Exception $e) {
                 Log::error("❌ 画像アップロードエラー: " . $e->getMessage());
                 $image_url = $user->image_url;
@@ -177,7 +175,7 @@ class UserController extends Controller
             }
             DB::commit();
 
-            return redirect('/mypage')->with('result', '商品を出品しました');
+            return redirect('/mypage?page=sell')->with('result', '商品を出品しました');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error("❌ 予期しないエラー発生: " . $e->getMessage());

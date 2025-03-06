@@ -10,16 +10,13 @@ use App\Models\Item;
 use App\Models\Purchase;
 use App\Models\Payment;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 
 class MypageTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed();
-    }
+    protected $seed = true;
 
     public function test_テストデータが正しく作成されたか()
     {
@@ -151,10 +148,7 @@ class MypageTest extends TestCase
 
     public function test_画像の形式が違う場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 500, 'application/pdf'); // PDFファイルを作成
 
         $response = $this->actingAs($user)->get('/mypage/profile');
@@ -173,10 +167,7 @@ class MypageTest extends TestCase
 
     public function test_ユーザー名が未入力の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
@@ -193,10 +184,7 @@ class MypageTest extends TestCase
 
     public function test_郵便番号が未入力の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
@@ -213,10 +201,7 @@ class MypageTest extends TestCase
 
     public function test_郵便番号をハイフンなしで入力の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
@@ -233,10 +218,7 @@ class MypageTest extends TestCase
 
     public function test_郵便番号を全角数字で入力の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
@@ -253,10 +235,7 @@ class MypageTest extends TestCase
 
     public function test_住所が未入力の場合、バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-        ]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);

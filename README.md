@@ -69,3 +69,68 @@
 | --- | --- |
 |<img width="1300" alt="c-sell" src="https://github.com/user-attachments/assets/1197ed1e-a135-4590-b6cb-152030cdc420" />||
 |商品画像、カテゴリー（複数選択可）、状態、商品名、ブランド（任意）、説明、価格を入力し商品を登録できます。|ログアウトボタンをクリックするとサイトからログアウトできます。|
+
+### 購入者へのメール
+|注文確認メール|コンビニ支払い手順メール|
+| --- | --- |
+|<img width="1086" alt="注文内容確認メール" src="https://github.com/user-attachments/assets/cb6c1cbb-3e39-4502-b19b-2b6c91a7d999" />|<img width="1082" alt="支払い手順メール" src="https://github.com/user-attachments/assets/d9995b6d-d8c3-456d-b4a6-c6b2a8ede10d" />|
+|決済完了時に購入した商品の内容と配送先を確認するメール。カード決済、コンビニ決済共通で送信されます。|コンビニ決済を選択して支払いボタンをクリックした際に、登録したメールアドレスにも支払い期限と手順が送信されます。|
+
+|コンビニ決済完了メール|カード決済失敗メール|
+| --- | --- |
+|<img width="1098" alt="決済完了" src="https://github.com/user-attachments/assets/0fd362f5-5349-4dd6-aff3-cd4aebd51950" />|<img width="1085" alt="カード失敗メール" src="https://github.com/user-attachments/assets/3adaef7e-65b2-4e97-b946-776a580d2859" />|
+|支払い期限内に支払いが完了した際に送信されます。|カード決済時に残高不足などの理由で決済が失敗した際に送信されます。|
+
+|コンビニ決済失敗メール|売り切れメール|
+| --- | --- |
+|<img width="1083" alt="失敗メール" src="https://github.com/user-attachments/assets/d3662568-e294-4393-8dda-4406f97a43b0" />|<img width="1102" alt="売り切れメール" src="https://github.com/user-attachments/assets/5b970686-2bea-4f13-a5b6-2396d0533978" />|
+|支払い期限までに支払いが完了しなかった場合に送信されます。|既に他の購入者によって購入済みの商品を購入した場合に送信されます。|
+
+### 出品者へのメール
+|商品売上通知メール|発送準備通知メール|
+| --- | --- |
+|<img width="1099" alt="売れましたメール" src="https://github.com/user-attachments/assets/e480092b-13ca-469a-8fbe-f1619108317e" />|<img width="1081" alt="発送準備メール" src="https://github.com/user-attachments/assets/a43a0776-d8b0-46a0-8c50-dbaeb63b30c8" />|
+|商品の購入完了時に出品者に送信されます。|カード決済とコンビニ決済それぞれで決済が完了した時点で出品者に送信されます。|
+
+|注文キャンセルメール|
+| --- |
+|<img width="1099" alt="キャンセルメール" src="https://github.com/user-attachments/assets/bee268ee-52d7-4595-91ca-a9a94ec7e5b8" />|
+|購入者がコンビニ支払い期限内に支払いが完了しなかった場合に出品者に送信されます。|
+
+## 実行環境
+Docker 27.4.0
+<br>
+nginx 1.21.1
+<br>
+php 8.3.8
+<br>
+mysql 8.0.26
+<br>
+phpMyAdmin 5.2.1
+<br>
+Mailhog
+<br>
+ngrok
+<br>
+stripe CLI 1.24.0
+
+## 使用技術
+Laravel Framework 8.83.8
+<br>
+Laravel Fortify
+<br>
+Stripe
+<br>
+HTML/CSS
+<br>
+Javascript
+<br>
+PHP
+<br>
+
+## テーブル設計
+<br>
+<img width="710" alt="テーブル仕様書" src="https://github.com/user-attachments/assets/91de8f90-f7f0-44b6-831f-4803f761ee7a" />
+
+## ER図
+![ER図](src/flea_market.drawio.png)

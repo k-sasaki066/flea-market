@@ -205,9 +205,15 @@ mysql:
   ```
   cp .env.example .env
   ```
+  <br>
+  ① アプリケーションキーを取得
+  
+  ```
+  php artisan key:generate
+  ```
 
   <br>
-  ① mysqlの設定(docker-compose.ymlを参照)
+  ② mysqlの設定(docker-compose.ymlを参照)
   
   ```
   DB_CONNECTION=mysql
@@ -218,7 +224,7 @@ mysql:
   DB_PASSWORD=laravel_pass(変更)
   ```
   <br>
-  ② mailhogの設定
+  ③ mailhogの設定
 
   ```
   MAIL_MAILER=smtp
@@ -231,7 +237,7 @@ mysql:
 
   <br>
   <br>
-  ③ stripeのアカウント設定
+  ④ stripeのアカウント設定
 　<br>
   stripe公式ページ(https://stripe.com/jp)
   <br>
@@ -248,7 +254,7 @@ mysql:
   ```
 
   <br>
-  ④ ngrokの設定
+  ⑤ ngrokの設定
   <br>
   ngrok公式ページ(https://dashboard.ngrok.com/)
 　<br>
@@ -259,7 +265,7 @@ mysql:
   NGROK_AUTHTOKEN=your_ngrok_auth_token
   ```
   <br>
-  ⑤ stripe webhookの設定
+  ⑥ stripe webhookの設定
 　<br>
   <img width="800" alt="webhook設定1" src="https://github.com/user-attachments/assets/81e9190d-3ee5-4111-8257-49911535eb77" />
   <br>
@@ -278,15 +284,8 @@ mysql:
   ```
 
   <br>
-  4. アプリケーションキーを取得
   
-  ```
-  php artisan key:generate
-  ```
-  
-  <br>
-  
-  5. テーブル作成
+  4. テーブル作成
   
   ```
   php artisan migrate
@@ -294,7 +293,7 @@ mysql:
 
   <br>
   
-  6. ダミーデータ作成
+  5. ダミーデータ作成
   
   ```
   php artisan db:seed
@@ -303,7 +302,7 @@ mysql:
 
   <br>
   
-  7. シンボリックリンク作成
+  6. シンボリックリンク作成
   
   ```
   php artisan storage:link

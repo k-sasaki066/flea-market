@@ -47,13 +47,13 @@
 
 |購入画面|配送先設定画面|
 | --- | --- |
-|<img width="1550" alt="c-purchase" src="https://github.com/user-attachments/assets/079e607b-041d-4c4c-8b11-083c5095904b" />|<img width="1300" alt="c-address" src="https://github.com/user-attachments/assets/d6d91cd1-0045-44ab-8a58-cbf00ca3f927" />|
-|支払い方法と配送先住所を設定できます。|購入画面の配送先住所欄の「変更する」ボタンをクリックすると配送先設定画面に遷移します。入力し変更ボタンをクリックすると購入画面の配送先が設定した住所に反映されます。この住所は購入した商品の配送先として紐づけられて登録されます。|
+|<img width="1450" alt="c-purchase" src="https://github.com/user-attachments/assets/079e607b-041d-4c4c-8b11-083c5095904b" />|<img width="1450" alt="c-address" src="https://github.com/user-attachments/assets/d6d91cd1-0045-44ab-8a58-cbf00ca3f927" />|
+|支払い方法と配送先住所を設定できます。購入ボタンをクリックすると決済画面に遷移します。配送先住所欄の「変更する」ボタンをクリックすると配送先設定画面に遷移します。|入力し変更ボタンをクリックすると購入画面の配送先が設定した住所に反映されます。この住所は購入した商品の配送先として紐づけられて登録されます。|
 
 |決済画面|決済キャンセル画面|
 | --- | --- |
 |<img width="1460" alt="c-stripe" src="https://github.com/user-attachments/assets/7e6151a9-0dbe-4c40-8be6-272fdb54973c" />|<img width="1459" alt="c-cancel" src="https://github.com/user-attachments/assets/8753efc2-abae-4c91-97e1-2096b22f1a13" />|
-|購入画面で購入ボタンをクリックすると決済画面に遷移します。メールアドレスとそれぞれの支払い方法での必要項目を入力して決済します。|決済画面にて戻るボタンをクリックするとキャンセル画面に遷移します。|
+|メールアドレスとそれぞれの支払い方法での必要項目を入力して決済します。|決済画面にて戻るボタンをクリックするとキャンセル画面に遷移します。|
 
 |カード決済成功画面|コンビニ支払い手順画面|
 | --- | --- |
@@ -67,7 +67,7 @@
 
 |出品画面|ログアウト|
 | --- | --- |
-|<img width="1300" alt="c-sell" src="https://github.com/user-attachments/assets/1197ed1e-a135-4590-b6cb-152030cdc420" />||
+|<img width="800" alt="c-sell" src="https://github.com/user-attachments/assets/1197ed1e-a135-4590-b6cb-152030cdc420" />||
 |商品画像、カテゴリー（複数選択可）、状態、商品名、ブランド（任意）、説明、価格を入力し商品を登録できます。|ログアウトボタンをクリックするとサイトからログアウトできます。|
 
 ### 購入者へのメール
@@ -95,10 +95,10 @@
 |注文キャンセルメール|
 | --- |
 |<img width="1099" alt="キャンセルメール" src="https://github.com/user-attachments/assets/bee268ee-52d7-4595-91ca-a9a94ec7e5b8" />|
-|購入者がコンビニ支払い期限内に支払いが完了しなかった場合に出品者に送信されます。|
+|コンビニ支払い期限内に支払いが完了しなかった場合に出品者に送信されます。|
 
 ## 実行環境
-Docker 27.4.0
+Docker 27.5.1
 <br>
 nginx 1.21.1
 <br>
@@ -130,7 +130,190 @@ PHP
 
 ## テーブル設計
 <br>
-<img width="710" alt="テーブル仕様書" src="https://github.com/user-attachments/assets/91de8f90-f7f0-44b6-831f-4803f761ee7a" />
+<img width="1450" alt="テーブル仕様書" src="https://github.com/user-attachments/assets/91de8f90-f7f0-44b6-831f-4803f761ee7a" />
 
 ## ER図
 ![ER図](src/flea_market.drawio.png)
+
+## 環境構築
+
+#### Docker ビルド
+<br>
+gitクローン
+
+```
+git clone githubのリンク
+```
+<br>
+docker composeのバージョンによって一部記載が異なるため、はじめにバージョンを確認します。
+<br>
+
+
+```
+docker compose version(docker-compose version)
+```
+<br>
+  -v1の場合
+<br>
+docker-compose.ymlファイルのコメントアウトを外してください
+
+```
+version: '3.8'　(コメントアウト解除)
+```
+
+  -v2の場合
+<br>
+変更点なし
+<br>
+
+dockerビルド
+```
+docker compose up -d --build(docker-compose up -d --build)
+```
+<br>
+
+> _Mac の M1・M2 チップの PC で設定しています。エラーが発生する場合は、platform: linux/x86_64をコメントアウトしてください。_
+> docker-compose.yml ファイルの「mysql」、「phpMyAdmin」, 「mail」, 「ngrok」の4箇所に記載があります。_
+
+```bash
+mysql:
+    platform: linux/x86_64(この文をコメントアウト)
+    image: mysql:8.0.26
+    environment:
+```
+
+<br>
+
+#### Laravel環境構築
+  1. PHPコンテナへ入る
+  
+  ```
+  docker compose exec php bash(docker-compose exec php bash)
+  ```
+  <br>
+
+  2. composer をインストール
+  
+  ```
+  composer install
+  ```
+
+  <br>
+  
+  3. .env.example ファイルをコピーして.env ファイルを作成し、環境変数を変更する
+  
+  ```
+  cp .env.example .env
+  ```
+
+  <br>
+  ① mysqlの設定(docker-compose.ymlを参照)
+  
+  ```
+  DB_CONNECTION=mysql
+  DB_HOST=mysql(変更)
+  DB_PORT=3306
+  DB_DATABASE=laravel_db(変更)
+  DB_USERNAME=laravel_user(変更)
+  DB_PASSWORD=laravel_pass(変更)
+  ```
+  <br>
+  ② mailhogの設定
+
+  ```
+  MAIL_MAILER=smtp
+  MAIL_HOST=mail
+  MAIL_PORT=1025
+  MAIL_FROM_ADDRESS="送信元アドレス（例：flea-market@test.com）"
+  ```
+  <br>
+  <img width="800" alt="スクリーンショット 2025-03-11 10 03 52" src="https://github.com/user-attachments/assets/6d876e0f-c13f-44d8-ad19-b28474c62c68" />
+
+  <br>
+  <br>
+  ③ stripeのアカウント設定
+　<br>
+  stripe公式ページ(https://stripe.com/jp)
+  <br>
+  <img width="800" alt="stripe設定１" src="https://github.com/user-attachments/assets/9428feb4-add4-4f49-9594-ee25e4269bcd" />
+  <br>
+  <img width="800" alt="stripe設定３" src="https://github.com/user-attachments/assets/ea6ed36b-85b4-44eb-82a0-80f48ed6868c" />
+  <br>
+  <img width="800" alt="stripe設定４" src="https://github.com/user-attachments/assets/d61fb882-7316-4233-9605-a3222b8ffeda" />
+
+  
+  ```
+  STRIPE_KEY=公開可能キーを貼り付け
+  STRIPE_SECRET=シークレットキーを貼り付け
+  ```
+
+  <br>
+  ④ ngrokの設定
+  <br>
+  ngrok公式ページ(https://dashboard.ngrok.com/)
+　<br>
+  <img width="800" alt="ngrok設定" src="https://github.com/user-attachments/assets/5d27c22d-c7e9-4601-8605-93f441df54bb" />
+  <br>
+  
+  ```
+  NGROK_AUTHTOKEN=your_ngrok_auth_token
+  ```
+  <br>
+  ⑤ stripe webhookの設定
+　<br>
+  <img width="800" alt="webhook設定1" src="https://github.com/user-attachments/assets/81e9190d-3ee5-4111-8257-49911535eb77" />
+  <br>
+  <img width="800" alt="webhook設定２" src="https://github.com/user-attachments/assets/23ae6455-b353-4d75-b714-62ebb6802346" />
+  <br>
+  <img width="800" alt="webhook設定３" src="https://github.com/user-attachments/assets/3fca8a1b-3f3d-43be-bd12-c3352678a7cd" />
+  <br>
+  <img width="800" alt="webhook設定４" src="https://github.com/user-attachments/assets/3481a30b-7c91-4fa1-80ed-1e927245221c" />
+  <br>
+  <img width="800" alt="webhook設定５" src="https://github.com/user-attachments/assets/f768e526-16b9-4927-beff-baca16027c6f" />
+  <br>
+  <img width="800" alt="webhook設定６" src="https://github.com/user-attachments/assets/f3951f14-9684-4e90-8f8d-51b23372eff3" />
+  
+  ```
+  STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+  ```
+
+  <br>
+  4. アプリケーションキーを取得
+  
+  ```
+  php artisan key:generate
+  ```
+  
+  <br>
+  
+  5. テーブル作成
+  
+  ```
+  php artisan migrate
+  ```
+
+  <br>
+  
+  6. ダミーデータ作成
+  
+  ```
+  php artisan db:seed
+  ```
+  
+
+  <br>
+  
+  7. シンボリックリンク作成
+  
+  ```
+  php artisan storage:link
+  ```
+<br>
+## URL
+
+- 開発環境
+  - ログインページ <http://localhost/login>
+- MailHog <http://localhost:8025>
+- phpMyAdmin <http://localhost:8080>
+- ngrok <http://localhost:4040>
+

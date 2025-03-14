@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
-use App\Models\Favorite;
 use App\Models\Comment;
 use App\Models\Condition;
 use App\Models\Category;
@@ -24,9 +23,8 @@ class CommentTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create();
-        Condition::create([
-            'name' => '良好',
-        ]);
+
+        Condition::create(['name' => '良好',]);
 
         Category::create(['id' => 1, 'name' => 'ファッション']);
         Category::create(['id' => 2, 'name' => '家電']);
@@ -97,7 +95,7 @@ class CommentTest extends TestCase
         $this->assertEquals($initialCount + 1, $newCount);
 
         $response = $this->actingAs($this->user)->get("/item/{$this->item->id}");
-        $response->assertSee((string)$newCount); // 数値として表示されているか
+        $response->assertSee((string)$newCount);
     }
 
     public function test_ログイン前のユーザーはコメントを送信できない()
@@ -161,5 +159,11 @@ class CommentTest extends TestCase
 
         $response->assertRedirect('/mypage/profile');
         $response->assertSessionHas(['error' => 'コメントするにはプロフィールを設定してください']);
+
+        $this->assertDatabaseMissing('comments', [
+            'user_id' => $user->id,
+            'item_id' => $this->item->id,
+            'comment' => 'テストコメント',
+        ]);
     }
 }

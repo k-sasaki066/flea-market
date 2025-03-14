@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ItemController extends Controller
 {

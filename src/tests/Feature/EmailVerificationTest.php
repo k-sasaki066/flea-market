@@ -69,7 +69,7 @@ class EmailVerificationTest extends TestCase
 
     public function test_会員登録後にメール認証メールが送信される()
     {
-        Notification::fake(); // メール送信をモック
+        Notification::fake();
 
         $response = $this->post('/register', [
             'name' => 'テストユーザー',
@@ -79,7 +79,7 @@ class EmailVerificationTest extends TestCase
         ]);
 
         $user = User::where('email', 'test@example.com')->firstOrFail();
-        Notification::assertSentTo($user, VerifyEmail::class); // メール認証通知が送信されたか確認
+        Notification::assertSentTo($user, VerifyEmail::class);
     }
 
     public function test_ログイン後にメール認証画面にリダイレクトされる()
@@ -108,17 +108,14 @@ class EmailVerificationTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        // メール認証通知を送信
         $user->sendEmailVerificationNotification();
 
-        // メール通知からURLを取得
         Notification::assertSentTo($user, VerifyEmail::class, function ($notification) use ($user) {
             $verificationUrl = $this->getVerificationUrl($notification, $user);
 
-            // URLにアクセス
             $response = $this->actingAs($user)->get($verificationUrl);
 
-            $response->assertLocation('/mypage?verified=1'); // 認証後、トップページへリダイレクトされるか
+            $response->assertLocation('/mypage?verified=1');
             return $user->fresh()->hasVerifiedEmail();
         });
     }
@@ -161,7 +158,6 @@ class EmailVerificationTest extends TestCase
             return count($channels) === 1;
         });
 
-        // メールが1回だけ送信されたことを確認
         Notification::assertSentToTimes($user, VerifyEmail::class, 1);
     }
 

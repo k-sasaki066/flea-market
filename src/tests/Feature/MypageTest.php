@@ -10,7 +10,7 @@ use App\Models\Item;
 use App\Models\Purchase;
 use App\Models\Payment;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class MypageTest extends TestCase
 {
@@ -69,7 +69,6 @@ class MypageTest extends TestCase
 
     public function test_必要な情報が取得できる_出品した商品一覧()
     {
-        // 出品商品を持つユーザーを取得
         $user = User::whereHas('items')->withCount('items')->firstOrFail();
         $itemsCount = $user->items_count;
 
@@ -149,7 +148,7 @@ class MypageTest extends TestCase
     public function test_画像の形式が違う場合、バリデーションメッセージが表示される()
     {
         $user = User::factory()->create();
-        $file = UploadedFile::fake()->create('test.pdf', 500, 'application/pdf'); // PDFファイルを作成
+        $file = UploadedFile::fake()->create('test.pdf', 500, 'application/pdf');
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
@@ -248,5 +247,46 @@ class MypageTest extends TestCase
         ]);
 
         $response->assertStatus(302)->assertSessionHasErrors(['address' => '住所を入力してください']);
+    }
+
+    public function test_全ての項目が入力されている場合_プロフィールが登録され_マイページに遷移される()
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+            'nickname' => null,
+            'post_cord' => null,
+            'address' => null,
+            'building' => null,
+            'image_url' => null,
+            'profile_completed' => false,
+        ]);
+
+        $response = $this->actingAs($user)->get('/mypage/profile');
+        $response->assertStatus(200);
+
+        $file = UploadedFile::fake()->create('test.png', 500, 'image/png');
+        $response = $this->post('/mypage/profile', [
+            'nickname' => 'test',
+            'post_cord' => '123-4567',
+            'address' => '東京都新宿区100-1',
+            'building' => 'テストビル101',
+            'image_url' => $file,
+        ]);
+
+        $response->assertRedirect('/mypage')->assertSessionHas('result', 'プロフィールが更新されました');
+
+        $savedItem = User::latest()->first();
+        $this->assertDatabaseHas('users', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'nickname' => 'test',
+            'post_cord' => '123-4567',
+            'address' => '東京都新宿区100-1',
+            'building' => 'テストビル101',
+            'image_url' => $savedItem->image_url,
+            'profile_completed' => true,
+        ]);
     }
 }

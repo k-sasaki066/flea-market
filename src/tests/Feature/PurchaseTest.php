@@ -7,12 +7,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
-use App\Models\Favorite;
 use App\Models\Condition;
 use App\Models\Category;
-use App\Models\Comment;
 use App\Models\Brand;
 use App\Models\Purchase;
+use App\Models\Payment;
 use Mockery;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
@@ -50,6 +49,8 @@ class PurchaseTest extends TestCase
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        Payment::create(['id' => 1, 'way' => 'コンビニ払い']);
     }
 
     public function test_テストデータが正しく作成されたか()
@@ -74,6 +75,11 @@ class PurchaseTest extends TestCase
         $this->assertDatabaseCount('brands', 1);
         $this->assertDatabaseHas('brands', [
             'name' => 'テストブランド',
+        ]);
+
+        $this->assertDatabaseCount('payments', 1);
+        $this->assertDatabaseHas('payments', [
+            'way' => 'コンビニ払い',
         ]);
     }
 
@@ -105,13 +111,13 @@ class PurchaseTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get("/purchase/address/{$this->item->id}");
-        $response->assertStatus(200);
+        $response->assertStatus(302);
 
         $response->assertRedirect('/mypage/profile');
         $response->assertSessionHas(['error' => '商品を購入するにはプロフィールを設定してください']);
     }
 
-    public function test_配送先を未選択場合、バリデーションメッセージが表示される()
+    public function test_支払い方法を未選択場合、バリデーションメッセージが表示される()
     {
         $user = User::factory()->create([
             'email_verified_at' => now(),
@@ -177,23 +183,20 @@ class PurchaseTest extends TestCase
             'email_verified_at' => now(),
             'profile_completed' => true,
         ]);
-        // Stripe API の `Session::create()` をモック
+
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $mockSession = Mockery::mock('alias:' . Session::class);
         $mockSession->shouldReceive('create')->once()->andReturn((object) ['url' => 'https://checkout.stripe.com']);
 
-        // 決済リクエストデータ
         $purchaseData = [
-            'payment_id' => 1,
+            'payment_id' => Payment::first()->id,
             'post_cord' => '123-4567',
             'address' => '東京都新宿区',
             'building' => 'テストビル101',
         ];
 
-        // 購入リクエスト実行
         $response = $this->actingAs($user)->post("/purchase/{$this->item->id}", $purchaseData);
 
-        // Stripe の決済ページにリダイレクトされるか確認
         $response->assertRedirect('https://checkout.stripe.com');
     }
 
@@ -204,7 +207,6 @@ class PurchaseTest extends TestCase
             'profile_completed' => true,
         ]);
 
-        // 購入画面を開くとデフォルトの情報が表示
         $response = $this->actingAs($user)->get("/purchase/{$this->item->id}");
         $response->assertStatus(200);
 
@@ -212,14 +214,12 @@ class PurchaseTest extends TestCase
         $response->assertSee($user->address);
         $response->assertSee($user->building);
 
-        // 配送先設定
         $response = $this->post("/purchase/address/{$this->item->id}", [
             'post_cord' => '987-6543',
             'address' => '岩手県テスト市テスト町1-1',
             'building' => '',
         ]);
 
-        // 購入ページに設定した住所が表示される
         $response = $this->get("/purchase/address/{$this->item->id}");
         $response->assertStatus(200);
 

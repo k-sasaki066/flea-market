@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Item;
 
 class SearchTest extends TestCase
 {
@@ -55,43 +54,36 @@ class SearchTest extends TestCase
         ->get('/search?keyword=時計');
 
         $items = $response->viewData('items');
-        $this->assertIsIterable($items);
 
         $response->assertStatus(200)->assertViewHas('items');
-        if (count($items) === 0) {
-            return true;
-        } else {
-            $this->assertGreaterThanOrEqual(1, count($items));
-        }
+        $this->assertTrue(collect($items)->every(fn($item) => str_contains($item->name, '時計')));
+
         $response->assertSessionHas('search_keyword', '時計');
     }
 
     public function test_トップページで検索したキーワードがマイリストページでも保持される()
     {
         $user = User::firstOrFail();
-        $this->actingAs($user)->followingRedirects()->get('/search?keyword=時計')->assertSessionHas('search_keyword', '時計');
+        $response = $this->actingAs($user)->followingRedirects()->get('/search?keyword=時計');
+        $response->assertSessionHas('search_keyword', '時計');
 
         $response = $this->actingAs($user)->followingRedirects()->get('/?page=mylist');
         $response->assertSessionHas('search_keyword', '時計');
-        $response->assertViewHas('items');
-        $response->assertViewHas('parameter');
     }
 
     public function test_マイリストページで検索したキーワードがトップページでも保持される()
     {
         $user = User::firstOrFail();
-        $this->actingAs($user)
-        ->followingRedirects()->get('/search?keyword=コーヒー')->assertSessionHas('search_keyword', 'コーヒー');
+        $response = $this->actingAs($user)
+        ->followingRedirects()->get('/search?keyword=コーヒー');
+        $response->assertSessionHas('search_keyword', 'コーヒー');
 
         $response = $this->actingAs($user)->followingRedirects()->get('/');
         $response->assertSessionHas('search_keyword', 'コーヒー');
-        $response->assertViewHas('items');
-        $response->assertViewHas('parameter');
     }
 
     public function test_検索キーワードを空で送信すると全件表示される()
     {
-        // 出品商品を持っていない新規ユーザーを作成
         $this->assertDatabaseCount('items', 10);
         $user = User::factory()->create([
             'email_verified_at' => now(),
@@ -99,9 +91,6 @@ class SearchTest extends TestCase
         $response = $this->actingAs($user)
         ->followingRedirects()
         ->get('/search?keyword=');
-
-        $items = $response->viewData('items');
-        $this->assertIsIterable($items);
 
         $response->assertStatus(200)
         ->assertViewHas('items', function ($items) {

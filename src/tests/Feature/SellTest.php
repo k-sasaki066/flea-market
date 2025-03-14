@@ -11,15 +11,13 @@ use App\Models\Condition;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Item;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class SellTest extends TestCase
 {
     use RefreshDatabase;
-    protected $brand;
-    protected $condition;
+    protected $brandName;
+    protected $conditionId;
     protected $categoryIds;
     protected $file;
 
@@ -27,10 +25,10 @@ class SellTest extends TestCase
     {
         parent::setUp();
         $this->seed();
-        $this->brand = Brand::first()->name;
-        $this->condition = Condition::first()->id;
+        $this->brandName = Brand::first()->name;
+        $this->conditionId = Condition::first()->id;
         $this->categoryIds = Category::pluck('id')->take(1)->toArray();
-        $this->file = UploadedFile::fake()->create('test.png', 500, 'image/png'); // pngファイルを作成
+        $this->file = UploadedFile::fake()->create('test.png', 500, 'image/png');
     }
 
     public function test_テストデータが正しく作成されたか()
@@ -88,15 +86,14 @@ class SellTest extends TestCase
     {
         $user = User::factory()->create();
         $file = UploadedFile::fake()->create('test.pdf', 500, 'application/pdf');
-        // PDFファイルを作成
 
         $response = $this->actingAs($user)->get('/sell');
         $response->assertStatus(200);
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
-            'brand_id' => $this->brand,
+            'condition_id' => $this->conditionId,
+            'brand_id' => $this->brandName,
             'name' => 'テスト商品',
             'image_url' => $file,
             'category' => $this->categoryIds,
@@ -116,8 +113,8 @@ class SellTest extends TestCase
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
-            'brand_id' => $this->brand,
+            'condition_id' => $this->conditionId,
+            'brand_id' => $this->brandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,
             'category' => $this->categoryIds,
@@ -137,8 +134,8 @@ class SellTest extends TestCase
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
-            'brand_id' => $this->brand,
+            'condition_id' => $this->conditionId,
+            'brand_id' => $this->brandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,
             'category' => $this->categoryIds,
@@ -158,8 +155,8 @@ class SellTest extends TestCase
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
-            'brand_id' => $this->brand,
+            'condition_id' => $this->conditionId,
+            'brand_id' => $this->brandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,
             'category' => $this->categoryIds,
@@ -179,8 +176,8 @@ class SellTest extends TestCase
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
-            'brand_id' => $this->brand,
+            'condition_id' => $this->conditionId,
+            'brand_id' => $this->brandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,
             'category' => $this->categoryIds,
@@ -194,7 +191,6 @@ class SellTest extends TestCase
     public function test_商品出品画面にて必要な情報が保存できること()
     {
         Storage::fake('public');
-        // 仮想ストレージを使用
 
         $user = User::factory()->create();
         $file = UploadedFile::fake()->create('test_image.jpg');
@@ -204,7 +200,7 @@ class SellTest extends TestCase
 
         $response = $this->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
+            'condition_id' => $this->conditionId,
             'brand_id' => 'テストブランド',
             'name' => 'テスト商品',
             'image_url' => $file,
@@ -221,18 +217,17 @@ class SellTest extends TestCase
         $savedItem = Item::latest()->first();
         $this->assertDatabaseHas('items', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
+            'condition_id' => $this->conditionId,
             'brand_id' => $brandId,
             'name' => 'テスト商品',
+            'image_url' => $savedItem->image_url,
             'category' => serialize($this->categoryIds),
             'description' => 'テスト説明',
             'price' => 1000,
         ]);
 
-        // ファイルが正しいディレクトリに保存されているか確認
         Storage::disk('public')->assertExists('images/' . basename($savedItem->image_url));
 
-        // `image_url` が正しいURLか
         $expectedUrl = '/storage/images/' . basename($savedItem->image_url);
         $this->assertEquals($expectedUrl, $savedItem->image_url);
     }
@@ -246,7 +241,7 @@ class SellTest extends TestCase
 
         $response = $this->actingAs($user)->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
+            'condition_id' => $this->conditionId,
             'brand_id' => 'テストブランド',
             'name' => 'テスト商品',
             'image_url' => $this->file,
@@ -257,17 +252,28 @@ class SellTest extends TestCase
 
         $response->assertRedirect('/mypage/profile');
         $response->assertSessionHas(['error' => '商品を出品するにはプロフィールを設定してください']);
+
+        $this->assertDatabaseMissing('items', [
+            'user_id' => $user->id,
+            'condition_id' => $this->conditionId,
+            'brand_id' => 'テストブランド',
+            'name' => 'テスト商品',
+            'image_url' => $this->file,
+            'category' => $this->categoryIds,
+            'description' => 'テスト説明',
+            'price' => 1000,
+        ]);
     }
 
     public function test_同じ名前のブランド名は重複して登録されない()
     {
-        Storage::fake('public');// 仮想ストレージを使用
+        Storage::fake('public');
         $user = User::factory()->create();
         $sameBrandName = Brand::first()->name;
 
         $response = $this->actingAs($user)->post('/sell', [
             'user_id' => $user->id,
-            'condition_id' => $this->condition,
+            'condition_id' => $this->conditionId,
             'brand_id' => $sameBrandName,
             'name' => 'テスト商品',
             'image_url' => $this->file,

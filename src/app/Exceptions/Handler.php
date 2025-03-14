@@ -5,7 +5,6 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\session\TolenMismatchException;
-use Illuminate\Database\QueryException;
 
 class Handler extends ExceptionHandler
 {

@@ -22,7 +22,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::first()->id,
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'EMPORIO-AMANI')->value('id'),
                 'name' => '腕時計',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Armani+Mens+Clock.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -61,7 +61,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'Crockett&Jones')->value('id'),
                 'name' => '革靴',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Leather+Shoes+Product+Photo.jpg',
                 'category' => serialize([0=>"1", 1=>"5"]),
@@ -74,7 +74,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::first()->id,
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'Windows')->value('id'),
                 'name' => 'ノートPC',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Living+Room+Laptop.jpg',
                 'category' => serialize([0=>"8"]),
@@ -87,7 +87,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'MAXIM')->value('id'),
                 'name' => 'マイク',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Music+Mic+4632231.jpg',
                 'category' => serialize([0=>"3"]),
@@ -100,7 +100,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::where('name', 'やや傷や汚れあり')->value('id'),
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'NINE WEST')->value('id'),
                 'name' => 'ショルダーバッグ',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Purse+fashion+pocket.jpg',
                 'category' => serialize([0=>"4"]),
@@ -113,7 +113,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'THERMOS')->value('id'),
                 'name' => 'タンブラー',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/Tumbler+souvenir.jpg',
                 'category' => serialize([0=>"10"]),
@@ -139,7 +139,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => User::inRandomOrder()->first()->id,
                 'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
-                'brand_id' => Brand::inRandomOrder()->first()->id,
+                'brand_id' => Brand::where('name', 'ちふれ')->value('id'),
                 'name' => 'メイクセット',
                 'image_url' => 'https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E5%A4%96%E5%87%BA%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%A2%E3%83%83%E3%83%95%E3%82%9A%E3%82%BB%E3%83%83%E3%83%88.jpg',
                 'category' => serialize([0=>"6"]),

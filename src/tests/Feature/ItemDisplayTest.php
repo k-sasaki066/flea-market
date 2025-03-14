@@ -56,7 +56,6 @@ class ItemDisplayTest extends TestCase
         $response = $this->get('/');
         $response->assertStatus(200);
 
-        // 商品詳細ページのリンクが正しく表示されているか確認
         $response->assertSee("/item/{$item->id}");
     }
 
@@ -65,7 +64,6 @@ class ItemDisplayTest extends TestCase
         $this->assertDatabaseCount('items', 10);
 
         $response = $this->get('/');
-        $items = $response->viewData('items');
 
         $response->assertStatus(200)
         ->assertViewHas('items', function ($items) {
@@ -78,12 +76,14 @@ class ItemDisplayTest extends TestCase
         $user = User::whereHas('items')->firstOrFail();
 
         $response = $this->actingAs($user)->get('/');
+        $response->assertStatus(200);
+
+        $response->assertViewHas('items');
         $items = $response->viewData('items');
 
-        $response->assertStatus(200)
-        ->assertViewHas('items', function ($items) use ($user) {
-            return $items->every(fn ($item) => $item->user_id !== $user->id);
-        });
+        $this->assertTrue(
+            $items->every(fn ($item) => $item->user_id !== $user->id)
+        );
     }
 
     public function test_購入済み商品は「Sold」と表示される()
@@ -91,24 +91,30 @@ class ItemDisplayTest extends TestCase
         $item = Item::firstOrFail();
         $item->update(['status' => 2]);
 
-        // データベースに `status = 2` の商品が存在することを確認
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
             'status' => 2
         ]);
 
         $response = $this->get('/');
+        $response->assertStatus(200);
+
         $items = $response->viewData('items');
-        $response->assertSee('sold');
+        $response->assertSee('Sold');
+        foreach ($items->where('id', '!=', $item->id) as $availableItem) {
+            $response->assertDontSee('<p class="sold-out bold">Sold</p>');
+        }
     }
 
     public function test_認証ユーザーがsuggestページを開くとお気に入り商品のカテゴリーに基づいて商品を取得する()
     {
         $user = User::factory()->create();
 
-        // ランダムな商品を取得してお気に入り登録
         $item = Item::inRandomOrder()->first();
-        Favorite::create(['user_id' => $user->id, 'item_id' => $item->id]);
+        Favorite::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id
+        ]);
 
         $this->assertDatabaseHas('favorites', [
             'user_id' => $user->id,
@@ -116,11 +122,11 @@ class ItemDisplayTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get('/?page=suggest');
-        $items = $response->viewData('items');
+        $response->assertStatus(200);
 
         $response->assertViewHas('items', function ($items) use ($item, $user) {
         if ($items->isEmpty()) {
-            return true; // 商品がなくてもテストを通す
+            return true;
         }
 
         return $items->every(fn($suggestedItem) =>
@@ -136,12 +142,13 @@ class ItemDisplayTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/?page=suggest');
-        $items = $response->viewData('items');
+        $response->assertStatus(200);
+
         $conditionId = Condition::where('name', '良好')->firstOrFail()->id;
 
         $response->assertViewHas('items', function ($items) use ($user, $conditionId) {
         if ($items->isEmpty()) {
-            return true; // 商品がなくてもテストを通す
+            return true;
         }
 
         return $items->every(fn($suggestedItem) =>
@@ -154,21 +161,22 @@ class ItemDisplayTest extends TestCase
     public function test_mylistページではいいねした商品だけが表示される()
     {
         $user = User::whereHas('favorites')->firstOrFail();
-
-        $favoriteItemIds = Favorite::where('user_id', $user->id)->pluck('item_id');
-
         $this->assertDatabaseHas('favorites', [
             'user_id' => $user->id,
         ]);
 
-        $response = $this->actingAs($user)->get('/?page=mylist');
-        $response->assertStatus(200)->assertSee('マイリスト');
+        $favoriteItemIds = Favorite::where('user_id', $user->id)->pluck('item_id');
 
+        $response = $this->actingAs($user)->get('/?page=mylist');
+        $response->assertStatus(200);
+
+        $response->assertViewHas('items');
         $items = $response->viewData('items');
-        // いいねした商品だけが表示されていることを確認
-        $response->assertViewHas('items', function ($items) use ($favoriteItemIds) {
-            return $items->every(fn($item) => $favoriteItemIds->contains($item->id));
-        });
+        $this->assertTrue($items->every(fn($item) => $favoriteItemIds->contains($item->id)));
+
+        foreach ($items as $item) {
+            $response->assertSee($item->name);
+        }
     }
 
     public function test_mylistページでは購入済みの商品はSoldと表示される()
@@ -187,19 +195,22 @@ class ItemDisplayTest extends TestCase
 
         $response = $this->actingAs($user)->get('/?page=mylist');
 
+        $response->assertViewHas('items');
         $items = $response->viewData('items');
-        $response->assertSee('sold');
+        $response->assertStatus(200)->assertSee('Sold');
+
+        foreach ($items->where('id', '!=', $item->id) as $availableItem) {
+            $response->assertDontSee('<p class="sold-out bold">Sold</p>');
+        }
     }
 
     public function test_mylistページでは自分が出品した商品は表示されない()
     {
         $user = User::whereHas('items')->firstOrFail();
 
-        $response = $this->actingAs($user)->get('/?page=mylist');
+        $response = $this->actingAs($user)->get('/?page=mylist');$response->assertStatus(200);
 
-        $items = $response->viewData('items');
-        $response->assertStatus(200)
-        ->assertViewHas('items', function ($items) use ($user) {
+        $response->assertViewHas('items', function ($items) use ($user) {
             return $items->every(fn ($item) => $item->user_id !== $user->id);
         });
     }

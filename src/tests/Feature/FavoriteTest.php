@@ -89,12 +89,9 @@ class FavoriteTest extends TestCase
             'item_id' => $this->item->id,
         ]);
 
-        // いいね後のカウントを取得し、1 増えていることを確認
         $newCount = Favorite::where('item_id', $this->item->id)->count();
         $this->assertEquals($initialCount + 1, $newCount);
 
-
-        // 詳細ページで `いいね` の数が表示されることを確認
         $response = $this->get("/item/{$this->item->id}");
         $response->assertSee((string)$newCount);
     }
@@ -125,7 +122,6 @@ class FavoriteTest extends TestCase
         $response->assertStatus(200)->assertJson(['message' => 'Already liked!']);
         $this->assertDatabaseCount('favorites', 1);
 
-        // 再度 `user_id` & `item_id` の組み合わせが増えていないか確認
         $this->assertDatabaseHas('favorites', [
             'user_id' => $this->user->id,
             'item_id' => $this->item->id,

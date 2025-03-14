@@ -168,8 +168,11 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'Password123!',
         ]);
 
-        $this->assertDatabaseHas('users', ['name' => 'テストユーザー', 'email' => 'test@example.com', 'email_verified_at' => null]);
-        $response->assertRedirect('/login');
+        $this->assertDatabaseHas('users', [
+            'name' => 'テストユーザー',
+            'email' => 'test@example.com', 'email_verified_at' => null
+        ]);
+        $response->assertRedirect('/login')->assertSessionHas('result', '会員登録が完了しました。ログインしてください');
     }
 
     public function test_すでに登録されたメールアドレスでは登録失敗()

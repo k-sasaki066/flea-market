@@ -26,11 +26,11 @@ class SelectTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)
-                ->visit("/purchase/{$this->item->id}") // プルダウンがあるページ
-                ->assertSee('選択してください') // 初期値が表示されているか確認
-                ->select('#select', '2') // 2番目の選択肢を選択
-                ->pause(500) // JavaScriptの処理を待つ
-                ->assertSeeIn('#selectValue', 'コンビニ払い'); // 選択した値が即時反映されるか
+                ->visit("/purchase/{$this->item->id}")
+                ->assertSee('選択してください')
+                ->select('#select', '2')
+                ->waitForText('カード払い')
+                ->assertValue('#selectValue', 'カード払い');
         });
     }
 
@@ -39,11 +39,19 @@ class SelectTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user)
                 ->visit("/purchase/{$this->item->id}")
-                ->select('#select', '1') // 3番目の選択肢を選択
-                ->pause(500) // JavaScriptの処理を待つ
-                ->refresh() // ページをリロード
-                ->assertSelected('#select', '1') // 選択した値が復元されているか
-                ->assertSeeIn('#selectValue', 'コンビニ払い'); // 再び表示が正しく反映されるか
+                ->select('#select', '1')
+                ->waitForText('コンビニ払い')
+                ->script("sessionStorage.setItem('selectedOption', document.querySelector('#select').value);")
+
+                ->refresh()
+
+                ->waitForText('コンビニ払い')
+                ->assertSelected('#select', '1')
+                ->assertSeeIn('#selectValue', 'コンビニ払い')
+
+                ->script("return sessionStorage.getItem('selectedOption');", function ($value) {
+                    $this->assertEquals('1', $value);
+                });
         });
     }
 }

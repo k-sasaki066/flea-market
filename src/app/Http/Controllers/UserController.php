@@ -9,7 +9,6 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Brand;
-use Carbon\Carbon;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
@@ -26,7 +25,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             return view('profile', compact('user'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error("❌ プロフィールページの取得中にエラー発生", ['error' => $e->getMessage()]);
             return redirect('/mypage')->with('error', 'プロフィール情報の取得に失敗しました。');
         }
@@ -40,7 +39,7 @@ class UserController extends Controller
 
             try {
                 $image_url = $profileRequest->file('image_url') ? Item::getImageUrl($profileRequest->file('image_url')) : $user->image_url;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 Log::error("❌ 画像アップロードエラー: " . $e->getMessage());
                 $image_url = $user->image_url;
                 return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください。');
@@ -61,7 +60,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
             return redirect('/mypage')->with('error', 'ユーザー情報の取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ プロフィール更新エラー: " . $e->getMessage());
             return redirect('/mypage')->with('error', 'プロフィールの更新に失敗しました。');
@@ -90,7 +89,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
             return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -116,7 +115,7 @@ class UserController extends Controller
         } catch (QueryException $e) {
             Log::error('❌ データベースエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', 'データの取得に失敗しました。');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             Log::error('❌ 予期しないエラー:', ['error' => $e->getMessage()]);
             return redirect('/')->with('error', '予期しないエラーが発生しました。');
         }
@@ -137,7 +136,7 @@ class UserController extends Controller
             if ($request->hasFile('image_url')) {
                 try {
                     $image_url = Item::getImageUrl($request->file('image_url'));
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollBack();
                     Log::error("❌ 画像アップロードに失敗しました: " . $e->getMessage());
                     return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください。');
@@ -149,7 +148,7 @@ class UserController extends Controller
                 $brandName = trim($request->brand_name);
                 try {
                     $brand = Brand::firstOrCreate(['name' => $brandName]);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollBack();
                     Log::error("❌ ブランド作成エラー: " . $e->getMessage());
                     return redirect()->back()->with('error', 'ブランドの登録に失敗しました。再度お試しください。');
@@ -176,7 +175,7 @@ class UserController extends Controller
             DB::commit();
 
             return redirect('/mypage?page=sell')->with('result', '商品を出品しました');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ 予期しないエラー発生: " . $e->getMessage());
             return redirect()->back()->with('error', '予期しないエラーが発生しました。');

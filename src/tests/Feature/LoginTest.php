@@ -6,9 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Session;
 
 class LoginTest extends TestCase
 {
@@ -18,7 +16,7 @@ class LoginTest extends TestCase
     {
         parent::setUp();
 
-        DB::table('users')->insert([
+        User::create([
             'id' => 1,
             'name' => 'テストユーザー',
             'email' => 'test@example.com',
@@ -139,16 +137,11 @@ class LoginTest extends TestCase
 
     public function test_正しい情報が入力された場合_ログイン処理が実行される()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => null,
-            'profile_completed' => false,
-        ]);
-
         $response = $this->get('/login');
         $response->assertStatus(200);
 
         $response = $this->post('/login', [
-            'email' => $this->user->email,
+            'email' => 'test@example.com',
             'password' => 'password',
         ]);
 
@@ -199,10 +192,6 @@ class LoginTest extends TestCase
     {
         $user = User::factory()->create([
             'email_verified_at' => now(),
-            'image_url' => '/images/test.jpg',
-            'nickname' => 'test',
-            'post_cord' => '123-4567',
-            'address' => 'テスト住所102',
             'profile_completed' => true,
         ]);
 

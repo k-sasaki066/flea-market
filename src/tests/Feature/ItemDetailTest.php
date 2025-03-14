@@ -119,7 +119,6 @@ class ItemDetailTest extends TestCase
         ->assertViewHas('category')
         ->assertViewHas('favorite');
 
-        // 必要な情報が含まれているか確認
         $response->assertSee($this->item->image_url);
         $response->assertSee($this->item->name);
         $response->assertSee($this->item->brand->name);
@@ -130,7 +129,6 @@ class ItemDetailTest extends TestCase
         $response->assertSee($this->item->condition->name);
         $response->assertSee('ファッション');
 
-        // コメントデータが正しく表示されているか確認
         foreach ($this->item->comments as $comment) {
             $response->assertSee($comment->user->nickname);
             $response->assertSee($comment->comment);
@@ -147,6 +145,7 @@ class ItemDetailTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->get('/item/' . $this->item->id);
+        $response->assertStatus(200);
 
         $response->assertViewHas('favorite', function ($favorite) {
             return $favorite !== null;

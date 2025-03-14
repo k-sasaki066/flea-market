@@ -138,11 +138,6 @@ class StripeWebhookController extends Controller
                 Log::info('✅ Webhook 受信:', ['type' => $event['type']]);
             }
 
-            // $endpoint_secret = env('STRIPE_WEBHOOK_SECRET');
-            // $sig_header = $request->header('Stripe-Signature');
-            // $event = Webhook::constructEvent($request->getContent(), $sig_header, $endpoint_secret);
-            // Log::info('✅ Webhook 受信:', ['type' => $event->type]);
-
             $session = $event['data']['object'] ?? null;
             $sessionId = $session['id'];
             $paymentMethodType = $session['payment_method_types'][0] ?? null;
@@ -171,13 +166,11 @@ class StripeWebhookController extends Controller
                     $address = $metadata['address'] ?? '';
                     $building = $metadata['building'] ?? '';
 
-                    // `status=1` の場合のみ `status=2` に更新（アトミックロック）
                     $updated = Item::where('id', $itemId)
                         ->where('status', 1)
                         ->update(['status' => 2]);
                         Log::info('✅ 商品のステータスを購入済みに更新しました', ['item_id' => $itemId, 'session_id' => $session['id']]);
 
-                    // 他のユーザーが先に購入していた場合（更新なし)
                     if ($updated === 0) {
                         Log::warning("❌ 商品が既に購入済みです", ['item_id' => $itemId]);
 
@@ -268,10 +261,6 @@ class StripeWebhookController extends Controller
                 $expiresAt = Carbon::createFromTimestamp($session->expires_at);
 
                 $purchase = Purchase::with('user')->where('stripe_session_id', $sessionId)->first();
-
-                // テスト(実際にデータベースに登録してあるデータを使用)
-                // $purchase = Purchase::where('stripe_session_id', '')->with('user')->first();
-                // テストここまで
 
                 Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
 

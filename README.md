@@ -28,7 +28,7 @@
 |商品詳細画面（未購入商品）|商品詳細画面（購入済み商品）|
 | --- | --- |
 |<img width="1463" alt="f-detail" src="https://github.com/user-attachments/assets/9c3666f5-eefa-4d4e-a55e-1f67ed395c21" />|<img width="1458" alt="c-detail" src="https://github.com/user-attachments/assets/4dd8c7ac-8651-4cd7-909a-3c5bf8542bd4" />|
-|商品詳細情報が表示されます。⭐️マークをクリックすることでいいね登録&解除、商品購入、コメント送信ができます。（ログインユーザーのみ）|購入済み商品の詳細情報画面では、Sold表示され購入ボタンは非表示になります。いいね登録&解除とコメント送信ができます。|
+|商品詳細情報が表示されます。いいね登録&解除、商品購入、コメント送信ができます。（ログインユーザーのみ）|購入済み商品の詳細情報画面では、Sold表示され購入ボタンは非表示になります。いいね登録&解除とコメント送信ができます。(ログインユーザーのみ）|
 
 |メール認証画面|認証メール|
 | --- | --- |
@@ -213,7 +213,15 @@ mysql:
   ```
 
   <br>
-  ② mysqlの設定(docker-compose.ymlを参照)
+  ② APP_NAME設定
+  
+  ```
+  APP_NAME=coachtechフリマ
+  ```
+ 
+  <br>
+  
+  ③ mysqlの設定(docker-compose.ymlを参照)
   
   ```
   DB_CONNECTION=mysql
@@ -224,7 +232,7 @@ mysql:
   DB_PASSWORD=laravel_pass(変更)
   ```
   <br>
-  ③ mailhogの設定
+  ④ mailhogの設定
 
   ```
   MAIL_MAILER=smtp
@@ -237,7 +245,7 @@ mysql:
 
   <br>
   <br>
-  ④ stripeのアカウント設定
+  ⑤ stripeのアカウント設定
 　<br>
   stripe公式ページ(https://stripe.com/jp)
   <br>
@@ -254,7 +262,7 @@ mysql:
   ```
 
   <br>
-  ⑤ ngrokの設定
+  ⑥ ngrokの設定
   <br>
   ngrok公式ページ(https://dashboard.ngrok.com/)
 　<br>
@@ -265,7 +273,7 @@ mysql:
   NGROK_AUTHTOKEN=your_ngrok_auth_token
   ```
   <br>
-  ⑥ stripe webhookの設定
+  ⑦ stripe webhookの設定
 　<br>
   <img width="800" alt="webhook設定1" src="https://github.com/user-attachments/assets/81e9190d-3ee5-4111-8257-49911535eb77" />
   <br>

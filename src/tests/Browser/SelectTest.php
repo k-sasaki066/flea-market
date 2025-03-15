@@ -29,8 +29,8 @@ class SelectTest extends DuskTestCase
                 ->visit("/purchase/{$this->item->id}")
                 ->assertSee('選択してください')
                 ->select('#select', '2')
-                ->waitForText('カード払い')
-                ->assertValue('#selectValue', 'カード払い');
+                ->waitForText('カード支払い')
+                ->assertValue('#selectValue', 'カード支払い');
         });
     }
 

@@ -202,7 +202,6 @@ class ItemDetailTest extends TestCase
 
         $response->assertSee('purchased');
         $response->assertSee('Sold');
-        // 購入済みの商品の場合、購入ボタンのクラスにpurchasedを追加し非表示にしている
     }
 
     public function test_未購入商品には購入ボタンが表示される()

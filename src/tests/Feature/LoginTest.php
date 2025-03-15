@@ -147,7 +147,6 @@ class LoginTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect('/mypage/profile');
-        // LoginResponseでuser_completed=falseの場合/mypage/profileに設定、そのページにアクセスするにはverifiedミドルウェアが適用されている
     }
 
     public function test_レートリミットが適用される()
@@ -155,18 +154,15 @@ class LoginTest extends TestCase
         $email = 'test@example.com';
         $ip = '127.0.0.1';
 
-        // 10回まで正常に試行できる
         for ($i = 0; $i < 10; $i++) {
             RateLimiter::hit("login:{$email}{$ip}");
         }
 
-        // 11回目の試行で制限される
         $this->assertTrue(RateLimiter::tooManyAttempts("login:{$email}{$ip}", 10));
 
         sleep(60);
         RateLimiter::clear("login:{$email}{$ip}");
 
-        // 制限が解除されていることを確認
         $this->assertFalse(RateLimiter::tooManyAttempts("login:{$email}{$ip}", 10));
     }
 

@@ -273,26 +273,170 @@ mysql:
   NGROK_AUTHTOKEN=your_ngrok_auth_token
   ```
   <br>
-  ⑦ stripe webhookの設定
+  ⑦ stripe webhookの設定(stripeのアカウントが作成されている上で設定してください)
 　<br>
-  <img width="800" alt="webhook設定1" src="https://github.com/user-attachments/assets/81e9190d-3ee5-4111-8257-49911535eb77" />
   <br>
-  <img width="800" alt="webhook設定２" src="https://github.com/user-attachments/assets/23ae6455-b353-4d75-b714-62ebb6802346" />
+  ▫️Stripe CLI をインストールする(composerではインストールできません)
   <br>
-  <img width="800" alt="webhook設定３" src="https://github.com/user-attachments/assets/3fca8a1b-3f3d-43be-bd12-c3352678a7cd" />
-  <br>
-  <img width="800" alt="webhook設定４" src="https://github.com/user-attachments/assets/3481a30b-7c91-4fa1-80ed-1e927245221c" />
-  <br>
-  <img width="800" alt="webhook設定５" src="https://github.com/user-attachments/assets/f768e526-16b9-4927-beff-baca16027c6f" />
-  <br>
-  <img width="800" alt="webhook設定６" src="https://github.com/user-attachments/assets/f3951f14-9684-4e90-8f8d-51b23372eff3" />
+  MacOS（Homebrew）
   
   ```
-  STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+  brew install stripe/stripe-cli/stripe
+  ```
+  <br>
+  Linux（Curl)
+  
+  ```
+  curl -fsSL https://stripe-cli.github.io/install.sh | bash
+  ```
+  
+  <br>
+  Windows（Scoop)
+
+  ```
+  scoop install stripe
+  ```
+  <br>
+  <br>
+  ▫️Stripe CLI の動作確認
+  <br>
+  
+  ```
+  stripe --version
+  ```
+  →例：stripe version 1.24.0のようにバージョンが表示されればインストール成功
+  
+  <br>
+  <br>
+  ▫️ログインして Stripe に接続
+  <br>
+
+  ```
+  stripe login
+  ```
+  →ターミナルにYour pairing code is: ************と表示される
+  <br>
+  →enterを押下するとstripeのブラウザが開くので、ターミナルに表示された『Your pairing code』と同じことを確認してアクセス許可を押下
+  <br>
+  <img width="500" alt="stripe login認証" src="https://github.com/user-attachments/assets/77b2449c-0e7f-4b7c-995c-dd20a7dbd296" />
+
+
+  <br>
+  <br>
+  ▫️ngrokのURLを確認する
+  <br>
+  ブラウザで ngrok の Web インターフェースにアクセスする (http://localhost:4040)
+  <br>
+  
+  →`https://random-name.ngrok-free.app`のようにngrokのURLが表示されている（random-nameにはランダムに生成された値が入ります）
+  <br>
+  ※ngrokのコンテナを再起動させるたびにURLが変わるため、その都度Webhookを更新します
+  <br>
+  <img width="500" alt="4040アクセス" src="https://github.com/user-attachments/assets/776b34d9-d693-4968-ae45-22abc4ba53dc" />
+
+
+  <br>
+  <br>
+  ▫️stripeのWebhookを設定する
+  <br>
+  <br>
+  stripeダッシュボードの開発者→Webhook→送信先を追加するを押下
+  <br>
+  <img width="500" alt="stripe webhook作成" src="https://github.com/user-attachments/assets/18efb72a-b3e2-452d-bb91-a5dda24fae42" />
+
+  <br>
+  <br>
+  お客様のアカウントを選択
+  <br>
+  以下の9イベントを送信するイベントとして選択する（保存後に『送信先を編集』にて編集可）
+  <br>
+
+  - charge.failed
+  - charge.succeeded
+  - checkout.session.async_payment_failed
+  - checkout.session.async_payment_succeeded
+  - checkout.session.completed
+  - payment_intent.created
+  - payment_intent.payment_failed
+  - payment_intent.requires_action
+  - payment_intent.succeeded
+
+  <br>
+  <img width="500" alt="webhook イベント選択" src="https://github.com/user-attachments/assets/0b3980d4-6f4f-4123-8325-bce5d554be53" />
+
+  <br>
+  <br>
+  イベント送信先にWebhookエンドポイントを選択
+  <br>
+  <img width="500" alt="webhoon イベント送信先" src="https://github.com/user-attachments/assets/56240946-64b4-40da-8657-d995faaad603" />
+
+  <br>
+  <br>
+  エンドポイントURLを設定
+  <br>
+  ngrok(http://localhost:4040)で確認したURLを以下のように編集し、設定する（保存後に『送信先を編集』にて編集可）
+  <br>
+  random-nameにはランダムに生成された値が入ります
+  <br>
+  <br>
+  
+  `https://random-name.ngrok-free.app` → **`https://random-name.ngrok-free.app/webhook/stripe`**
+  <br>
+  <img width="500" alt="webhook送信先設定" src="https://github.com/user-attachments/assets/6c4c2984-277b-42e7-9a24-68bd9d9c335a" />
+  
+  <br>
+  <br>
+  送信先を作成するを押下すると以下のような画面になります
+  <br>
+  右にある著名シークレットをコピーし、envファイルに記述する（Webhook の署名検証に必要）
+  <br>
+  <img width="500" alt="webhook著名シークレット" src="https://github.com/user-attachments/assets/d0025a34-4da1-469d-8375-95a717d03c47" />
+  
+  ```
+  STRIPE_WEBHOOK_SECRET=whsec_***********************
+  ```
+  <br>
+  <br>
+  変更後に .env の設定を反映
+  
+  ```
+  php artisan config:clear
   ```
 
   <br>
+  <br>
+  ▫️イベント送信をテストする
+  <br>
+  Webhook画面の右側にあるテストイベントを送信ボタンを押下
+  <br>
+  実行コマンドが表示されるので、ターミナルで実行する
+  <br>
+  <img width="500" alt="テストイベント送信" src="https://github.com/user-attachments/assets/3a4fb2f7-01e5-4817-9cfc-99252e7b2954" />
   
+  ```
+  stripe trigger payment_intent.succeeded
+  ```
+  <br>
+  laravel.logにて✅ Webhook 受信が確認できればOK
+  <br>
+  <img width="500" alt="webhook テストlaravel" src="https://github.com/user-attachments/assets/5f3ff52a-f594-4a50-aea6-87efd6a49613" />
+  <br>
+  <br>
+  ▫️作成したWebhookを編集する場合
+  <br>
+  開発者→Webhook→現在使用しているWebhookを選択する
+  <br>
+  開いた画面の右側にある『送信先を編集』を押下
+  <br>
+  <img width="500" alt="webhook編集１" src="https://github.com/user-attachments/assets/33a6678b-7c31-4ea7-8555-a883cc3b7aa9" />
+  <br>
+  <br>
+  エンドポイントのURLやイベントを編集できるので、適宜編集して『送信先を保存』を押下
+  <br>
+  <img width="500" alt="webhook編集２" src="https://github.com/user-attachments/assets/c3410bb9-dbb1-4c77-9565-520db8e0ea47" />
+  <br>
+  
+  <br>
   4. テーブル作成
   
   ```

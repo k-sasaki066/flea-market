@@ -45,7 +45,7 @@
                         <img class="favorite-count__img" src="{{ asset($favorite ? 'images/star-yellow.svg' : 'images/star.svg') }}" alt="いいね" width="22px">
                     </button>
                     @else
-                    <a class="favorite-count__login" href="#favorite"><img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
+                    <a class="favorite-count__login" href="/login" onclick="return confirmLogin();"><img class="favorite-count__img" src="{{ asset('images/star.svg') }}" alt="" width="22px"></a>
                     @endauth
                     <span class="favorite-count__text">{{ $item['favorites_count'] }}</span>
                 </div>
@@ -57,7 +57,7 @@
             @auth
             <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="/purchase/{{ $item['id'] }}">購入手続きへ</a>
             @else
-            <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="#modal">購入手続きへ</a>
+            <a class="item-purchase__btn form-btn bold @if($item['status'] == 2) purchased @endif" href="/login" onclick="return confirmLogin();">購入手続きへ</a>
             @endauth
         </div>
 
@@ -113,34 +113,15 @@
             @if(Auth::check())
             <button class="item-comment__form-btn form-btn bold" type="submit">コメントを送信する</button>
             @else
-            <a class="item-comment__form-btn form-btn bold" href="#comment">コメントを送信する</a>
+            <a class="item-comment__form-btn form-btn bold" href="/login" onclick="return confirmLogin();">コメントを送信する</a>
             @endif
         </form>
     </div>
-
-    <div class="modal__group" id="modal">
-        <a href="#!" class="modal-overlay"></a>
-        <div class="modal__inner">
-            <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text bold">商品を購入するには、ログインが必要です。</p>
-        </div>
-    </div>
-
-    <div class="modal__group" id="favorite">
-        <a href="#!" class="modal-overlay"></a>
-        <div class="modal__inner">
-            <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text bold">いいね登録するには、ログインが必要です。</p>
-        </div>
-    </div>
-
-    <div class="modal__group" id="comment">
-        <a href="#!" class="modal-overlay"></a>
-        <div class="modal__inner">
-            <a class="close-detail__button" href="#">×</a>
-            <p class="modal-text bold">コメントを送信するには、ログインが必要です。</p>
-        </div>
-    </div>
     <script src="{{ asset('js/favorite.js') }}"></script>
+    <script>
+        function confirmLogin() {
+            return confirm("ログインが必要です。ログインしますか？");
+        }
+    </script>
 </div>
 @endsection

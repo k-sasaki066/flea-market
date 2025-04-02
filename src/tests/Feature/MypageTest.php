@@ -124,22 +124,50 @@ class MypageTest extends TestCase
             });
     }
 
-    public function test_初期値として過去設定されていること（プロフィール画像、ユーザー名、郵便番号、住所）()
+    public function test_変更項目が初期値として過去設定されていること（プロフィール画像、ユーザー名、郵便番号、住所）()
     {
-        $user = User::factory()->create([
-            'email_verified_at' => now(),
-            'profile_completed' => true,
-            'image_url' => '/images/test.jpg',
-            'post_cord' => '123-4567',
-            'address' => '東京都新宿区',
-            'building' => 'テストビル101',
-        ]);
+        Storage::fake('public');
+
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
         $response->assertViewIs('profile');
 
-        $response->assertSee('/images/test.jpg');
+        $response->assertSee($user->image_url);
+        $response->assertSee($user->post_cord);
+        $response->assertSee($user->address);
+        $response->assertSee($user->building);
+
+        $file = UploadedFile::fake()->create('test_image.jpg');
+        $response = $this->post('/mypage/profile', [
+            'nickname' => $user->nickname,
+            'image_url' => $file,
+            'post_cord' => '123-4567',
+            'address' => '東京都新宿区',
+            'building' => 'テストビル101',
+        ]);
+
+        $response->assertRedirect('/mypage')->assertSessionHas(['result' => 'プロフィールが更新されました']);
+
+        $user->refresh();
+        $this->assertDatabaseHas('users', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'nickname' => $user->nickname,
+            'post_cord' => '123-4567',
+            'address' => '東京都新宿区',
+            'building' => 'テストビル101',
+            'image_url' => $user->image_url,
+            'profile_completed' => true,
+        ]);
+        Storage::disk('public')->assertExists('images/' . basename($user->image_url));
+
+        $response = $this->get('/mypage/profile');
+        $response->assertStatus(200);
+        $response->assertViewIs('profile');
+
+        $response->assertSee($user->image_url);
         $response->assertSee('123-4567');
         $response->assertSee('東京都新宿区');
         $response->assertSee('テストビル101');
@@ -266,7 +294,7 @@ class MypageTest extends TestCase
         $response = $this->actingAs($user)->get('/mypage/profile');
         $response->assertStatus(200);
 
-        $file = UploadedFile::fake()->create('test.png', 500, 'image/png');
+        $file = UploadedFile::fake()->create('test_image.jpg');
         $response = $this->post('/mypage/profile', [
             'nickname' => 'test',
             'post_cord' => '123-4567',
@@ -277,7 +305,7 @@ class MypageTest extends TestCase
 
         $response->assertRedirect('/mypage')->assertSessionHas('result', 'プロフィールが更新されました');
 
-        $savedItem = User::latest()->first();
+        $savedItem = User::find($user->id);
         $this->assertDatabaseHas('users', [
             'name' => $user->name,
             'email' => $user->email,

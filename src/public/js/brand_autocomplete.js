@@ -6,13 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/api/brands?query=${encodeURIComponent(query)}`)
             .then(response => response.json())
             .then(data => {
-                // console.log("取得したデータ:", data);
-                dataList.innerHTML = ""; // 一度クリア
-
-                // if (data.length === 0) {
-                //     console.warn("⚠️ ブランドが見つかりませんでした");
-                //     return;
-                // }
+                dataList.innerHTML = "";
 
                 data.forEach(brand => {
                     let option = document.createElement("option");
@@ -27,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     brandInput.addEventListener("input", function () {
         if (this.value === "") {
-            fetchBrands(); // 入力が空なら全ブランド表示
+            fetchBrands();
         } else {
             fetchBrands(this.value);
         }

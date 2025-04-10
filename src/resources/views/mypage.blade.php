@@ -68,8 +68,8 @@
             <div class="list-card__item">
                 <div class="list-card__wrap">
                     <p class="new-message__count flex">10</p>
-                    <a class="list-card__link" href="/transaction">
-                        <img class="list-card__img" src="{{ $item['image_url'] }}" alt="item">
+                    <a class="list-card__link" href="/transaction/{{ $item['id'] }}">
+                        <img class="list-card__img" src="{{ $item['purchase']['item']['image_url'] }}" alt="item">
                     </a>
                 </div>
             </div>

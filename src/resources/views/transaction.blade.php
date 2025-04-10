@@ -23,28 +23,32 @@
     <div class="transaction-list__wrap">
         <h3 class="transaction-list__text">その他の取引</h3>
         <div class="transaction-list__item flex">
-            <a class="transaction-list__item-link" href="">商品名</a>
-            <a class="transaction-list__item-link" href="">商品名</a>
-            <a class="transaction-list__item-link" href="">商品名</a>
+            @if($otherItems)
+            @foreach($otherItems as $otherItem)
+            <a class="transaction-list__item-link" href="/transaction/{{ $otherItem['id'] }}">{{ $otherItem['purchase']['item']['name'] }}</a>
+            @endforeach
+            @endif
         </div>
     </div>
 
     <div class="transaction-wrap">
         <div class="transaction-title grid">
             <div class="transaction-user__img-wrap">
-                <img class="transaction-user__img" src="" alt="">
+                @if($otherUser['image_url'])
+                <img class="transaction-user__img" src="{{ $otherUser['image_url'] }}" alt="">
+                @endif
             </div>
-            <h2 class="transaction-name">「ユーザー名」さんとの取引画面</h2>
+            <h2 class="transaction-name">{{ $otherUser['nickname'] }}さんとの取引画面</h2>
             <a class="transaction-complete__btn" href="">取引を完了する</a>
         </div>
 
         <div class="transaction-item__wrap flex">
             <div class="transaction-item__img-wrap">
-                <img class="transaction-item__img" src="" alt="">
+                <img class="transaction-item__img" src="{{ $transaction['purchase']['item']['image_url'] }}" alt="">
             </div>
             <div class="transaction-item__content flex">
-                <h1 class="transaction-item__name">商品名</h1>
-                <p class="transaction-item__price">商品価格</p>
+                <h1 class="transaction-item__name">{{ $transaction['purchase']['item']['name'] }}</h1>
+                <p class="transaction-item__price"><span class="transaction-item__price-span">&yen;</span>{{ number_format($transaction['purchase']['item']['price']) }}</p>
             </div>
         </div>
 
@@ -52,9 +56,11 @@
             <div class="transaction-message__other-wrap">
                 <div class="transaction-message__content flex">
                     <div class="transaction-message__img-wrap">
-                        <img class="transaction-message__img" src="" alt="">
+                        @if($otherUser['image_url'])
+                        <img class="transaction-message__img" src="{{ $otherUser['image_url'] }}" alt="">
+                        @endif
                     </div>
-                    <p class="transaction-message__name bold">ユーザー名</p>
+                    <p class="transaction-message__name bold">{{ $otherUser['nickname'] }}</p>
                 </div>
                 <div class="error-message">
                     message
@@ -64,9 +70,11 @@
 
             <div class="transaction-message__self-wrap">
                 <div class="transaction-message__content flex message-self">
-                    <p class="transaction-message__name bold">ユーザー名</p>
+                    <p class="transaction-message__name bold">{{ $user['nickname'] }}</p>
                     <div class="transaction-message__img-wrap">
-                        <img class="transaction-message__img" src="" alt="">
+                        @if($user['image_url'])
+                        <img class="transaction-message__img" src="{{ $user['image_url'] }}" alt="">
+                        @endif
                     </div>
                 </div>
                 <div class="error-message">

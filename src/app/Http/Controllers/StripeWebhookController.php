@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
 use App\Models\Purchase;
 use App\Models\Item;
+use App\Models\Transaction;
 use Stripe\Webhook;
 use Stripe\Stripe;
 use Stripe\Refund;
@@ -165,6 +166,7 @@ class StripeWebhookController extends Controller
                     $postCord = $metadata['post_cord'] ?? '';
                     $address = $metadata['address'] ?? '';
                     $building = $metadata['building'] ?? '';
+                    $sellerId = $metadata['seller_id'] ?? null;
 
                     $updated = Item::where('id', $itemId)
                         ->where('status', 1)
@@ -213,6 +215,13 @@ class StripeWebhookController extends Controller
                         'building' => $building,
                         'stripe_session_id' => $session['id'],
                         'payment_status' => ($paymentMethodType == 'card' ? 'paid' : 'pending'),
+                    ]);
+
+                    Transaction::create([
+                        'purchase_id' => Purchase::where('stripe_session_id', $session['id'])->value('id'),
+                        'buyer_id' => $userId,
+                        'seller_id' => $sellerId,
+                        'status' => 'chatting',
                     ]);
 
                     DB::commit();

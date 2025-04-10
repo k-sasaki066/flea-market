@@ -134,6 +134,7 @@ class PurchaseController extends Controller
                     'address' => $request->address,
                     'building' => $request->building,
                     'item_name' => $item->name,
+                    'seller_id' => $item->user_id,
                     'seller_nickname' => $item->user->nickname,
                     'seller_email' => $item->user->email,
                     'purchaser_nickname' => $user->nickname,

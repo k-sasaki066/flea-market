@@ -35,4 +35,8 @@ class Purchase extends Model
         return $this->belongsTo(Item::class);
     }
 
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
 }

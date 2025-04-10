@@ -51,6 +51,8 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
+
+    Route::get('/transaction', [UserController::class, 'transaction']);
 });
 
 Route::get('/stripe/session-status', [PurchaseController::class, 'getSessionStatus']);

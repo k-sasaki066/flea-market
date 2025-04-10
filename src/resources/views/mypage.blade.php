@@ -25,7 +25,10 @@
             <img class="user-img" src="{{ $user['image_url'] }}" alt="">
             @endif
         </div>
-        <h2 class="user-name">{{ (!$user['nickname']) ? 'ユーザー' : $user['nickname'] }}</h2>
+        <div class="user-name__wrap flex">
+            <h2 class="user-name">{{ (!$user['nickname']) ? 'ユーザー' : $user['nickname'] }}</h2>
+            <span class="star-rating" data-rate="">★ ★ ★ ★ ★</span>
+        </div>
         <a class="profile-link bold" href="/mypage/profile">プロフィールを編集</a>
     </div>
 
@@ -38,6 +41,10 @@
             <form class="list-menu__form" action="/mypage" method="GET">
                 <input type="hidden" name="page" value="buy">
                 <button class="list-menu__text bold {{ ($parameter == 'buy') ? 'selected' : '' }}" type="submit">購入した商品</button>
+            </form>
+            <form class="list-menu__form" action="/mypage" method="GET">
+                <input type="hidden" name="page" value="transaction">
+                <button class="list-menu__text bold {{ ($parameter == 'transaction') ? 'selected' : '' }}" type="submit">取引中の商品<span class="unread-count__span">2</span></button>
             </form>
         </div>
 
@@ -54,6 +61,17 @@
                     </a>
                 </div>
                 <p class="list-card__ttl">{{ $item['name'] }}</p>
+            </div>
+            @endforeach
+            @elseif($parameter == 'transaction')
+            @foreach($items as $item)
+            <div class="list-card__item">
+                <div class="list-card__wrap">
+                    <p class="new-message__count flex">10</p>
+                    <a class="list-card__link" href="/transaction">
+                        <img class="list-card__img" src="{{ $item['image_url'] }}" alt="item">
+                    </a>
+                </div>
             </div>
             @endforeach
             @endif

@@ -1,0 +1,173 @@
+.transaction-container {
+    width: 100vw;
+    height: 100vh;
+    grid-template-columns: 20% 1fr;
+}
+
+.transaction-list__wrap {
+    grid-column: 1/2;
+    background-color: #868686;
+}
+
+.transaction-list__text {
+    margin-top: 12px;
+    text-align: center;
+    color: #fff;
+}
+
+.transaction-list__item {
+    margin-top: 32px;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+}
+
+.transaction-list__item-link {
+    display: inline-block;
+    width: 80%;
+    text-align: center;
+    background-color: #eeeeec;
+    color: #000;
+    border-radius: 3px;
+}
+
+.transaction-wrap {
+    grid-column: 2/3;
+    padding: 0 12px;
+}
+
+.transaction-user__img-wrap {
+    width: 70px;
+    height: 70px;
+}
+
+.transaction-message__img-wrap {
+    width: 50px;
+    height: 50px;
+}
+
+.transaction-user__img-wrap,
+.transaction-message__img-wrap {
+    border-radius: 50%;
+    background-color: #d9d9d9;
+}
+
+.transaction-title {
+    grid-template-columns: 70px 1fr 152px;
+    align-items: center;
+    gap: 20px;
+    padding: 12px;
+    position: relative;
+}
+
+.transaction-title::after,
+.transaction-item__wrap::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    right: -12px;
+    bottom: 0;
+    height: 1px;
+    background: #5f5f5f;
+    z-index: 1;
+}
+
+.transaction-complete__btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 20px;
+    color: #fff;
+    background-color: #fe8282;
+}
+
+.transaction-item__wrap {
+    align-items: center;
+    gap: 20px;
+    padding: 12px;
+    position: relative;
+}
+
+.transaction-item__img-wrap {
+    width: 160px;
+    min-width: 160px;
+    height: 160px;
+    background-color: #d9d9d9;
+}
+
+.transaction-item__content {
+    gap: 24px;
+    flex-direction: column;
+}
+
+.transaction-item__name {
+    margin-top: 12px;
+}
+
+.transaction-item__price {
+    font-size: 20px;
+}
+
+.transaction-message__other-wrap,
+.transaction-message__self-wrap {
+    width: 45%;
+    padding: 12px 0;
+}
+
+.transaction-message__self-wrap {
+    margin: 0 0 0 auto;
+}
+
+.transaction-message__content {
+    align-items: center;
+    gap: 20px;
+}
+
+.message-self {
+    justify-content: flex-end;
+}
+
+.transaction-message__text {
+    margin-top: 8px;
+    padding: 8px;
+    text-align: center;
+    background-color: #d9d9d9;
+    border-radius: 3px;
+}
+
+.transaction-form {
+    position: fixed;
+    bottom: 12px;
+    right: 0;
+    left: 20%;
+    grid-template-columns: 1fr 110px 42px;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+}
+
+.transaction-form__img-select {
+    font-size: 16px;
+    padding: 5px 12px;
+}
+
+.transaction-form__btn {
+    width: 50px;
+    height: 34px;
+    margin-left: -8px;
+    margin-top: -14px;
+}
+
+.transaction-message__form-group {
+    gap: 18px;
+    margin-top: 4px;
+    margin-right: 8px;
+    justify-content: right;
+    align-items: center;
+}
+
+.transaction-message__update-btn,
+.transaction-message__delete-btn {
+    font-size: 12px;
+    color: #5f5f5f;
+    text-shadow: 1px 2px 3px #dadada;
+}

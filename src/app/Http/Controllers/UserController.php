@@ -81,6 +81,9 @@ class UserController extends Controller
                 case 'buy':
                     $items = Item::getPurchasedItems($userId);
                     break;
+                case 'transaction':
+                    $items = Item::getPurchasedItems($userId);
+                    break;
                 default:
                     $items = collect([]);
             }
@@ -192,5 +195,10 @@ class UserController extends Controller
         }
 
         return response()->json($brands->get());
+    }
+
+    public function transaction() {
+
+    return view('transaction');
     }
 }

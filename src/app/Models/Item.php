@@ -143,7 +143,7 @@ class Item extends Model
 
     public static function getParameter($request)
     {
-        $allowedPages = ['suggest', 'mylist', 'sell', 'buy', 'default'];
+        $allowedPages = ['suggest', 'mylist', 'sell', 'buy', 'transaction', 'default'];
         $parameter = $request->input('page', 'default');
 
         return in_array($parameter, $allowedPages, true) ? $parameter : 'default';

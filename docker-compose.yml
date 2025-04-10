@@ -59,7 +59,7 @@ services:
       - maildir:/tmp
 
   ngrok:
-    image: wernight/ngrok
+    image: ngrok/ngrok
     platform: linux/x86_64
     restart: always
     command: ngrok http nginx:80

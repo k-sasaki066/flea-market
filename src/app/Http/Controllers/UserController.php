@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Brand;
+use App\Models\Transaction;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
@@ -82,7 +83,7 @@ class UserController extends Controller
                     $items = Item::getPurchasedItems($userId);
                     break;
                 case 'transaction':
-                    $items = Item::getPurchasedItems($userId);
+                    $items = Transaction::getTransactionItems($userId);
                     break;
                 default:
                     $items = collect([]);
@@ -197,8 +198,18 @@ class UserController extends Controller
         return response()->json($brands->get());
     }
 
-    public function transaction() {
+    public function transaction($transactionId) {
+        $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
+        ->findOrFail($transactionId);
 
-    return view('transaction');
+        $user = Auth::user();
+        $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
+
+        $items = Transaction::getTransactionItems($user['id']);
+        $otherItems = $items->filter(function ($item) use ($transactionId) {
+            return $item->id != $transactionId;
+        });
+
+        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems'));
     }
 }

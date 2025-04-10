@@ -151,7 +151,9 @@ a {
     aspect-ratio: 1 / 1;
 }
 
-.user-img {
+.user-img,
+.transaction-user__img,
+.transaction-message__img {
     border-radius: 50%;
 }
 

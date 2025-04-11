@@ -27,7 +27,8 @@
 }
 
 .form-group__item-input,
-.transaction-form__message-input {
+.transaction-form__message-input,
+.transaction-edit-form__message-input {
     border: 1px solid #5F5F5F;
     width: 100%;
     border-radius: 3px;

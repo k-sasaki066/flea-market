@@ -8,9 +8,11 @@ use App\Models\User;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MessageRequest;
+use App\Http\Requests\EditMessageRequest;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class MessageController extends Controller
 {
@@ -53,6 +55,24 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ メッセージ投稿エラー: " . $e->getMessage());
+            return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください。');
+        }
+    }
+
+    public function update(EditMessageRequest $request, $messageId)
+    {
+        try {
+            $message = Message::findOrFail($messageId);
+            DB::beginTransaction();
+            $message->update([
+                'message' => $request->message_send,
+            ]);
+            DB::commit();
+
+            return redirect()->back()->with('message_updated', true)->with('result', 'メッセージを更新しました');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("❌ メッセージ更新エラー: " . $e->getMessage());
             return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください。');
         }
     }

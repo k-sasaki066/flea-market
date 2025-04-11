@@ -101,7 +101,7 @@ class SellTest extends TestCase
             'price' => 1000,
         ]);
 
-        $response->assertStatus(302)->assertSessionHasErrors(['image_url' => 'jpegまたはpng形式のファイルを指定してください']);
+        $response->assertStatus(302)->assertSessionHasErrors(['image_url' => '「.png」または「.jpeg」形式でアップロードしてください']);
     }
 
     public function test_商品の説明が256文字以上の場合、バリデーションメッセージが表示される()

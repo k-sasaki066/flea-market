@@ -59,10 +59,10 @@ services:
       - maildir:/tmp
 
   ngrok:
-    image: ngrok/ngrok
+    image: ngrok/ngrok:latest
     platform: linux/x86_64
     restart: always
-    command: ngrok http nginx:80
+    command: http nginx:80
     depends_on:
       - nginx
     env_file:

@@ -189,7 +189,7 @@ class MypageTest extends TestCase
             'building' => 'テストビル101',
         ]);
 
-        $response->assertStatus(302)->assertSessionHasErrors(['image_url' => 'jpegまたはpng形式のファイルを指定してください']);
+        $response->assertStatus(302)->assertSessionHasErrors(['image_url' => '「.png」または「.jpeg」形式でアップロードしてください']);
     }
 
     public function test_ユーザー名が未入力の場合、バリデーションメッセージが表示される()

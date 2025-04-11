@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Brand;
 use App\Models\Transaction;
+use App\Models\Message;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
@@ -74,6 +75,7 @@ class UserController extends Controller
             $user = User::select(['nickname', 'image_url'])->findOrFail($userId);
             $parameter = Item::getParameter($request);
             $page = $request->input('page', 'default');
+            $unreadCount = Transaction::getUnreadMessageCount($userId);
 
             switch ($page) {
                 case 'sell':
@@ -83,13 +85,13 @@ class UserController extends Controller
                     $items = Item::getPurchasedItems($userId);
                     break;
                 case 'transaction':
-                    $items = Transaction::getTransactionItems($userId);
+                    $items = Transaction::getTransactionItemsWithUnreadCount($userId);
                     break;
                 default:
                     $items = collect([]);
             }
 
-            return view('mypage', compact('user', 'items', 'parameter'));
+            return view('mypage', compact('user', 'items', 'parameter', 'unreadCount'));
         } catch (ModelNotFoundException $e) {
             Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
             return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');
@@ -198,18 +200,25 @@ class UserController extends Controller
         return response()->json($brands->get());
     }
 
-    public function transaction($transactionId) {
+    public function getTransaction($transactionId) {
         $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
         ->findOrFail($transactionId);
 
         $user = Auth::user();
         $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
 
-        $items = Transaction::getTransactionItems($user['id']);
+        $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
         $otherItems = $items->filter(function ($item) use ($transactionId) {
             return $item->id != $transactionId;
         });
 
-        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems'));
+        $messages = Message::where('transaction_id', $transactionId)
+        ->with('sender')
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+        Message::markAsRead($transactionId, $user);
+
+        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages'));
     }
 }

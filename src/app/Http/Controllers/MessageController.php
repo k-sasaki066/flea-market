@@ -76,4 +76,25 @@ class MessageController extends Controller
             return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください。');
         }
     }
+
+    public function destroy(Message $message)
+    {
+        try {
+            $userId = Auth::id();
+            if ($message->sender_id !== $userId) {
+                abort(403);
+            }
+            DB::beginTransaction();
+
+            $message->delete();
+
+            DB::commit();
+
+            return redirect()->back()->with('result', 'メッセージを削除しました');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("❌ メッセージ削除エラー: " . $e->getMessage());
+            return redirect()->back()->with('error', 'メッセージの削除に失敗しました。再度お試しください。');
+        }
+    }
 }

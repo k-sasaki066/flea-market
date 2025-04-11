@@ -66,19 +66,30 @@
                         @endif
                     </div>
                 </div>
+
+                @if ($message->deleted_at)
+                <p class="transaction-delete-message__text">このメッセージは削除されました</p>
+                @else
                 <p class="transaction-message__text">{{ $message['message'] }}</p>
-                @if($message['image_url'])
+                @endif
+
+                @if($message['image_url'] && !$message->deleted_at)
                 <div class="transaction-message__chat-img-wrap">
                     <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
                 </div>
                 @endif
+
+                @if (!$message->deleted_at)
                 <div class="transaction-message__form-group flex">
                     <a class="transaction-message__update-btn" href="#">編集</a>
-                    <form class="transaction-message__delete-form" action="" method="">
+                    <form class="transaction-message__delete-form" action="/message/{{ $message['id'] }}" method="POST">
                         @csrf
-                        <button class="transaction-message__delete-btn">削除</button>
+                        @method('DELETE')
+                        <button class="transaction-message__delete-btn" onclick="return confirm('「{{ $message['message']}}」\nこのメッセージを削除します。よろしいですか？');">削除</button>
                     </form>
                 </div>
+                @endif
+
                 <form class="transaction-edit-form" action="/message/{{ $message['id'] }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
@@ -104,8 +115,14 @@
                     </div>
                     <p class="transaction-message__name bold">{{ $message['sender']['nickname'] }}</p>
                 </div>
+
+                @if ($message->deleted_at)
+                <p class="transaction-delete-message__text">このメッセージは削除されました</p>
+                @else
                 <p class="transaction-message__text">{{ $message['message'] }}</p>
-                @if($message['image_url'])
+                @endif
+
+                @if($message['image_url'] && !$message->deleted_at)
                 <div class="transaction-message__chat-img-wrap">
                     <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
                 </div>

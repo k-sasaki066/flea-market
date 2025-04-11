@@ -215,9 +215,15 @@
     text-align: center;
 }
 
+.transaction-delete-message__text {
+    font-size: 14px;
+    text-align: center;
+    color: #34528e;
+}
+
 @media screen and (max-width: 959px) {
 
     .transaction-message__container {
-        height: calc(100vh - 374px);
+        height: calc(100vh - 386px);
     }
 }

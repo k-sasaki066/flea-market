@@ -212,7 +212,8 @@ class UserController extends Controller
             return $item->id != $transactionId;
         });
 
-        $messages = Message::where('transaction_id', $transactionId)
+        $messages = Message::withTrashed()
+        ->where('transaction_id', $transactionId)
         ->with('sender')
         ->orderBy('created_at', 'asc')
         ->get();

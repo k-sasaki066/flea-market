@@ -55,6 +55,8 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::get('/transaction/{transaction}', [UserController::class, 'getTransaction']);
     Route::post('/transaction/{transaction}', [MessageController::class, 'sendMessage']);
+
+    Route::put('/message/{message}', [MessageController::class, 'update']);
 });
 
 Route::get('/stripe/session-status', [PurchaseController::class, 'getSessionStatus']);

@@ -29,7 +29,8 @@ a {
     font-weight: bold;
 }
 
-.error-message {
+.error-message,
+.edit-error-message {
     color: #e24a4a;
 }
 

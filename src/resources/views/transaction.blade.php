@@ -57,7 +57,7 @@
         <div class="transaction-message__container">
             @foreach($messages as $message)
             @if($message->sender_id === $user->id)
-            <div class="transaction-message__self-wrap">
+            <div class="transaction-message__self-wrap" data-message-id="{{ $message['id'] }}">
                 <div class="transaction-message__content flex message-self">
                     <p class="transaction-message__name bold">{{ $message['sender']['nickname'] }}</p>
                     <div class="transaction-message__img-wrap">
@@ -73,12 +73,26 @@
                 </div>
                 @endif
                 <div class="transaction-message__form-group flex">
-                    <a class="transaction-message__update-btn" href="">編集</a>
+                    <a class="transaction-message__update-btn" href="#">編集</a>
                     <form class="transaction-message__delete-form" action="" method="">
                         @csrf
                         <button class="transaction-message__delete-btn">削除</button>
                     </form>
                 </div>
+                <form class="transaction-edit-form" action="/message/{{ $message['id'] }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('PUT')
+                    <div class="edit-error-message">
+                        @error('message_send')
+                        {{ $message }}
+                        @enderror
+                    </div>
+                    <textarea class="transaction-edit-form__message-input" name="message_send" rows="1">{{ old('message') ? old('message') : $message['message'] }}</textarea>
+                    <div class="transaction-edit-form__btn-group flex">
+                        <button class="transaction-edit__btn" type="submit">更新</button>
+                        <button class="transaction-cancel-edit__btn" type="button">キャンセル</button>
+                    </div>
+                </form>
             </div>
             @else
             <div class="transaction-message__other-wrap">
@@ -105,7 +119,7 @@
             @csrf
             <div class="error-message">
                 @error('message')
-                {{ $message }}
+                    {{ $message }}
                 @enderror
             </div>
             <div class="error-message">
@@ -122,6 +136,12 @@
         </form>
     </div>
 </div>
+
+@if(session('message_updated'))
+    <div id="message-update-status" data-updated="true"></div>
+@endif
+
+<script src="{{ asset('js/message_edit.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const textarea = document.querySelector('.transaction-form__message-input');

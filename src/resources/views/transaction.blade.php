@@ -122,4 +122,25 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.querySelector('.transaction-form__message-input');
+        const form = document.querySelector('.transaction-form');
+
+        const transactionId = "{{ $transaction['id'] }}";
+        const storageKey = 'chat_draft_' + transactionId;
+
+        if (localStorage.getItem(storageKey)) {
+            textarea.value = localStorage.getItem(storageKey);
+        }
+
+        textarea.addEventListener('input', function () {
+            localStorage.setItem(storageKey, textarea.value);
+        });
+
+        form.addEventListener('submit', function () {
+            localStorage.removeItem(storageKey);
+        });
+    });
+</script>
 @endsection

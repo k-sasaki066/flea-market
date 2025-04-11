@@ -8,6 +8,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\EmailVerificationNotificationController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
 
-    Route::get('/transaction/{transaction}', [UserController::class, 'transaction']);
+    Route::get('/transaction/{transaction}', [UserController::class, 'getTransaction']);
+    Route::post('/transaction/{transaction}', [MessageController::class, 'sendMessage']);
 });
 
 Route::get('/stripe/session-status', [PurchaseController::class, 'getSessionStatus']);

@@ -44,7 +44,11 @@
             </form>
             <form class="list-menu__form" action="/mypage" method="GET">
                 <input type="hidden" name="page" value="transaction">
-                <button class="list-menu__text bold {{ ($parameter == 'transaction') ? 'selected' : '' }}" type="submit">取引中の商品<span class="unread-count__span">2</span></button>
+                <button class="list-menu__text bold {{ ($parameter == 'transaction') ? 'selected' : '' }}" type="submit">取引中の商品
+                    @if($unreadCount > 0)
+                    <span class="unread-count__span">{{ $unreadCount }}</span>
+                    @endif
+                </button>
             </form>
         </div>
 
@@ -67,7 +71,9 @@
             @foreach($items as $item)
             <div class="list-card__item">
                 <div class="list-card__wrap">
-                    <p class="new-message__count flex">10</p>
+                    @if($item['unread_count'] > 0)
+                    <p class="new-message__count flex">{{ $item['unread_count'] }}</p>
+                    @endif
                     <a class="list-card__link" href="/transaction/{{ $item['id'] }}">
                         <img class="list-card__img" src="{{ $item['purchase']['item']['image_url'] }}" alt="item">
                     </a>

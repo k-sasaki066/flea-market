@@ -39,7 +39,9 @@
                 @endif
             </div>
             <h2 class="transaction-name">{{ $otherUser['nickname'] }}さんとの取引画面</h2>
+            @if($transaction['buyer_id'] == $user['id'])
             <a class="transaction-complete__btn" href="">取引を完了する</a>
+            @endif
         </div>
 
         <div class="transaction-item__wrap flex">
@@ -53,34 +55,23 @@
         </div>
 
         <div class="transaction-message__container">
-            <div class="transaction-message__other-wrap">
-                <div class="transaction-message__content flex">
-                    <div class="transaction-message__img-wrap">
-                        @if($otherUser['image_url'])
-                        <img class="transaction-message__img" src="{{ $otherUser['image_url'] }}" alt="">
-                        @endif
-                    </div>
-                    <p class="transaction-message__name bold">{{ $otherUser['nickname'] }}</p>
-                </div>
-                <div class="error-message">
-                    message
-                </div>
-                <p class="transaction-message__text">メッセージメッセージ</p>
-            </div>
-
+            @foreach($messages as $message)
+            @if($message->sender_id === $user->id)
             <div class="transaction-message__self-wrap">
                 <div class="transaction-message__content flex message-self">
-                    <p class="transaction-message__name bold">{{ $user['nickname'] }}</p>
+                    <p class="transaction-message__name bold">{{ $message['sender']['nickname'] }}</p>
                     <div class="transaction-message__img-wrap">
-                        @if($user['image_url'])
-                        <img class="transaction-message__img" src="{{ $user['image_url'] }}" alt="">
+                        @if($message['sender']['image_url'])
+                        <img class="transaction-message__img" src="{{ $message['sender']['image_url'] }}" alt="">
                         @endif
                     </div>
                 </div>
-                <div class="error-message">
-                    message
+                <p class="transaction-message__text">{{ $message['message'] }}</p>
+                @if($message['image_url'])
+                <div class="transaction-message__chat-img-wrap">
+                    <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
                 </div>
-                <p class="transaction-message__text">メッセージ</p>
+                @endif
                 <div class="transaction-message__form-group flex">
                     <a class="transaction-message__update-btn" href="">編集</a>
                     <form class="transaction-message__delete-form" action="" method="">
@@ -89,16 +80,46 @@
                     </form>
                 </div>
             </div>
+            @else
+            <div class="transaction-message__other-wrap">
+                <div class="transaction-message__content flex">
+                    <div class="transaction-message__img-wrap">
+                        @if($message['sender']['image_url'])
+                        <img class="transaction-message__img" src="{{ $message['sender']['image_url'] }}" alt="">
+                        @endif
+                    </div>
+                    <p class="transaction-message__name bold">{{ $message['sender']['nickname'] }}</p>
+                </div>
+                <p class="transaction-message__text">{{ $message['message'] }}</p>
+                @if($message['image_url'])
+                <div class="transaction-message__chat-img-wrap">
+                    <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
+                </div>
+                @endif
+            </div>
+            @endif
+            @endforeach
         </div>
 
-        <form class="transaction-form grid" method="" action="">
+        <form class="transaction-form grid" method="POST" action="/transaction/{{ $transaction['id'] }}" enctype="multipart/form-data">
             @csrf
-            <textarea class="transaction-form__message-input" type="text" name="" rows="1" placeholder="取引メッセージを入力してください"></textarea>
-            <label class="transaction-form__img-select bold" for="upload">画像を追加</label>
-            <input class="transaction-form__img-hidden" type="file" id="upload" name="" accept="image/png, image/jpeg">
-            <button class="transaction-form__btn" type="submit"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
+            <div class="error-message">
+                @error('message')
+                {{ $message }}
+                @enderror
+            </div>
+            <div class="error-message">
+                @error('image_url')
+                {{ $message }}
+                @enderror
+            </div>
+            <div class="transaction-form__group grid">
+                <textarea class="transaction-form__message-input" type="text" name="message" rows="1" placeholder="取引メッセージを入力してください">{{ old('message') }}</textarea>
+                <label class="transaction-form__img-select bold" for="upload">画像を追加</label>
+                <input class="transaction-form__img-hidden" type="file" id="upload" name="image_url" accept="image/png, image/jpeg">
+                <button class="transaction-form__btn" type="submit"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
+            </div>
         </form>
     </div>
 </div>
-
 @endsection

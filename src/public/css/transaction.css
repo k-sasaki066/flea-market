@@ -25,6 +25,8 @@
 .transaction-list__item-link {
     display: inline-block;
     width: 80%;
+    line-height: 1.4;
+    padding: 2px 0;
     text-align: center;
     background-color: #eeeeec;
     color: #000;
@@ -35,6 +37,7 @@
     grid-column: 2/3;
     padding: 0 12px;
     height: 100%;
+    position: relative;
 }
 
 .transaction-user__img-wrap {
@@ -221,9 +224,98 @@
     color: #34528e;
 }
 
+/* ---modal--- */
+.modal__group {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.modal__group:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal__inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 560px;
+    transform: translate(-50%, -50%);
+    padding: 0 12px;
+    background-color: #fdfce6;
+    border: 1px solid #282828;
+    border-radius: 10px;
+    z-index: 2;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.modal-title,
+.rating-form__content,
+.rating-btn__wrap {
+    padding: 12px 0;
+    position: relative;
+}
+
+.modal-title::after,
+.rating-form__content::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    right: -12px;
+    bottom: 0;
+    height: 1px;
+    background: #282828;
+    z-index: 1;
+}
+
+.rating-form__text {
+    color: #9c9d98;
+}
+
+.rating-btn {
+    display: inline-block;
+    background-color: #fe8282;
+    color: #fff;
+    border-radius: 3px;
+    padding: 4px 12px;
+}
+
+.rating-form__star {
+    color: #d9d9d9;
+    font-size: 86px;
+}
+
+.rating-btn__wrap {
+    text-align: right;
+    font-size: 18px;
+}
+
 @media screen and (max-width: 959px) {
 
     .transaction-message__container {
         height: calc(100vh - 386px);
+    }
+
+    .modal__inner {
+        width: 500px;
+    }
+
+    .rating-form__star {
+        font-size: 76px;
     }
 }

@@ -85,6 +85,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Message::class, 'sender_id');
     }
 
+    public function ratingsGiven()
+    {
+        return $this->hasMany(Rating::class, 'rater_id');
+    }
+
+    public function ratingReceived()
+    {
+        return $this->hasMany(Rating::class, 'rated_user_id');
+    }
+
     public static function getPaymentUser($userId)
     {
         $user = User::select('id', 'post_cord', 'address', 'building')->findOrFail($userId);

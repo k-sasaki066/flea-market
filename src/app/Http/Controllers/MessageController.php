@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Image;
 use App\Models\Message;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,29 @@ use Exception;
 
 class MessageController extends Controller
 {
+    public function getTransaction($transactionId) {
+        $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
+        ->findOrFail($transactionId);
+
+        $user = Auth::user();
+        $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
+
+        $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
+        $otherItems = $items->filter(function ($item) use ($transactionId) {
+            return $item->id != $transactionId;
+        });
+
+        $messages = Message::withTrashed()
+        ->where('transaction_id', $transactionId)
+        ->with('sender', 'image')
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+        Message::markAsRead($transactionId, $user);
+
+        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages'));
+    }
+
     public function sendMessage(MessageRequest $messageRequest, ProfileRequest $profileRequest, $transactionId) {
         DB::beginTransaction();
         try {

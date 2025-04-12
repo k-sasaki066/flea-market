@@ -9,6 +9,7 @@ use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\EmailVerificationNotificationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,11 +54,13 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/success', [PurchaseController::class, 'success'])->name('stripe.success');
     Route::get('/cancel', [PurchaseController::class, 'cancel'])->name('stripe.cancel');
 
-    Route::get('/transaction/{transaction}', [UserController::class, 'getTransaction']);
+    Route::get('/transaction/{transaction}', [MessageController::class, 'getTransaction']);
     Route::post('/transaction/{transaction}', [MessageController::class, 'sendMessage']);
 
     Route::put('/message/{message}', [MessageController::class, 'update']);
     Route::delete('/message/{message}', [MessageController::class, 'destroy']);
+
+    Route::post('/rating/{transaction}', [RatingController::class, 'store']);
 });
 
 Route::get('/stripe/session-status', [PurchaseController::class, 'getSessionStatus']);

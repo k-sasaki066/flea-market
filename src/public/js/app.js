@@ -1,29 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll('.form-group, .item-comment__form, .purchase-form, .sell-form, .transaction-form, .transaction-edit-form').forEach(form => {
+    document.querySelectorAll('.form-group, .item-comment__form, .purchase-form, .sell-form, .transaction-form, .transaction-edit-form, .rating-form').forEach(form => {
         const button = form.querySelector('.form-btn');
         const iconButton = form.querySelector('.transaction-form__btn');
         const editButton = form.querySelector('.transaction-edit__btn');
+        const ratingButton = form.querySelector('.rating-btn');
 
-        if (button) {
-            form.addEventListener("submit", function () {
+        form.addEventListener("submit", function () {
+            if (button) {
                 button.disabled = true;
                 button.textContent = "処理中...";
-            });
-        }
+            }
 
-        if (iconButton) {
-            form.addEventListener("submit", function () {
+            if (iconButton) {
                 iconButton.disabled = true;
-                iconButton.innerHTML = '<span>処理中...</span>';
-            });
-        }
+                iconButton.innerHTML = '<span style="font-size: 12px;">処理中...</span>';
+            }
 
-        if (editButton) {
-            form.addEventListener("submit", function () {
+            if (editButton) {
                 editButton.disabled = true;
                 editButton.textContent = "更新中...";
-            });
-        }
+            }
+
+            if (ratingButton) {
+                ratingButton.disabled = true;
+                ratingButton.textContent = "送信中...";
+            }
+        });
     });
 
     const resendForm = document.getElementById("resendForm");

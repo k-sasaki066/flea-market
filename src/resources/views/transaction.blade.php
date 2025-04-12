@@ -40,7 +40,7 @@
             </div>
             <h2 class="transaction-name">{{ $otherUser['nickname'] }}さんとの取引画面</h2>
             @if($transaction['buyer_id'] == $user['id'])
-            <a class="transaction-complete__btn bold" href="#{{ $transaction['id'] }}">取引を完了する</a>
+            <a class="transaction-complete__btn bold" href="#review">取引を完了する</a>
             @endif
         </div>
 
@@ -153,18 +153,28 @@
             </div>
         </form>
 
-        <div class="modal__group" id="{{ $transaction['id'] }}">
+        <div class="modal__group" id="review">
         <a href="#" class="modal-overlay"></a>
             <div class="modal__inner">
-                <form class="rating-form grid" action="" method="">
+                <form class="rating-form grid" action="/rating/{{ $transaction['id'] }}" method="POST">
                     @csrf
                     <h1 class="modal-title">取引が完了しました。</h1>
                     <div class="rating-form__content">
                         <p class="rating-form__text">今回の取引相手はどうでしたか？</p>
-                        <span class="rating-form__star" data-rate="">★ ★ ★ ★ ★</span>
+                        <div class="error-message">
+                            @error('rating')
+                            {{ $message }}
+                            @enderror
+                        </div>
+                        <div class="rating-form__star-wrap" id="starRating">
+                            @for ($i = 1; $i <= 5; $i++)
+                            <span class="rating-form__star" data-value="{{ $i }}">★</span>
+                            @endfor
+                        </div>
+                        <input type="hidden" name="rating" id="ratingValue" value="">
                     </div>
                     <div class="rating-btn__wrap">
-                        <button class="rating-btn" type="submit">送信する</button>
+                        <button class="rating-btn" type="submit" onclick="return confirm('評価を送信して取引を完了します。\nよろしいですか？');">送信する</button>
                     </div>
                 </form>
             </div>
@@ -178,6 +188,7 @@
 
 <script src="{{ asset('js/message_image_preview.js') }}"></script>
 <script src="{{ asset('js/message_edit.js') }}"></script>
+<script src="{{ asset('js/rating_form.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const textarea = document.querySelector('.transaction-form__message-input');

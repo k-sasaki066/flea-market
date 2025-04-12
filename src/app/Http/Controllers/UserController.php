@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Brand;
 use App\Models\Transaction;
+use App\Models\Rating;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ExhibitionRequest;
@@ -74,7 +75,14 @@ class UserController extends Controller
             $user = User::select(['nickname', 'image_url'])->findOrFail($userId);
             $parameter = Item::getParameter($request);
             $page = $request->input('page', 'default');
+
             $unreadCount = Transaction::getUnreadMessageCount($userId);
+
+            $averageRatingRaw = Rating::where('rated_user_id', $userId)->avg('rating');
+            $averageRating = $averageRatingRaw ? round($averageRatingRaw) : null;
+
+            $ratingCount = Rating::where('rated_user_id', $userId)
+            ->count();
 
             switch ($page) {
                 case 'sell':
@@ -90,7 +98,7 @@ class UserController extends Controller
                     $items = collect([]);
             }
 
-            return view('mypage', compact('user', 'items', 'parameter', 'unreadCount'));
+            return view('mypage', compact('user', 'items', 'parameter', 'unreadCount', 'averageRating', 'ratingCount'));
         } catch (ModelNotFoundException $e) {
             Log::error("❌ ユーザーが見つかりません: " . $e->getMessage());
             return redirect('/')->with('error', 'ユーザー情報の取得に失敗しました。');

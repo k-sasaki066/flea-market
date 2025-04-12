@@ -27,7 +27,14 @@
         </div>
         <div class="user-name__wrap flex">
             <h2 class="user-name">{{ (!$user['nickname']) ? 'ユーザー' : $user['nickname'] }}</h2>
-            <span class="star-rating" data-rate="">★ ★ ★ ★ ★</span>
+
+            @if ($ratingCount > 0 && $averageRating !== null)
+            <div class="star-rating-wrap">
+                @for ($i = 1; $i <= 5; $i++)
+                    <span class="star-rating {{ $i <= $averageRating ? 'star-filled' : 'star-empty' }}">★</span>
+                @endfor
+            </div>
+            @endif
         </div>
         <a class="profile-link bold" href="/mypage/profile">プロフィールを編集</a>
     </div>

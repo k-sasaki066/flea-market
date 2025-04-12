@@ -40,7 +40,7 @@
             </div>
             <h2 class="transaction-name">{{ $otherUser['nickname'] }}さんとの取引画面</h2>
             @if($transaction['buyer_id'] == $user['id'])
-            <a class="transaction-complete__btn" href="">取引を完了する</a>
+            <a class="transaction-complete__btn bold" href="#{{ $transaction['id'] }}">取引を完了する</a>
             @endif
         </div>
 
@@ -152,6 +152,23 @@
                 <button class="transaction-form__btn" type="submit" id="imageSelectBtn"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
             </div>
         </form>
+
+        <div class="modal__group" id="{{ $transaction['id'] }}">
+        <a href="#" class="modal-overlay"></a>
+            <div class="modal__inner">
+                <form class="rating-form grid" action="" method="">
+                    @csrf
+                    <h1 class="modal-title">取引が完了しました。</h1>
+                    <div class="rating-form__content">
+                        <p class="rating-form__text">今回の取引相手はどうでしたか？</p>
+                        <span class="rating-form__star" data-rate="">★ ★ ★ ★ ★</span>
+                    </div>
+                    <div class="rating-btn__wrap">
+                        <button class="rating-btn" type="submit">送信する</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

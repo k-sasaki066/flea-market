@@ -21,8 +21,16 @@ class MessageController extends Controller
     public function getTransaction($transactionId) {
         $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
         ->findOrFail($transactionId);
-
         $user = Auth::user();
+
+        $showReviewModal = false;
+
+        if ($user['id'] === $transaction['seller_id'] && 
+            $transaction['buyer_rated'] && 
+            !$transaction['seller_rated']) {
+            $showReviewModal = true;
+        }
+
         $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
 
         $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
@@ -38,14 +46,18 @@ class MessageController extends Controller
 
         Message::markAsRead($transactionId, $user);
 
-        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages'));
+        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages', 'showReviewModal'));
     }
 
-    public function sendMessage(MessageRequest $messageRequest, ProfileRequest $profileRequest, $transactionId) {
+    public function sendMessage(MessageRequest $messageRequest, ProfileRequest $profileRequest, Transaction $transaction) {
         DB::beginTransaction();
         try {
             $user = User::findOrFail(Auth::id());
             $userId = $user->id;
+
+            if ($transaction->buyer_rated && $userId === $transaction->seller_id) {
+                return redirect()->back()->with('error', '購入者の評価が完了しているため、これ以上のメッセージ送信はできません。');
+            }
 
             $image_url = null;
             if ($profileRequest->hasFile('image_url')) {
@@ -60,7 +72,7 @@ class MessageController extends Controller
 
             try{
                 $message = Message::create([
-                    'transaction_id' => $transactionId,
+                    'transaction_id' => $transaction['id'],
                     'sender_id' => $userId,
                     'message' => $messageRequest['message'],
                 ]);

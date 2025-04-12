@@ -61,8 +61,13 @@ class RatingController extends Controller
                     'rating' => $request->rating,
                 ]);
 
-                Transaction::where('id', $transaction['id'])
-                    ->update(['seller_rated' => true]);
+                $transaction->seller_rated = true;
+
+                if ($transaction->buyer_rated) {
+                    $transaction->status = 'completed';
+                }
+
+                $transaction->save();
             }
             DB::commit();
 

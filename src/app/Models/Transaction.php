@@ -61,7 +61,8 @@ class Transaction extends Model
     {
         $items = Transaction::where(function ($query) use ($userId) {
             $query->where('buyer_id', $userId)
-                ->where('status', 'chatting');
+                ->where('status', 'chatting')
+                ->where('buyer_rated', false);
         })
         ->orWhere(function ($query) use ($userId) {
             $query->where('seller_id', $userId)

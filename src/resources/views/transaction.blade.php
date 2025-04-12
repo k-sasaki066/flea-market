@@ -186,6 +186,12 @@
     <div id="message-update-status" data-updated="true"></div>
 @endif
 
+@if ($showReviewModal)
+    <script>
+        window.location.hash = '#review';
+    </script>
+@endif
+
 <script src="{{ asset('js/message_image_preview.js') }}"></script>
 <script src="{{ asset('js/message_edit.js') }}"></script>
 <script src="{{ asset('js/rating_form.js') }}"></script>
@@ -208,6 +214,14 @@
         form.addEventListener('submit', function () {
             localStorage.removeItem(storageKey);
         });
+
+        const hash = window.location.hash;
+        if (hash && document.querySelector(hash)) {
+            const target = document.querySelector(hash);
+            console.log(target);
+            target.style.visibility = 'visible';
+            target.style.opacity = '1';
+        }
     });
 </script>
 @endsection

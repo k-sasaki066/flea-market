@@ -25,10 +25,21 @@
     overflow-wrap: break-word;
 }
 
+.star-rating-wrap {
+    position: absolute;
+    left: -12px;
+    bottom: -6px;
+}
+
 .star-rating {
     font-size: 24px;
-    position: absolute;
-    bottom: -6px;
+}
+
+.star-filled {
+    color: #fff146;
+}
+
+.star-empty {
     color: #d9d9d9;
 }
 

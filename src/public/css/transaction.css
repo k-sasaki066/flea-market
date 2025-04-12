@@ -112,7 +112,7 @@
     width: 100%;
     height: calc(100vh - 334px);
     overflow-y: auto;
-    padding-bottom: 68px;
+    padding-bottom: 84px;
 }
 
 .transaction-message__other-wrap,

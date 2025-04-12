@@ -73,23 +73,6 @@
                 <p class="transaction-message__text">{{ $message['message'] }}</p>
                 @endif
 
-                @if($message['image_url'] && !$message->deleted_at)
-                <div class="transaction-message__chat-img-wrap">
-                    <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
-                </div>
-                @endif
-
-                @if (!$message->deleted_at)
-                <div class="transaction-message__form-group flex">
-                    <a class="transaction-message__update-btn" href="#">編集</a>
-                    <form class="transaction-message__delete-form" action="/message/{{ $message['id'] }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button class="transaction-message__delete-btn" onclick="return confirm('「{{ $message['message']}}」\nこのメッセージを削除します。よろしいですか？');">削除</button>
-                    </form>
-                </div>
-                @endif
-
                 <form class="transaction-edit-form" action="/message/{{ $message['id'] }}" method="POST" style="display: none;">
                     @csrf
                     @method('PUT')
@@ -104,6 +87,23 @@
                         <button class="transaction-cancel-edit__btn" type="button">キャンセル</button>
                     </div>
                 </form>
+
+                @if(isset($message['image']) && $message['image']['image_url'] && !$message->deleted_at)
+                <div class="transaction-message__chat-img-wrap">
+                    <img class="transaction-message__chat-img" src="{{ $message['image']['image_url'] }}" alt="">
+                </div>
+                @endif
+
+                @if (!$message->deleted_at)
+                <div class="transaction-message__form-group flex">
+                    <a class="transaction-message__update-btn" href="#">編集</a>
+                    <form class="transaction-message__delete-form" action="/message/{{ $message['id'] }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="transaction-message__delete-btn" onclick="return confirm('「{{ $message['message']}}」\nこのメッセージを削除します。よろしいですか？');">削除</button>
+                    </form>
+                </div>
+                @endif
             </div>
             @else
             <div class="transaction-message__other-wrap">
@@ -122,9 +122,9 @@
                 <p class="transaction-message__text">{{ $message['message'] }}</p>
                 @endif
 
-                @if($message['image_url'] && !$message->deleted_at)
+                @if(isset($message['image']) && $message['image']['image_url'] && !$message->deleted_at)
                 <div class="transaction-message__chat-img-wrap">
-                    <img class="transaction-message__chat-img" src="{{ $message['image_url'] }}" alt="">
+                    <img class="transaction-message__chat-img" src="{{ $message['image']['image_url'] }}" alt="">
                 </div>
                 @endif
             </div>
@@ -144,11 +144,12 @@
                 {{ $message }}
                 @enderror
             </div>
+            <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
             <div class="transaction-form__group grid">
                 <textarea class="transaction-form__message-input" type="text" name="message" rows="1" placeholder="取引メッセージを入力してください">{{ old('message') }}</textarea>
-                <label class="transaction-form__img-select bold" for="upload">画像を追加</label>
-                <input class="transaction-form__img-hidden" type="file" id="upload" name="image_url" accept="image/png, image/jpeg">
-                <button class="transaction-form__btn" type="submit"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
+                <label class="transaction-form__img-select bold" for="imageInput">画像を追加</label>
+                <input class="transaction-form__img-hidden" type="file" id="imageInput" name="image_url" accept="image/png, image/jpeg">
+                <button class="transaction-form__btn" type="submit" id="imageSelectBtn"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
             </div>
         </form>
     </div>
@@ -158,6 +159,7 @@
     <div id="message-update-status" data-updated="true"></div>
 @endif
 
+<script src="{{ asset('js/message_image_preview.js') }}"></script>
 <script src="{{ asset('js/message_edit.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {

@@ -14,7 +14,6 @@ class Message extends Model
         'transaction_id',
         'sender_id',
         'message',
-        'image_url',
         'read_at',
     ];
 
@@ -30,6 +29,11 @@ class Message extends Model
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class);
     }
 
     public static function markAsRead($transactionId, $user)

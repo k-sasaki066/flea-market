@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Image;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\Item;
@@ -17,11 +18,10 @@ use Exception;
 class MessageController extends Controller
 {
     public function sendMessage(MessageRequest $messageRequest, ProfileRequest $profileRequest, $transactionId) {
+        DB::beginTransaction();
         try {
             $user = User::findOrFail(Auth::id());
             $userId = $user->id;
-
-            $validatedData = array_merge($messageRequest->validated(), $profileRequest->validated());
 
             $image_url = null;
             if ($profileRequest->hasFile('image_url')) {
@@ -34,15 +34,18 @@ class MessageController extends Controller
                 }
             }
 
-            DB::beginTransaction();
-
             try{
-                Message::create([
+                $message = Message::create([
                     'transaction_id' => $transactionId,
                     'sender_id' => $userId,
-                    'message' => $validatedData['message'],
-                    'image_url' => $image_url,
+                    'message' => $messageRequest['message'],
                 ]);
+                if($image_url) {
+                    Image::create([
+                        'message_id' => $message['id'],
+                        'image_url' => $image_url,
+                    ]);
+                }
             } catch (QueryException $e) {
                 DB::rollBack();
                 Log::error("❌ メッセージ登録エラー: " . $e->getMessage());

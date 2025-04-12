@@ -19,6 +19,8 @@ class CreateTransactionsTable extends Migration
             $table->foreignId('seller_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->foreignId('buyer_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->enum('status', ['chatting', 'completed', 'canceled'])->default('chatting');
+            $table->boolean('seller_rated')->default(false);
+            $table->boolean('buyer_rated')->default(false);
             $table->timestamps();
         });
     }

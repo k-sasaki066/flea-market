@@ -38,6 +38,11 @@ class Transaction extends Model
         return $this->hasMany(Message::class);
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
     public static function getUnreadMessageCount($userId)
     {
         $transactionIds = Transaction::where('buyer_id', $userId)

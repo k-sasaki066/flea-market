@@ -214,7 +214,7 @@ class UserController extends Controller
 
         $messages = Message::withTrashed()
         ->where('transaction_id', $transactionId)
-        ->with('sender')
+        ->with('sender', 'image')
         ->orderBy('created_at', 'asc')
         ->get();
 

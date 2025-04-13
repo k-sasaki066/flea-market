@@ -95,7 +95,7 @@
                         </div>
                         <p class="item-comment__name">{{ $comment['user']['nickname'] }}</p>
                     </div>
-                    <p class="item-comment__text">{{ $comment['comment'] }}</p>
+                    <p class="item-comment__text">{!! nl2br(e($comment['comment'])) !!}</p>
                 </div>
                 @endforeach
             </div>

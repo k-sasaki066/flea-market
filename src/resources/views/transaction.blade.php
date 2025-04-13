@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="transaction-message__container">
+        <div class="transaction-message__container" id="message-box">
             @foreach($messages as $message)
             @if($message->sender_id === $user->id)
             <div class="transaction-message__self-wrap" data-message-id="{{ $message['id'] }}">
@@ -70,7 +70,7 @@
                 @if ($message->deleted_at)
                 <p class="transaction-delete-message__text">このメッセージは削除されました</p>
                 @else
-                <p class="transaction-message__text">{{ $message['message'] }}</p>
+                <p class="transaction-message__text">{!! nl2br(e($message['message'])) !!}</p>
                 @endif
 
                 <form class="transaction-edit-form" action="/message/{{ $message['id'] }}" method="POST" style="display: none;">
@@ -119,7 +119,7 @@
                 @if ($message->deleted_at)
                 <p class="transaction-delete-message__text">このメッセージは削除されました</p>
                 @else
-                <p class="transaction-message__text">{{ $message['message'] }}</p>
+                <p class="transaction-message__text">{!! nl2br(e($message['message'])) !!}</p>
                 @endif
 
                 @if(isset($message['image']) && $message['image']['image_url'] && !$message->deleted_at)
@@ -146,7 +146,7 @@
             </div>
             <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
             <div class="transaction-form__group grid">
-                <textarea class="transaction-form__message-input" type="text" name="message" rows="1" placeholder="取引メッセージを入力してください">{{ old('message') }}</textarea>
+                <textarea class="transaction-form__message-input" type="text" name="message" rows="1" placeholder="取引メッセージを入力してください" data-transaction-id="{{ $transaction['id'] }}">{{ old('message') }}</textarea>
                 <label class="transaction-form__img-select bold" for="imageInput">画像を追加</label>
                 <input class="transaction-form__img-hidden" type="file" id="imageInput" name="image_url" accept="image/png, image/jpeg">
                 <button class="transaction-form__btn" type="submit" id="imageSelectBtn"><img class="transaction-form__btn-img" src="{{ asset('images/sendbutton.svg') }}" alt="コメント" width="54px"></button>
@@ -192,36 +192,8 @@
     </script>
 @endif
 
+<script src="{{ asset('js/message.js') }}"></script>
 <script src="{{ asset('js/message_image_preview.js') }}"></script>
 <script src="{{ asset('js/message_edit.js') }}"></script>
 <script src="{{ asset('js/rating_form.js') }}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const textarea = document.querySelector('.transaction-form__message-input');
-        const form = document.querySelector('.transaction-form');
-
-        const transactionId = "{{ $transaction['id'] }}";
-        const storageKey = 'chat_draft_' + transactionId;
-
-        if (localStorage.getItem(storageKey)) {
-            textarea.value = localStorage.getItem(storageKey);
-        }
-
-        textarea.addEventListener('input', function () {
-            localStorage.setItem(storageKey, textarea.value);
-        });
-
-        form.addEventListener('submit', function () {
-            localStorage.removeItem(storageKey);
-        });
-
-        const hash = window.location.hash;
-        if (hash && document.querySelector(hash)) {
-            const target = document.querySelector(hash);
-            console.log(target);
-            target.style.visibility = 'visible';
-            target.style.opacity = '1';
-        }
-    });
-</script>
 @endsection

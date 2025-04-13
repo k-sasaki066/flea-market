@@ -19,34 +19,59 @@ use Exception;
 class MessageController extends Controller
 {
     public function getTransaction($transactionId) {
-        $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
-        ->findOrFail($transactionId);
-        $user = Auth::user();
+        try {
+            $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
+            ->findOrFail($transactionId);
 
-        $showReviewModal = false;
+            if (!$transaction->purchase || !$transaction->purchase->item) {
+                return redirect('/')->with('error', 'この取引に関連する商品情報が見つかりませんでした。');
+            }
+            
+            $user = Auth::user();
 
-        if ($user['id'] === $transaction['seller_id'] && 
-            $transaction['buyer_rated'] && 
-            !$transaction['seller_rated']) {
-            $showReviewModal = true;
+            $showReviewModal = false;
+
+            if ($user['id'] === $transaction['seller_id'] && 
+                $transaction['buyer_rated'] && 
+                !$transaction['seller_rated']) {
+                $showReviewModal = true;
+            }
+
+            $isSeller = $transaction->seller_id === $user['id'];
+            $isBuyer = $transaction->buyer_id === $user['id'];
+
+            if (!$isSeller && !$isBuyer) {
+                return redirect('/')->with('error', 'この取引にアクセスする権限がありません');
+            }
+
+            if (($isSeller && $transaction->seller_rated) || ($isBuyer && $transaction->buyer_rated)) {
+                return redirect('/')->with('result', 'この取引はすでに評価済みです');
+            }
+
+            $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
+
+            $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
+            $otherItems = $items->filter(function ($item) use ($transactionId) {
+                return $item->id != $transactionId;
+            });
+
+            $messages = Message::withTrashed()
+            ->where('transaction_id', $transactionId)
+            ->with('sender', 'image')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+            Message::markAsRead($transactionId, $user);
+
+            return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages', 'showReviewModal'));
+        } catch (\Exception $e) {
+            Log::error('取引画面表示時のエラー', [
+                'transaction_id' => $transactionId,
+                'user_id' => $user['id'],
+                'message' => $e->getMessage(),
+            ]);
+            return redirect('/')->with('error', '取引情報の表示中にエラーが発生しました。');
         }
-
-        $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
-
-        $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
-        $otherItems = $items->filter(function ($item) use ($transactionId) {
-            return $item->id != $transactionId;
-        });
-
-        $messages = Message::withTrashed()
-        ->where('transaction_id', $transactionId)
-        ->with('sender', 'image')
-        ->orderBy('created_at', 'asc')
-        ->get();
-
-        Message::markAsRead($transactionId, $user);
-
-        return view('transaction', compact('transaction', 'otherUser', 'user', 'otherItems', 'messages', 'showReviewModal'));
     }
 
     public function sendMessage(MessageRequest $messageRequest, ProfileRequest $profileRequest, Transaction $transaction) {

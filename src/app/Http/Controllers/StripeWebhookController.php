@@ -267,47 +267,65 @@ class StripeWebhookController extends Controller
 
             // コンビニ決済支払い期限切れ
             if ($event['type'] === 'checkout.session.async_payment_failed') {
-                $expiresAt = Carbon::createFromTimestamp($session->expires_at);
+                DB::beginTransaction();
+                try {
+                    $expiresAt = Carbon::createFromTimestamp($session->expires_at);
 
-                $purchase = Purchase::with('user')->where('stripe_session_id', $sessionId)->first();
+                    $purchase = Purchase::with('user', 'transaction')->where('stripe_session_id', $sessionId)->first();
 
-                Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
+                    Log::error("❌ 非同期決済が失敗しました: ", ['session_id' => $sessionId]);
 
-                if ($purchase) {
-                    $purchase->update([
-                        'payment_status' => 'canceled',
-                    ]);
-                    $item = Item::with('user')->find($purchase->item_id);
-                    if ($item) {
-                        $item->update([
-                            'status' => 1,
-                        ]);
-                        Log::info('✅ 商品のステータスを出品に更新しました', ['item_id' => $purchase->item_id, 'purchase' => $purchase]);
-
-                        // 購入者への決済失敗メール
-                        $data = [
-                            'purchaser_nickname' => $purchase->user->nickname ?? 'お客',
-                            'item' => $item->name ?? '商品',
-                            'price' => $session['amount_total'],
-                            'expires_at' => $expiresAt,
-                        ];
-
-                        Mail::to($session['customer_details']['email'])->send(new KonbiniPaymentFailureMail($data));
-
-                        Log::info("✅ 購入者へコンビニ決済失敗メールを送信しました: ", ['data' => $data]);
-
-                        // 出品者へのキャンセルメール
-                        $data = [
-                            'seller_nickname' => $item->user->nickname ?? 'お客',
-                            'item' => $item->name ?? '商品',
-                            'price' => $session['amount_total'],
-                        ];
-
-                        Mail::to($item->user->email)->send(new SellerOrderCancelMail($data));
-                        Log::info("📩 出品者へキャンセルメールを送信しました: ", $data);
+                    if ($purchase->payment_status === 'canceled') {
+                        Log::info('⚠️ 既にキャンセル済みの購入データです', ['session_id' => $sessionId]);
+                        return;
                     }
 
-                    Log::info("❌ 注文をキャンセルしました: ", ['session_id' => $sessionId]);
+                    if ($purchase) {
+                        $purchase->update([
+                            'payment_status' => 'canceled',
+                        ]);
+                        $item = Item::with('user')->find($purchase->item_id);
+                        if ($item) {
+                            $item->update([
+                                'status' => 1,
+                            ]);
+                            Log::info('✅ 商品のステータスを出品に更新しました', ['item_id' => $purchase->item_id]);
+
+                            if ($purchase->transaction) {
+                                $purchase->transaction->update([
+                                    'status' => 'canceled',
+                                ]);
+                                Log::info('📦 取引のステータスをキャンセルに更新しました', ['transaction_id' => $purchase->transaction->id]);
+                            }
+                            // 購入者への決済失敗メール
+                            $data = [
+                                'purchaser_nickname' => $purchase->user->nickname ?? 'お客',
+                                'item' => $item->name ?? '商品',
+                                'price' => $session['amount_total'],
+                                'expires_at' => $expiresAt,
+                            ];
+
+                            Mail::to($session['customer_details']['email'])->send(new KonbiniPaymentFailureMail($data));
+
+                            Log::info("✅ 購入者へコンビニ決済失敗メールを送信しました: ", ['data' => $data]);
+
+                            // 出品者へのキャンセルメール
+                            $data = [
+                                'seller_nickname' => $item->user->nickname ?? 'お客',
+                                'item' => $item->name ?? '商品',
+                                'price' => $session['amount_total'],
+                            ];
+
+                            Mail::to($item->user->email)->send(new SellerOrderCancelMail($data));
+                            Log::info("📩 出品者へキャンセルメールを送信しました: ", $data);
+                        }
+
+                        Log::info("❌ 注文をキャンセルしました: ", ['session_id' => $sessionId]);
+                    }
+                    DB::commit();
+                } catch(\Exception $e) {
+                    DB::rollBack();
+                    Log::error('❌ コンビニ決済失敗処理中にエラー', ['error' => $e->getMessage()]);
                 }
             }
 

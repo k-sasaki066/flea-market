@@ -41,6 +41,9 @@ class RatingController extends Controller
 
             DB::beginTransaction();
             if ($transaction->buyer_id === $userId) {
+                if ($transaction->buyer_rated) {
+                    return back()->with('error', 'すでに評価済みです');
+                }
                 $rating = Rating::create([
                     'transaction_id' => $transaction['id'],
                     'rater_id' => $userId,
@@ -54,6 +57,14 @@ class RatingController extends Controller
                 Mail::to($transaction->seller->email)->send(new RatingNotificationMail($rating, $transaction));
 
             } elseif ($transaction->seller_id === $userId) {
+                if (!$transaction->buyer_rated) {
+                    return back()->with('error', '購入者の評価が完了していません');
+                }
+
+                if ($transaction->seller_rated) {
+                    return back()->with('error', 'すでに評価済みです。');
+                }
+                
                 Rating::create([
                     'transaction_id' => $transaction['id'],
                     'rater_id' => $userId,
@@ -76,7 +87,7 @@ class RatingController extends Controller
             DB::rollBack();
             Log::error("❌ 評価送信エラー: " . $e->getMessage());
 
-            return redirect('/transaction/' . $transaction['id'])->with('error', '評価の送信中にエラーが発生しました。再度お試しください。');
+            return redirect('/transaction/' . $transaction['id'])->with('error', '評価の送信中にエラーが発生しました。再度お試しください');
         }
     }
 }

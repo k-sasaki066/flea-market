@@ -103,16 +103,16 @@ class CommentTest extends TestCase
         $response = $this->get("/item/{$this->item->id}");
         $response->assertStatus(200)->assertViewIs('detail');
 
-        $response->assertSee('<a class="item-comment__form-btn form-btn bold" href="#comment">コメントを送信する</a>', false);
-        $commentData = ['comment' => 'テストコメント'];
+        $response->assertSee('<a class="item-comment__form-btn form-btn bold" href="/login" onclick="return confirmLogin();">コメントを送信する</a>', false);
 
-        $response = $this->get("/item/{$this->item->id}#comment", $commentData);
-        $response->assertSee('コメントを送信するには、ログインが必要です。');
+        $response = $this->get("/login", [
+            'comment' => '未ログインのテストコメント',
+        ]);
+        $response->assertStatus(200)->assertViewIs('auth.login');
 
         $this->assertDatabaseMissing('comments', [
-            'user_id' => $this->user->id,
             'item_id' => $this->item->id,
-            'comment' => 'テストコメント',
+            'comment' => '未ログインのテストコメント',
         ]);
     }
 

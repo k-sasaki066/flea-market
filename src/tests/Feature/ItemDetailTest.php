@@ -226,10 +226,10 @@ class ItemDetailTest extends TestCase
         $response = $this->get("/item/{$this->item->id}");
 
         $response->assertStatus(200)->assertViewIs('detail');
-        $response->assertSee('<a class="item-purchase__btn form-btn bold " href="#modal">購入手続きへ</a>', false);
+        $response->assertSee('<a class="item-purchase__btn form-btn bold " href="/login" onclick="return confirmLogin();">購入手続きへ</a>', false);
 
-        $response = $this->get("/item/{$this->item->id}#modal");
-        $response->assertSee('商品を購入するには、ログインが必要です。');
+        $response = $this->get("/login");
+        $response->assertStatus(200)->assertViewIs('auth.login');
     }
 
     public function test_存在しない商品を指定するとエラーハンドリングが行われる()

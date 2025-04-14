@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 imagePreviewContainer.innerHTML = `
                     <div style="position: relative; display: inline-block;">
                         <img src="${e.target.result}" alt="プレビュー画像" style="max-width: 100px; max-height: 100px; border: 1px solid #ccc; margin-top: 10px;">
-                        <button type="button" id="removeImageBtn" style="position: absolute; top: 4px; right: -4px; background: #fff; color:rgb(76, 76, 76); border: 2px solid rgb(76, 76, 76); border-radius: 50%; width: 24px; height: 24px; cursor: pointer;display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1;">×</button>
+                        <button type="button" id="removeImageBtn" style="position: absolute; top: 4px; right: -4px; background: #fff; color:rgb(76, 76, 76); border: 2px solid rgb(76, 76, 76); border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 16px; line-height: 1;padding-bottom: 2px;">×</button>
                     </div>
                 `;
 

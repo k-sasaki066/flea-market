@@ -13,6 +13,10 @@ a {
     cursor: pointer;
 }
 
+.main {
+    padding-top: 56px;
+}
+
 .flex {
     display: flex;
 }
@@ -59,6 +63,11 @@ a {
 
 /* ---header-logo--- */
 .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
     padding: 12px 24px;
     background-color: #000;
     align-items: center;
@@ -180,6 +189,30 @@ a {
     display: none;
 }
 
+/* ---スクロールバー--- */
+.item-comment__inner::-webkit-scrollbar,
+.transaction-message__container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.item-comment__inner::-webkit-scrollbar-track,
+.transaction-message__container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.item-comment__inner::-webkit-scrollbar-thumb,
+.transaction-message__container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    -webkit-appearance: none;
+}
+
+.item-comment__inner::-webkit-scrollbar-thumb:hover,
+.transaction-message__container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 @media screen and (max-width: 959px) {
     .header {
         grid-template-columns: 1fr 1fr;
@@ -203,6 +236,10 @@ a {
         grid-column: 2/3;
         grid-row: 2/3;
         text-align: right;
+    }
+
+    .main {
+        padding-top: 106px;
     }
 
     .flash_error-message,

@@ -163,9 +163,9 @@ class FavoriteTest extends TestCase
         $response = $this->get("/item/{$this->item->id}");
 
         $response->assertStatus(200)->assertViewIs('detail');
-        $response->assertSee('<a class="favorite-count__login" href="#favorite">', false);
+        $response->assertSee('<a class="favorite-count__login" href="/login" onclick="return confirmLogin();"><img class="favorite-count__img" src="http://localhost/images/star.svg" alt="" width="22px"></a>', false);
 
-        $response = $this->get("/item/{$this->item->id}#favorite");
-        $response->assertSee('いいね登録するには、ログインが必要です。');
+        $response = $this->get("/login");
+        $response->assertStatus(200)->assertViewIs('auth.login');
     }
 }

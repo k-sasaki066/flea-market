@@ -121,25 +121,6 @@
     scrollbar-color: #888 #f1f1f1;
 }
 
-.item-comment__inner::-webkit-scrollbar {
-    width: 4px;
-}
-
-.item-comment__inner::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.item-comment__inner::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-    -webkit-appearance: none;
-}
-
-.item-comment__inner::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
 .item-comment__wrap:not(:first-of-type) {
     margin-top: 28px;
 }

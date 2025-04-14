@@ -97,7 +97,7 @@
                 @if (!$message->deleted_at)
                 <div class="transaction-message__form-group flex">
                     <a class="transaction-message__update-btn" href="#">編集</a>
-                    <form class="transaction-message__delete-form" action="/message/{{ $message['id'] }}" method="POST">
+                    <form class="transaction-message__delete-form flex" action="/message/{{ $message['id'] }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button class="transaction-message__delete-btn" onclick="return confirm('「{{ $message['message']}}」\nこのメッセージを削除します。よろしいですか？');">削除</button>
@@ -134,6 +134,7 @@
 
         <form class="transaction-form grid" method="POST" action="/transaction/{{ $transaction['id'] }}" enctype="multipart/form-data">
             @csrf
+            <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
             <div class="error-message">
                 @error('message')
                     {{ $message }}
@@ -144,7 +145,6 @@
                 {{ $message }}
                 @enderror
             </div>
-            <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
             <div class="transaction-form__group grid">
                 <textarea class="transaction-form__message-input" type="text" name="message" rows="1" placeholder="取引メッセージを入力してください" data-transaction-id="{{ $transaction['id'] }}">{{ old('message') }}</textarea>
                 <label class="transaction-form__img-select bold" for="imageInput">画像を追加</label>

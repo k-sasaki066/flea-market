@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 behavior: 'smooth'
             });
         }
+        if (textarea && textarea.value.trim() !== '') {
+            localStorage.setItem(storageKey, textarea.value);
+        }
     });
 
     if (textarea && localStorage.getItem(storageKey)) {

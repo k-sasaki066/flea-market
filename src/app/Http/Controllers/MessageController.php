@@ -18,27 +18,26 @@ use Exception;
 
 class MessageController extends Controller
 {
-    public function getTransaction($transactionId) {
+    public function getTransaction(Transaction $transaction) {
+        $transactionId = $transaction->id ?? null;
+        $user = Auth::user();
         try {
-            $transaction = Transaction::with(['buyer', 'seller', 'purchase.item'])
-            ->findOrFail($transactionId);
+            $transaction->load(['buyer', 'seller', 'purchase.item']);
 
             if (!$transaction->purchase || !$transaction->purchase->item) {
                 return redirect('/')->with('error', 'この取引に関連する商品情報が見つかりませんでした。');
             }
-            
-            $user = Auth::user();
 
             $showReviewModal = false;
 
-            if ($user['id'] === $transaction['seller_id'] && 
-                $transaction['buyer_rated'] && 
-                !$transaction['seller_rated']) {
+            if ($user->id === $transaction->seller_id && 
+                $transaction->buyer_rated && 
+                !$transaction->seller_rated) {
                 $showReviewModal = true;
             }
 
-            $isSeller = $transaction->seller_id === $user['id'];
-            $isBuyer = $transaction->buyer_id === $user['id'];
+            $isSeller = $transaction->seller_id === $user->id;
+            $isBuyer = $transaction->buyer_id === $user->id;
 
             if (!$isSeller && !$isBuyer) {
                 return redirect('/')->with('error', 'この取引にアクセスする権限がありません');
@@ -48,7 +47,7 @@ class MessageController extends Controller
                 return redirect('/')->with('result', 'この取引はすでに評価済みです');
             }
 
-            $otherUser = $transaction['buyer']['id'] == $user['id'] ? $transaction['seller'] : $transaction['buyer'];
+            $otherUser = $transaction->buyer->id == $user->id ? $transaction->seller : $transaction->buyer;
 
             $items = Transaction::getTransactionItemsWithUnreadCount($user['id']);
             $otherItems = $items->filter(function ($item) use ($transactionId) {
@@ -67,7 +66,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             Log::error('取引画面表示時のエラー', [
                 'transaction_id' => $transactionId,
-                'user_id' => $user['id'],
+                'user_id' => $user->id,
                 'message' => $e->getMessage(),
             ]);
             return redirect('/')->with('error', '取引情報の表示中にエラーが発生しました。');
@@ -81,7 +80,7 @@ class MessageController extends Controller
             $userId = $user->id;
 
             if ($transaction->buyer_rated && $userId === $transaction->seller_id) {
-                return redirect()->back()->with('error', '購入者の評価が完了しているため、これ以上のメッセージ送信はできません。');
+                return redirect()->back()->with('error', '購入者の評価が完了しているため、これ以上のメッセージ送信はできません');
             }
 
             $image_url = null;
@@ -91,26 +90,26 @@ class MessageController extends Controller
                 } catch (\Exception $e) {
                     DB::rollBack();
                     Log::error("❌ 画像アップロードに失敗しました: " . $e->getMessage());
-                    return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください。');
+                    return redirect()->back()->with('error', '画像のアップロードに失敗しました。再度お試しください');
                 }
             }
 
             try{
                 $message = Message::create([
-                    'transaction_id' => $transaction['id'],
+                    'transaction_id' => $transaction->id,
                     'sender_id' => $userId,
-                    'message' => $messageRequest['message'],
+                    'message' => $messageRequest->message,
                 ]);
                 if($image_url) {
                     Image::create([
-                        'message_id' => $message['id'],
+                        'message_id' => $message->id,
                         'image_url' => $image_url,
                     ]);
                 }
             } catch (QueryException $e) {
                 DB::rollBack();
                 Log::error("❌ メッセージ登録エラー: " . $e->getMessage());
-                return redirect()->back()->with('error', 'メッセージの登録に失敗しました。再度お試しください。');
+                return redirect()->back()->with('error', 'メッセージの登録に失敗しました。再度お試しください');
             }
             
             DB::commit();
@@ -119,14 +118,17 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ メッセージ投稿エラー: " . $e->getMessage());
-            return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください。');
+            return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください');
         }
     }
 
-    public function update(EditMessageRequest $request, $messageId)
+    public function update(EditMessageRequest $request, Message $message)
     {
         try {
-            $message = Message::findOrFail($messageId);
+            if ($message->sender_id !== Auth::id()) {
+                return redirect()->back()->with('error', 'このメッセージを編集する権限がありません');
+            }
+
             DB::beginTransaction();
             $message->update([
                 'message' => $request->message_send,
@@ -137,7 +139,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ メッセージ更新エラー: " . $e->getMessage());
-            return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください。');
+            return redirect()->back()->with('error', 'メッセージの送信に失敗しました。再度お試しください');
         }
     }
 
@@ -158,7 +160,7 @@ class MessageController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("❌ メッセージ削除エラー: " . $e->getMessage());
-            return redirect()->back()->with('error', 'メッセージの削除に失敗しました。再度お試しください。');
+            return redirect()->back()->with('error', 'メッセージの削除に失敗しました。再度お試しください');
         }
     }
 }

@@ -155,8 +155,8 @@
 .transaction-form {
     position: fixed;
     bottom: 0;
-    right: 0;
-    left: 21%;
+    right: 12px;
+    left: 20%;
     padding: 12px;
     background-color: #fff;
 }

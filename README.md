@@ -154,16 +154,14 @@ PHP
 ![ER図](src/flea_market.drawio.png)
 
 ## 環境構築
-
-#### Docker ビルド
 <br>
-gitクローン
+▫️gitクローン
 
 ```
 git clone https://github.com/k-sasaki066/flea-market.git
 ```
 <br>
-docker composeのバージョンによって一部記載が異なるため、はじめにバージョンを確認します。
+▫️docker composeのバージョンによって一部記載が異なるため、はじめにバージョンを確認します。
 <br>
 
 
@@ -171,20 +169,87 @@ docker composeのバージョンによって一部記載が異なるため、は
 docker compose version(docker-compose version)
 ```
 <br>
-  -v1の場合
+-v1の場合
 <br>
 docker-compose.ymlファイルのコメントアウトを外してください
 
 ```
 version: '3.8'　(コメントアウト解除)
 ```
-
-  -v2の場合
+<br>
+-v2の場合
 <br>
 変更点なし
 <br>
+<br>
+▫️.env.example ファイルをコピーして.env ファイルを作成し、環境変数を変更する
+  
+  ```
+  cp .env.example .env
+  ```
+  <br>
+  ① APP_NAME設定
+  
+  ```
+  APP_NAME=coachtechフリマ
+  ```
+ 
+  <br>
+  
+  ② mysqlの設定(docker-compose.ymlを参照)
+  
+  ```
+  DB_CONNECTION=mysql
+  DB_HOST=mysql(変更)
+  DB_PORT=3306
+  DB_DATABASE=laravel_db(変更)
+  DB_USERNAME=laravel_user(変更)
+  DB_PASSWORD=laravel_pass(変更)
+  ```
+  <br>
+  ③ mailhogの設定
 
-dockerビルド
+  ```
+  MAIL_MAILER=smtp
+  MAIL_HOST=mail
+  MAIL_PORT=1025
+  MAIL_FROM_ADDRESS="送信元アドレス（例：flea-market@test.com）"
+  ```
+  <br>
+  <img width="800" alt="スクリーンショット 2025-03-11 10 03 52" src="https://github.com/user-attachments/assets/6d876e0f-c13f-44d8-ad19-b28474c62c68" />
+
+  <br>
+  <br>
+  ④ stripeのアカウント設定
+　<br>
+  stripe公式ページ(https://stripe.com/jp)
+  <br>
+  <img width="800" alt="stripe設定１" src="https://github.com/user-attachments/assets/9428feb4-add4-4f49-9594-ee25e4269bcd" />
+  <br>
+  <img width="800" alt="stripe設定３" src="https://github.com/user-attachments/assets/ea6ed36b-85b4-44eb-82a0-80f48ed6868c" />
+  <br>
+  <img width="800" alt="stripe設定４" src="https://github.com/user-attachments/assets/d61fb882-7316-4233-9605-a3222b8ffeda" />
+
+  
+  ```
+  STRIPE_KEY=公開可能キーを貼り付け
+  STRIPE_SECRET=シークレットキーを貼り付け
+  ```
+　<br>
+  <br>
+  ⑤ ngrokの設定
+  <br>
+  ngrok公式ページ(https://dashboard.ngrok.com/)
+　<br>
+  <img width="800" alt="ngrok設定" src="https://github.com/user-attachments/assets/5d27c22d-c7e9-4601-8605-93f441df54bb" />
+  <br>
+  
+  ```
+  NGROK_AUTHTOKEN=your_ngrok_auth_token
+  ```
+  <br>
+
+▫️dockerビルド
 ```
 docker compose up -d --build(docker-compose up -d --build)
 ```
@@ -217,81 +282,39 @@ mysql:
   ```
 
   <br>
-  
-  3. .env.example ファイルをコピーして.env ファイルを作成し、環境変数を変更する
-  
-  ```
-  cp .env.example .env
-  ```
-  <br>
-  ① アプリケーションキーを取得
+
+  3. アプリケーションキーを取得
   
   ```
   php artisan key:generate
   ```
-
-  <br>
-  ② APP_NAME設定
-  
-  ```
-  APP_NAME=coachtechフリマ
-  ```
+　<br>
  
-  <br>
-  
-  ③ mysqlの設定(docker-compose.ymlを参照)
+  4. テーブル作成
   
   ```
-  DB_CONNECTION=mysql
-  DB_HOST=mysql(変更)
-  DB_PORT=3306
-  DB_DATABASE=laravel_db(変更)
-  DB_USERNAME=laravel_user(変更)
-  DB_PASSWORD=laravel_pass(変更)
-  ```
-  <br>
-  ④ mailhogの設定
-
-  ```
-  MAIL_MAILER=smtp
-  MAIL_HOST=mail
-  MAIL_PORT=1025
-  MAIL_FROM_ADDRESS="送信元アドレス（例：flea-market@test.com）"
-  ```
-  <br>
-  <img width="800" alt="スクリーンショット 2025-03-11 10 03 52" src="https://github.com/user-attachments/assets/6d876e0f-c13f-44d8-ad19-b28474c62c68" />
-
-  <br>
-  <br>
-  ⑤ stripeのアカウント設定
-　<br>
-  stripe公式ページ(https://stripe.com/jp)
-  <br>
-  <img width="800" alt="stripe設定１" src="https://github.com/user-attachments/assets/9428feb4-add4-4f49-9594-ee25e4269bcd" />
-  <br>
-  <img width="800" alt="stripe設定３" src="https://github.com/user-attachments/assets/ea6ed36b-85b4-44eb-82a0-80f48ed6868c" />
-  <br>
-  <img width="800" alt="stripe設定４" src="https://github.com/user-attachments/assets/d61fb882-7316-4233-9605-a3222b8ffeda" />
-
-  
-  ```
-  STRIPE_KEY=公開可能キーを貼り付け
-  STRIPE_SECRET=シークレットキーを貼り付け
+  php artisan migrate
   ```
 
   <br>
-  ⑥ ngrokの設定
-  <br>
-  ngrok公式ページ(https://dashboard.ngrok.com/)
-　<br>
-  <img width="800" alt="ngrok設定" src="https://github.com/user-attachments/assets/5d27c22d-c7e9-4601-8605-93f441df54bb" />
-  <br>
+  
+  5. ダミーデータ作成
   
   ```
-  NGROK_AUTHTOKEN=your_ngrok_auth_token
+  php artisan db:seed
   ```
+  
+
   <br>
-  ⑦ stripe webhookの設定(stripeのアカウントが作成されている上で設定してください)
+  
+  6. シンボリックリンク作成
+  
+  ```
+  php artisan storage:link
+  ```
+<br>
+<br>
+  ▫️stripe webhookの設定(stripeのアカウントが作成されている上で設定してください)
 　<br>
   <br>
   ▫️Stripe CLI をインストールする(composerではインストールできません)
@@ -453,31 +476,6 @@ mysql:
   <br>
   <img width="500" alt="webhook編集２" src="https://github.com/user-attachments/assets/c3410bb9-dbb1-4c77-9565-520db8e0ea47" />
   <br>
-  
-  <br>
-  4. テーブル作成
-  
-  ```
-  php artisan migrate
-  ```
-
-  <br>
-  
-  5. ダミーデータ作成
-  
-  ```
-  php artisan db:seed
-  ```
-  
-
-  <br>
-  
-  6. シンボリックリンク作成
-  
-  ```
-  php artisan storage:link
-  ```
-<br>
 
 ## URL
 
@@ -493,18 +491,18 @@ mysql:
 
 - User1(item1の出品者)
   - nickname : 出品者1
-  - email : seller1@example.com
+  - email : `seller1@example.com`
   - password : password1
 <br>
 
 - User2(item6の出品者)
   - nickname : 出品者2
-  - email : seller2@example.com
+  - email : `seller2@example.com`
   - password : password2
 <br>
 
 - User3
   - nickname : 未出品ユーザー
-  - email : noitems@example.com
+  - email : `noitems@example.com`
   - password : password3
  

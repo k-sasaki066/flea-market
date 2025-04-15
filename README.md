@@ -79,7 +79,7 @@
 
 |購入者評価画面|出品者評価画面|
 | --- | --- |
-|<img width="1517" alt="購入者評価画面" src="https://github.com/user-attachments/assets/7d4b648c-229e-4561-936a-b4df3f5ed309" />|<img width="1516" alt="出品者評価画面" src="https://github.com/user-attachments/assets/de3b8000-6e55-4df2-818e-2e0774fd3ae1" />|
+|<img width="1517" alt="購入者評価画面" src="https://github.com/user-attachments/assets/7d4b648c-229e-4561-936a-b4df3f5ed309" />|<img width="1519" alt="出品者評価画面" src="https://github.com/user-attachments/assets/37a3d605-01ae-4190-8e77-dfaa70949a9d" />|
 |「取引を完了する」ボタンをクリックすると評価モーダルが表示され、出品者への評価を送信できます。評価を送信すると取引が完了し、取引中の商品一覧ページから削除されます。<br>購入者の取引が完了すると、出品者へ取引完了通知がメールで送信されます。|購入者の取引完了後、該当商品の取引画面を開くと評価モーダルが表示され、購入者へ評価を送信できます。評価を送信すると取引が完了し、取引中の商品一覧ページから削除されます。|
 
 |出品画面|ログアウト|

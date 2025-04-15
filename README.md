@@ -3,6 +3,8 @@
 <br>
 購入の際はクレジットカード払いかコンビニ払いを選択して決済ができ、それぞれの決済に合わせて購入者と出品者にメールが送信されます。
 <br>
+購入後は商品ごとに購入者と出品者でメッセージのやり取りができ、双方で評価を送信することで取引が完了します。
+<br>
 
 ### TOPページ
 <img width="1445" alt="c-top2" src="https://github.com/user-attachments/assets/46fff86e-2b74-40f5-9005-17b931b213e2" />
@@ -62,8 +64,23 @@
 
 |出品商品一覧画面|購入商品一覧画面|
 | --- | --- |
-|<img width="1459" alt="c-mypage" src="https://github.com/user-attachments/assets/6d7c7bcf-0f42-44d6-8f97-eadfef1f5764" />|<img width="1458" alt="c-mypage2" src="https://github.com/user-attachments/assets/239988c5-02a7-4713-a4d1-896a96284bb7" />|
+|<img width="1516" alt="出品商品一覧(追加実装)" src="https://github.com/user-attachments/assets/fdb18193-0026-4cf7-85ae-1ef975bcae60" />|<img width="1516" alt="購入商品一覧(追加実装)" src="https://github.com/user-attachments/assets/2c1be232-4066-4298-ab49-c8443c56682c" />|
 |マイページの「出品した商品」をクリックすると、出品した商品が表示されます。|マイページの「購入した商品」をクリックすると、購入した商品が表示されます。|
+
+|取引中商品一覧画面|取引画面|
+| --- | --- |
+|<img width="1515" alt="取引中の商品２" src="https://github.com/user-attachments/assets/4b7ef4fb-6000-431a-95c2-771bfda2d06f" />|<img width="1515" alt="取引画面2" src="https://github.com/user-attachments/assets/39aaa0a7-9a6e-4422-966e-8fea52008fd0" />|
+|マイページの「取引中の商品」をクリックすると、現在取引中の商品が表示されます。新着メッセージの総件数、各商品には新着メッセージ件数が表示され、表示商品は新着メッセージが来た順に並び替えられます。<br>相手から受け取った評価がある場合は平均値がユーザー名の下に表示されます。|「取引中の商品」に表示された商品画像をクリックすると各商品の取引画面に遷移します。<br>サイドバーから別の商品の取引ページに遷移できます。<br>購入者の取引画面には右上に取引完了ボタンが表示されます。|
+
+|取引チャット機能|取引チャット例|
+| --- | --- |
+|<img width="1516" alt="メッセージ編集" src="https://github.com/user-attachments/assets/8d9d1165-9391-4986-b661-56fa966de296" />|<img width="1515" alt="取引画面（画像表示例）" src="https://github.com/user-attachments/assets/92520bfe-4c48-481f-bf6a-0b5dfff29395" />|
+|投稿済みのメッセージの編集や削除ができます。<br>1つのメッセージに1枚の画像(任意)を送信できます。<br>メッセージの下にある「編集」をクリックすると編集フォームに切り替わります。|メッセージの下にある「削除」をクリックするとメッセージが削除され、『このメッセージは削除されました』と表示されます。|
+
+|購入者評価画面|出品者評価画面|
+| --- | --- |
+|<img width="1517" alt="購入者評価画面" src="https://github.com/user-attachments/assets/7d4b648c-229e-4561-936a-b4df3f5ed309" />|<img width="1516" alt="出品者評価画面" src="https://github.com/user-attachments/assets/de3b8000-6e55-4df2-818e-2e0774fd3ae1" />|
+|「取引を完了する」ボタンをクリックすると評価モーダルが表示され、出品者への評価を送信できます。評価を送信すると取引が完了し、取引中の商品一覧ページから削除されます。<br>購入者の取引が完了すると、出品者へ取引完了通知がメールで送信されます。|購入者の取引完了後、該当商品の取引画面を開くと評価モーダルが表示され、購入者へ評価を送信できます。評価を送信すると取引が完了し、取引中の商品一覧ページから削除されます。|
 
 |出品画面|ログアウト|
 | --- | --- |
@@ -92,10 +109,10 @@
 |<img width="1099" alt="売れましたメール" src="https://github.com/user-attachments/assets/e480092b-13ca-469a-8fbe-f1619108317e" />|<img width="1081" alt="発送準備メール" src="https://github.com/user-attachments/assets/a43a0776-d8b0-46a0-8c50-dbaeb63b30c8" />|
 |商品の購入完了時に出品者に送信されます。|カード決済とコンビニ決済それぞれで決済が完了した時点で出品者に送信されます。|
 
-|注文キャンセルメール|
-| --- |
-|<img width="1099" alt="キャンセルメール" src="https://github.com/user-attachments/assets/bee268ee-52d7-4595-91ca-a9a94ec7e5b8" />|
-|コンビニ支払い期限内に支払いが完了しなかった場合に出品者に送信されます。|
+|注文キャンセルメール|購入者取引完了通知メール|
+| --- | --- |
+|<img width="1099" alt="キャンセルメール" src="https://github.com/user-attachments/assets/bee268ee-52d7-4595-91ca-a9a94ec7e5b8" />|<img width="1191" alt="出品者通知メール" src="https://github.com/user-attachments/assets/652a6512-993c-4dbf-9ca1-0ed05fd5f77f" />|
+|コンビニ支払い期限内に支払いが完了しなかった場合に出品者に送信されます。|購入者の取引完了後に出品者に送信されます。メール内のリンクから取引画面に遷移できます。|
 
 ## 実行環境
 Docker 27.5.1
@@ -130,7 +147,8 @@ PHP
 
 ## テーブル設計
 <br>
-<img width="1450" alt="テーブル仕様書" src="https://github.com/user-attachments/assets/91de8f90-f7f0-44b6-831f-4803f761ee7a" />
+<img width="1110" alt="テーブル仕様書追加ver" src="https://github.com/user-attachments/assets/c40a4fd4-d65f-4b61-bbaf-42e101021c64" />
+
 
 ## ER図
 ![ER図](src/flea_market.drawio.png)
@@ -142,7 +160,7 @@ PHP
 gitクローン
 
 ```
-git clone githubのリンク
+git clone https://github.com/k-sasaki066/flea-market.git
 ```
 <br>
 docker composeのバージョンによって一部記載が異なるため、はじめにバージョンを確認します。
@@ -460,6 +478,7 @@ mysql:
   php artisan storage:link
   ```
 <br>
+
 ## URL
 
 - 開発環境
@@ -468,3 +487,24 @@ mysql:
 - phpMyAdmin <http://localhost:8080>
 - ngrok <http://localhost:4040>
 
+<br>
+
+## ダミーデータ
+
+- User1(item1の出品者)
+  - nickname : 出品者1
+  - email : seller1@example.com
+  - password : password1
+<br>
+
+- User2(item6の出品者)
+  - nickname : 出品者2
+  - email : seller2@example.com
+  - password : password2
+<br>
+
+- User3
+  - nickname : 未出品ユーザー
+  - email : noitems@example.com
+  - password : password3
+ 

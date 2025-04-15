@@ -484,6 +484,7 @@ mysql:
 - MailHog <http://localhost:8025>
 - phpMyAdmin <http://localhost:8080>
 - ngrok <http://localhost:4040>
+- stripeドキュメント [テストカード](https://docs.stripe.com/testing?locale=ja-JP&testing-method=card-numbers)
 
 <br>
 

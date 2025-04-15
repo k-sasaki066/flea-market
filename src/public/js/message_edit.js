@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const cancelButtons = document.querySelectorAll('.transaction-cancel-edit__btn');
     const editingId = sessionStorage.getItem('editing_message_id');
 
-    // 対象メッセージの各要素をまとめて取得
     function getMessageElements(wrapper) {
         return {
             wrapper,

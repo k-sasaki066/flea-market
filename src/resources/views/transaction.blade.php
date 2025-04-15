@@ -3,6 +3,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/common.css')}}">
 <link rel="stylesheet" href="{{ asset('css/transaction.css')}}">
+<link rel="stylesheet" href="{{ asset('css/transaction_rating_modal.css')}}">
 <link rel="stylesheet" href="{{ asset('css/form.css')}}">
 @endsection
 

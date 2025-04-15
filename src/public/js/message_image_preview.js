@@ -15,10 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 `;
 
-                // 削除ボタンのイベントを追加
                 document.getElementById("removeImageBtn").addEventListener("click", function () {
                     imagePreviewContainer.innerHTML = "";
-                    imageInput.value = ""; // ファイル選択もリセット
+                    imageInput.value = "";
                 });
             };
             reader.readAsDataURL(file);

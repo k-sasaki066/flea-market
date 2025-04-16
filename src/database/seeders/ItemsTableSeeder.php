@@ -20,7 +20,7 @@ class ItemsTableSeeder extends Seeder
     {
         $user1Id = cache()->get('seller1_id');
         $user2Id = cache()->get('seller2_id');
-        $otherUserIds = cache()->get('other_user_ids');
+        // $otherUserIds = cache()->get('other_user_ids');
 
         $items = [
             [
@@ -37,7 +37,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user1Id,
                 'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
                 'brand_id' => null,
                 'name' => 'HDD',
@@ -50,7 +50,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(1)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user1Id,
                 'condition_id' => Condition::where('name', 'やや傷や汚れあり')->value('id'),
                 'brand_id' => null,
                 'name' => '玉ねぎ3束',
@@ -63,7 +63,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(2)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user1Id,
                 'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
                 'brand_id' => Brand::where('name', 'Crockett&Jones')->value('id'),
                 'name' => '革靴',
@@ -76,7 +76,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(3)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user1Id,
                 'condition_id' => Condition::first()->id,
                 'brand_id' => Brand::where('name', 'Windows')->value('id'),
                 'name' => 'ノートPC',
@@ -102,7 +102,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(5)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user2Id,
                 'condition_id' => Condition::where('name', 'やや傷や汚れあり')->value('id'),
                 'brand_id' => Brand::where('name', 'NINE WEST')->value('id'),
                 'name' => 'ショルダーバッグ',
@@ -115,7 +115,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(6)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user2Id,
                 'condition_id' => Condition::where('name', '状態が悪い')->value('id'),
                 'brand_id' => Brand::where('name', 'THERMOS')->value('id'),
                 'name' => 'タンブラー',
@@ -128,7 +128,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(7)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user2Id,
                 'condition_id' => Condition::first()->id,
                 'brand_id' => null,
                 'name' => 'コーヒーミル',
@@ -141,7 +141,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->subDay(8)->format('Y-m-d'),
             ],
             [
-                'user_id' => collect($otherUserIds)->random(),
+                'user_id' => $user2Id,
                 'condition_id' => Condition::where('name', '目立った傷や汚れなし')->value('id'),
                 'brand_id' => Brand::where('name', 'ちふれ')->value('id'),
                 'name' => 'メイクセット',

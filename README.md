@@ -490,13 +490,13 @@ mysql:
 
 ## ダミーデータ
 
-- User1(item1の出品者)
+- User1(item1~item5の出品者)
   - nickname : 出品者1
   - email : `seller1@example.com`
   - password : password1
 <br>
 
-- User2(item6の出品者)
+- User2(item6~item10の出品者)
   - nickname : 出品者2
   - email : `seller2@example.com`
   - password : password2

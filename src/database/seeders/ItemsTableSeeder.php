@@ -20,7 +20,6 @@ class ItemsTableSeeder extends Seeder
     {
         $user1Id = cache()->get('seller1_id');
         $user2Id = cache()->get('seller2_id');
-        // $otherUserIds = cache()->get('other_user_ids');
 
         $items = [
             [

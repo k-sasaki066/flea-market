@@ -35,9 +35,7 @@ class UsersTableSeeder extends Seeder
 
         $otherUsers = User::factory()->count(2)->create();
 
-        // 他Seederに渡すため保存
         cache()->put('seller1_id', $user1->id);
         cache()->put('seller2_id', $user2->id);
-        // cache()->put('other_user_ids', $otherUsers->pluck('id')->toArray());
     }
 }
